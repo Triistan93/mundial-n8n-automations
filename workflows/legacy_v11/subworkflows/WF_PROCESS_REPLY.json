@@ -1,0 +1,135 @@
+{
+  "name": "WF_PROCESS_REPLY",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "id": "node_start_reply"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, deal_id, requester_user_id, state, current_question, collected_data_json, last_interaction_at FROM ticket_bot_sessions WHERE requester_user_id = $1 AND status = 'ACTIVE' LIMIT 1;",
+        "additionalFields": {
+          "queryParams": "={{$json.author_id}}"
+        }
+      },
+      "name": "Get_Active_Session_Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [300, 300],
+      "id": "node_get_reply_session"
+    },
+    {
+      "parameters": {
+        "functionCode": "const session = $input.first().json;\nconst replyInput = $('Start').first().json;\n\nif (!session || !session.id) {\n  return [{ json: { status: 'NOOP', reason: 'NO_ACTIVE_SESSION_FOUND' } }];\n}\n\nconst currQ = session.current_question;\nconst replyText = (replyInput.message_text || '').trim();\nconst collData = session.collected_data_json || {};\n\n// Normalização e Derivação com base no Catálogo Congelado\nlet nextStep = 'COMPLETE_TRIAGE';\nlet isInvalid = false;\n\nif (currQ === 'optional_comment_choice') {\n  if (replyText.toLowerCase().includes('sim')) {\n    nextStep = 'AWAITING_OPTIONAL_COMMENT_TEXT';\n  } else {\n    nextStep = 'COMPLETE_TRIAGE';\n  }\n} else if (currQ === 'AWAITING_OPTIONAL_COMMENT_TEXT') {\n  collData['optional_comment'] = replyText;\n  nextStep = 'COMPLETE_TRIAGE';\n} else {\n  // Respostas temáticas\n  nextStep = 'optional_comment_choice';\n}\n\nreturn [{\n  json: {\n    session_id: session.id,\n    deal_id: session.deal_id,\n    requester_id: session.requester_user_id,\n    current_question: currQ,\n    answer_text: replyText,\n    next_step: nextStep,\n    collected_data: collData,\n    is_invalid: isInvalid\n  }\n}];"
+      },
+      "name": "Parse_Reply_And_Transition",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [520, 300],
+      "id": "node_parse_reply"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.next_step}}",
+              "value2": "COMPLETE_TRIAGE"
+            }
+          ]
+        }
+      },
+      "name": "Check_Complete_Triage",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [740, 300],
+      "id": "node_check_complete"
+    },
+    {
+      "parameters": {
+        "workflowId": "WF_COMPLETE_TRIAGE",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "name": "Invoke_WF_Complete_Triage",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [960, 200],
+      "id": "node_exec_complete_triage"
+    },
+    {
+      "parameters": {
+        "workflowId": "WF_ASK_NEXT_QUESTION",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "name": "Invoke_WF_Ask_Next_Question",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [960, 400],
+      "id": "node_exec_ask_next"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Get_Active_Session_Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Active_Session_Postgres": {
+      "main": [
+        [
+          {
+            "node": "Parse_Reply_And_Transition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse_Reply_And_Transition": {
+      "main": [
+        [
+          {
+            "node": "Check_Complete_Triage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check_Complete_Triage": {
+      "main": [
+        [
+          {
+            "node": "Invoke_WF_Complete_Triage",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invoke_WF_Ask_Next_Question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

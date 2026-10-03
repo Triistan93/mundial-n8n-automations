@@ -1,0 +1,181 @@
+{
+  "name": "WF_COMPLETE_TRIAGE",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "id": "node_start_complete"
+    },
+    {
+      "parameters": {
+        "workflowId": "WF_BEHAVIOR_ENGINE",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "name": "Invoke_Behavior_Engine",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [300, 300],
+      "id": "node_exec_behavior"
+    },
+    {
+      "parameters": {
+        "authentication": "webhookUrl",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/1/409v91u08jtdb7f2/crm.deal.get",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "id",
+              "value": "={{$json.deal_id}}"
+            }
+          ]
+        }
+      },
+      "name": "Read_Back_Deal_Bitrix",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [520, 300],
+      "id": "node_read_back"
+    },
+    {
+      "parameters": {
+        "functionCode": "const deal = $input.first().json.result || {};\n\n// Read-back verification\nconst impactVal = deal.UF_CRM_TI_IMPACT;\nconst urgencyVal = deal.UF_CRM_TI_URGENCY;\nconst priorityVal = deal.UF_CRM_TI_PRIORITY;\nconst nextOwnerVal = deal.UF_CRM_TI_NEXT_OWNER;\nconst waitReasonVal = deal.UF_CRM_TI_WAIT_REASON;\n\nconst isValid = Boolean(impactVal && urgencyVal && priorityVal && nextOwnerVal && waitReasonVal);\n\nreturn [{\n  json: {\n    deal_id: Number(deal.ID),\n    read_back_pass: isValid,\n    requester_id: Number(deal.CREATED_BY_ID || deal.UF_CRM_TI_REQUESTER),\n    summary_text: 'Triagem concluída com sucesso pela equipe de TI.'\n  }\n}];"
+      },
+      "name": "Validate_Read_Back",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [740, 300],
+      "id": "node_validate_rb"
+    },
+    {
+      "parameters": {
+        "workflowId": "WF_WRITE_TIMELINE",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "name": "Invoke_Write_Timeline",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [960, 200],
+      "id": "node_write_tl"
+    },
+    {
+      "parameters": {
+        "authentication": "webhookUrl",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/1/409v91u08jtdb7f2/im.message.add",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "DIALOG_ID",
+              "value": "={{$json.requester_id}}"
+            },
+            {
+              "name": "MESSAGE",
+              "value": "Perfeito! Já registrei as informações do seu chamado e a equipe de TI já está ciente. Obrigado!"
+            },
+            {
+              "name": "SYSTEM",
+              "value": "N"
+            }
+          ]
+        }
+      },
+      "name": "Send_Success_Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1180, 200],
+      "id": "node_send_success"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE ticket_bot_sessions SET status = 'COMPLETED', state = 'COMPLETED', completed_at = NOW() WHERE deal_id = $1;",
+        "additionalFields": {
+          "queryParams": "={{$json.deal_id}}"
+        }
+      },
+      "name": "Close_Session_Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [1400, 200],
+      "id": "node_close_sess"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Invoke_Behavior_Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invoke_Behavior_Engine": {
+      "main": [
+        [
+          {
+            "node": "Read_Back_Deal_Bitrix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read_Back_Deal_Bitrix": {
+      "main": [
+        [
+          {
+            "node": "Validate_Read_Back",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate_Read_Back": {
+      "main": [
+        [
+          {
+            "node": "Invoke_Write_Timeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invoke_Write_Timeline": {
+      "main": [
+        [
+          {
+            "node": "Send_Success_Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send_Success_Message": {
+      "main": [
+        [
+          {
+            "node": "Close_Session_Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

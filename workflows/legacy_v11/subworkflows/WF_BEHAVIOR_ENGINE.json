@@ -1,0 +1,135 @@
+{
+  "name": "WF_BEHAVIOR_ENGINE",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "id": "node_start_be"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Behavior Engine Integration (B01, B02, B04)\n// Dispara a reavaliação de regras determinísticas no Deal\nconst input = $input.first().json;\nconst dealId = input.deal_id;\n\nreturn [{\n  json: {\n    deal_id: dealId,\n    behavior_rules: ['B01_PRIORITY', 'B02_CANONICAL_TITLE', 'B04_STATE_GUARDS'],\n    status: 'ENFORCE_REQUESTED'\n  }\n}];"
+      },
+      "name": "Prepare_Engine_Payload",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [300, 300],
+      "id": "node_prep_be"
+    },
+    {
+      "parameters": {
+        "authentication": "webhookUrl",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/1/409v91u08jtdb7f2/crm.deal.get",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "id",
+              "value": "={{$json.deal_id}}"
+            }
+          ]
+        }
+      },
+      "name": "Fetch_Deal_State",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [520, 300],
+      "id": "node_fetch_deal"
+    },
+    {
+      "parameters": {
+        "functionCode": "const deal = $input.first().json.result || {};\n\n// B01: Priority Authority Matrix V1\nconst imp = String(deal.UF_CRM_TI_IMPACT || '');\nconst urg = String(deal.UF_CRM_TI_URGENCY || '');\n\n// B04: Next Owner & Wait Reason defaults\nconst nextOwnerId = 1148; // TI\nconst waitReasonId = 1162; // NONE\n\n// Cálculo canônico B01\n// P1: Critical, P2: High, P3: Medium, P4: Low\nlet priorityId = 1204; // Default P3\nif (imp.includes('1180') || imp.includes('1182')) { // Entire company / store\n  priorityId = 1200; // P1\n} else if (imp.includes('1184')) { // Department\n  priorityId = 1202; // P2\n}\n\nreturn [{\n  json: {\n    deal_id: Number(deal.ID),\n    fields_to_update: {\n      UF_CRM_TI_PRIORITY: priorityId,\n      UF_CRM_TI_NEXT_OWNER: nextOwnerId,\n      UF_CRM_TI_WAIT_REASON: waitReasonId\n    }\n  }\n}];"
+      },
+      "name": "Calculate_B01_B04",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [740, 300],
+      "id": "node_calc_rules"
+    },
+    {
+      "parameters": {
+        "authentication": "webhookUrl",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/1/409v91u08jtdb7f2/crm.deal.update",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "id",
+              "value": "={{$json.deal_id}}"
+            },
+            {
+              "name": "fields[UF_CRM_TI_PRIORITY]",
+              "value": "={{$json.fields_to_update.UF_CRM_TI_PRIORITY}}"
+            },
+            {
+              "name": "fields[UF_CRM_TI_NEXT_OWNER]",
+              "value": "={{$json.fields_to_update.UF_CRM_TI_NEXT_OWNER}}"
+            },
+            {
+              "name": "fields[UF_CRM_TI_WAIT_REASON]",
+              "value": "={{$json.fields_to_update.UF_CRM_TI_WAIT_REASON}}"
+            }
+          ]
+        }
+      },
+      "name": "Bitrix_Apply_Behavior_Enforcement",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [960, 300],
+      "id": "node_apply_enforce"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Prepare_Engine_Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare_Engine_Payload": {
+      "main": [
+        [
+          {
+            "node": "Fetch_Deal_State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch_Deal_State": {
+      "main": [
+        [
+          {
+            "node": "Calculate_B01_B04",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate_B01_B04": {
+      "main": [
+        [
+          {
+            "node": "Bitrix_Apply_Behavior_Enforcement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

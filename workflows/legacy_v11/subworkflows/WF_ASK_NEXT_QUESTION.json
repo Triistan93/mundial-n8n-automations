@@ -1,0 +1,104 @@
+{
+  "name": "WF_ASK_NEXT_QUESTION",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "id": "node_start_ask"
+    },
+    {
+      "parameters": {
+        "functionCode": "const input = $input.first().json;\n\n// Pre-send validation rule: dialog_type == 'private' AND dialog_id == requester_id\nconst requesterId = Number(input.requester_id || input.author_id);\nconst dialogId = String(requesterId);\n\nlet questionText = 'Gostaria de deixar algum comentário?';\nlet keyboardButtons = [\n  [{ text: 'Sim, quero comentar', command: 'Sim, quero comentar' }],\n  [{ text: 'Não, pode finalizar', command: 'Não, pode finalizar' }]\n];\n\nif (input.next_step === 'AWAITING_OPTIONAL_COMMENT_TEXT') {\n  questionText = 'Pode escrever agora. Seja breve e envie tudo em uma única mensagem.';\n  keyboardButtons = [];\n}\n\nreturn [{\n  json: {\n    deal_id: input.deal_id,\n    requester_id: requesterId,\n    dialog_id: dialogId,\n    message_text: questionText,\n    keyboard: keyboardButtons\n  }\n}];"
+      },
+      "name": "Format_Question_And_Buttons",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [300, 300],
+      "id": "node_format_q"
+    },
+    {
+      "parameters": {
+        "authentication": "webhookUrl",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/1/409v91u08jtdb7f2/im.message.add",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "DIALOG_ID",
+              "value": "={{$json.dialog_id}}"
+            },
+            {
+              "name": "MESSAGE",
+              "value": "={{$json.message_text}}"
+            },
+            {
+              "name": "SYSTEM",
+              "value": "N"
+            }
+          ]
+        }
+      },
+      "name": "Send_Bitrix_Chat_Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [520, 300],
+      "id": "node_send_msg"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE ticket_bot_sessions SET last_interaction_at = NOW(), state = $1, current_question = $2 WHERE deal_id = $3;",
+        "additionalFields": {
+          "queryParams": "={{$node[\"Format_Question_And_Buttons\"].json[\"next_step\"] || 'ACTIVE'}}, {{$node[\"Format_Question_And_Buttons\"].json[\"next_step\"] || 'optional_comment_choice'}}, {{$node[\"Format_Question_And_Buttons\"].json[\"deal_id\"]}}"
+        }
+      },
+      "name": "Update_Session_Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [740, 300],
+      "id": "node_update_session_q"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Format_Question_And_Buttons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format_Question_And_Buttons": {
+      "main": [
+        [
+          {
+            "node": "Send_Bitrix_Chat_Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send_Bitrix_Chat_Message": {
+      "main": [
+        [
+          {
+            "node": "Update_Session_Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

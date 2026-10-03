@@ -1,0 +1,79 @@
+{
+  "name": "WF_WRITE_TIMELINE",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "id": "node_start_timeline"
+    },
+    {
+      "parameters": {
+        "functionCode": "const input = $input.first().json;\n\nconst dealId = input.deal_id;\nconst comment = input.summary_text || 'Triagem automática realizada pelo bot de TI.';\n\nreturn [{\n  json: {\n    deal_id: dealId,\n    comment_payload: {\n      ENTITY_ID: dealId,\n      ENTITY_TYPE: 'deal',\n      COMMENT: comment\n    }\n  }\n}];"
+      },
+      "name": "Prepare_Timeline_Comment",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [300, 300],
+      "id": "node_prep_timeline"
+    },
+    {
+      "parameters": {
+        "authentication": "webhookUrl",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/1/409v91u08jtdb7f2/crm.timeline.comment.add",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "fields[ENTITY_ID]",
+              "value": "={{$json.comment_payload.ENTITY_ID}}"
+            },
+            {
+              "name": "fields[ENTITY_TYPE]",
+              "value": "={{$json.comment_payload.ENTITY_TYPE}}"
+            },
+            {
+              "name": "fields[COMMENT]",
+              "value": "={{$json.comment_payload.COMMENT}}"
+            }
+          ]
+        }
+      },
+      "name": "Bitrix_Add_Timeline_Comment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [520, 300],
+      "id": "node_add_comment"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Prepare_Timeline_Comment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare_Timeline_Comment": {
+      "main": [
+        [
+          {
+            "node": "Bitrix_Add_Timeline_Comment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "name": "WF_NEW_TICKET",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "id": "node_start"
+    },
+    {
+      "parameters": {
+        "authentication": "webhookUrl",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/1/409v91u08jtdb7f2/crm.deal.get",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "id",
+              "value": "={{$json.deal_id}}"
+            }
+          ]
+        }
+      },
+      "name": "Bitrix_Get_Deal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [280, 300],
+      "id": "node_get_deal"
+    },
+    {
+      "parameters": {
+        "functionCode": "const deal = $input.first().json.result || {};\nconst catId = Number(deal.CATEGORY_ID);\nconst createdById = Number(deal.CREATED_BY_ID || deal.UF_CRM_TI_REQUESTER);\nconst allowedRequesters = [32598];\n\n// Guard conditions\nif (catId !== 160) {\n  return [{ json: { status: 'IGNORED', reason: 'NOT_CATEGORY_160', deal_id: deal.ID, cat_id: catId } }];\n}\n\nif (!allowedRequesters.includes(createdById)) {\n  return [{ json: { status: 'IGNORED', reason: 'REQUESTER_NOT_ALLOWED', deal_id: deal.ID, requester: createdById } }];\n}\n\nreturn [{ json: {\n  deal_id: Number(deal.ID),\n  requester_id: createdById,\n  title: deal.TITLE || '',\n  comments: deal.COMMENTS || '',\n  category_uf: deal.UF_CRM_1763388156 || null,\n  subcategory_uf: deal.UF_CRM_1763388469429 || null,\n  store_uf: deal.UF_CRM_1689593052602 || null,\n  deal_data: deal\n} }];"
+      },
+      "name": "Validate_Category_And_Requester",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [480, 300],
+      "id": "node_validate_guard"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, status, state FROM ticket_bot_sessions WHERE requester_user_id = $1 AND status = 'ACTIVE' LIMIT 1;",
+        "additionalFields": {
+          "queryParams": "={{$json.requester_id}}"
+        }
+      },
+      "name": "Check_Active_Session_Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "id": "node_check_session"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Knowledge Extractor & Theme Detection Engine\nconst inputData = $input.first().json;\n\n// Canonical Theme Detection\nlet themeId = 'GENERICO';\nconst catMap = {\n  '880': 'COMPUTADOR', '882': 'IMPRESSORA', '878': 'ERP_MICROWORK',\n  '908': 'ATPV_RENAVE', '874': 'BITRIX24', '918': 'DESATIVAR_ACESSO',\n  '920': 'CAMERA', '876': 'COMPRA_EQUIPAMENTO', '916': 'ACESSO_SENHA'\n};\n\nif (inputData.category_uf && catMap[String(inputData.category_uf)]) {\n  themeId = catMap[String(inputData.category_uf)];\n}\n\nreturn [{\n  json: {\n    deal_id: inputData.deal_id,\n    requester_id: inputData.requester_id,\n    theme_id: themeId,\n    initial_question: 'START_TRIAGE',\n    status: 'START_CONVERSATION'\n  }\n}];"
+      },
+      "name": "Detect_Theme_And_Initialize",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [880, 300],
+      "id": "node_theme_init"
+    },
+    {
+      "parameters": {
+        "workflowId": "WF_ASK_NEXT_QUESTION",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "name": "Invoke_Ask_First_Question",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [1080, 300],
+      "id": "node_ask_first"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Bitrix_Get_Deal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bitrix_Get_Deal": {
+      "main": [
+        [
+          {
+            "node": "Validate_Category_And_Requester",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate_Category_And_Requester": {
+      "main": [
+        [
+          {
+            "node": "Check_Active_Session_Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check_Active_Session_Postgres": {
+      "main": [
+        [
+          {
+            "node": "Detect_Theme_And_Initialize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect_Theme_And_Initialize": {
+      "main": [
+        [
+          {
+            "node": "Invoke_Ask_First_Question",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

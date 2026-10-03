@@ -1,0 +1,656 @@
+{
+  "name": "BITRIX_TI_TRIAGE_BOT_V11",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 00 — CONFIG / PRE-FLIGHT\nCarrega parâmetros centrais, allowlist de solicitantes autorizados e avalia o Kill Switch.",
+        "height": 360,
+        "width": 580,
+        "color": 4
+      },
+      "id": "sticky_00",
+      "name": "Sticky_00_Config",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-280, -80]
+    },
+    {
+      "parameters": {
+        "content": "## 01 — POLLING / DISCOVERY\nBusca novos tickets elegíveis na Category 160 e novas mensagens no chat privado.",
+        "height": 280,
+        "width": 480,
+        "color": 5
+      },
+      "id": "sticky_01",
+      "name": "Sticky_01_Discovery",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [320, -30]
+    },
+    {
+      "parameters": {
+        "content": "## 02 — NEW TICKET & SESSION CREATION\nValidação de Category 160, allowlist, persistência inicial da sessão e fila (max 1 ativa por requester).",
+        "height": 340,
+        "width": 640,
+        "color": 6
+      },
+      "id": "sticky_02",
+      "name": "Sticky_02_New_Ticket",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [820, -60]
+    },
+    {
+      "parameters": {
+        "content": "## 03 — INCOMING REPLY & IDEMPOTÊNCIA\nGuarda anti-duplicidade, self-message guard, carregamento e atualização da sessão no Postgres.",
+        "height": 360,
+        "width": 640,
+        "color": 7
+      },
+      "id": "sticky_03",
+      "name": "Sticky_03_Incoming_Reply",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [820, 320]
+    },
+    {
+      "parameters": {
+        "content": "## 04 & 05 & 06 — THEME, KNOWLEDGE & QUESTION ENGINE\nDetecção canônica de tema, regra KNOWN DATA > ASK AGAIN e despacho dinâmico de botões.",
+        "height": 460,
+        "width": 680,
+        "color": 1
+      },
+      "id": "sticky_05_06",
+      "name": "Sticky_Theme_Question_Engine",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1500, -60]
+    },
+    {
+      "parameters": {
+        "content": "## 07 & 08 — CRM UPDATE & BEHAVIOR ENGINE\nAtualização restrita (Impact/Urgency), B01 (Prioridade V1), B02 (Título), B04, Timeline e Read-Back rigoroso.",
+        "height": 460,
+        "width": 780,
+        "color": 2
+      },
+      "id": "sticky_07_08",
+      "name": "Sticky_CRM_Behavior_Engine",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1500, 420]
+    },
+    {
+      "parameters": {
+        "content": "## 09 & 10 — TIMEOUT, AUDIT & ERROR HANDLING\nGestão de inatividade (T+4h lembrete, T+24h timeout), auditoria pericial e salvaguardas fail-closed.",
+        "height": 420,
+        "width": 660,
+        "color": 3
+      },
+      "id": "sticky_09_10",
+      "name": "Sticky_Timeout_Audit_Error",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [2320, -30]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 15
+            }
+          ]
+        }
+      },
+      "name": "00_Polling_Orchestrator_Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [-240, 96],
+      "id": "node_trigger"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 00 — CONFIGURAÇÃO CENTRAL & ALLOWLIST\nconst CONFIG = {\n  BOT_ENABLED: true,\n  CATEGORY_ID: 160,\n  BOT_ALLOWED_REQUESTERS: [32598],\n  INTEGRATION_USER_ID: 61622,\n  FAIL_CLOSED: true,\n  MAX_ACTIVE_PER_REQUESTER: 1\n};\n\nif (!CONFIG.BOT_ENABLED) {\n  return [{ json: { execute: false, reason: 'KILL_SWITCH_ACTIVE' } }];\n}\n\nreturn [{ json: { execute: true, config: CONFIG } }];"
+      },
+      "name": "00_Load_Config",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [-80, 96],
+      "id": "node_config"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.execute}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "00_Kill_Switch",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [60, 96],
+      "id": "node_kill_switch"
+    },
+    {
+      "parameters": {
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.list",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "filter[CATEGORY_ID]", "value": "160" },
+            { "name": "filter[STAGE_ID]", "value": "C160:NEW" },
+            { "name": "order[ID]", "value": "DESC" },
+            { "name": "select[]", "value": "ID" },
+            { "name": "select[]", "value": "TITLE" },
+            { "name": "select[]", "value": "COMMENTS" },
+            { "name": "select[]", "value": "CREATED_BY_ID" },
+            { "name": "select[]", "value": "UF_CRM_TI_REQUESTER" },
+            { "name": "select[]", "value": "UF_CRM_1689593052602" },
+            { "name": "select[]", "value": "UF_CRM_1763388156" },
+            { "name": "select[]", "value": "UF_CRM_1763388469429" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "01_Get_New_Tickets",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [360, 96],
+      "id": "node_get_tickets"
+    },
+    {
+      "parameters": {
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.dialog.messages.get",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "DIALOG_ID", "value": "32598" },
+            { "name": "LIMIT", "value": "5" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "01_Get_New_Messages",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [560, 96],
+      "id": "node_get_messages"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 02 — VALIDAÇÃO DO DEAL & ALLOWLIST DE PRODUÇÃO\nconst deals = $node['01_Get_New_Tickets'].json.result || [];\nconst config = $node['00_Load_Config'].json.config;\nconst validDeals = [];\n\nfor (const d of deals) {\n  const requesterId = Number(d.UF_CRM_TI_REQUESTER || d.CREATED_BY_ID);\n  if (Number(d.CATEGORY_ID) === config.CATEGORY_ID && config.BOT_ALLOWED_REQUESTERS.includes(requesterId)) {\n    validDeals.push({\n      deal_id: Number(d.ID),\n      requester_id: requesterId,\n      title: d.TITLE || '',\n      comments: d.COMMENTS || '',\n      store_id: d.UF_CRM_1689593052602,\n      cat_id: d.UF_CRM_1763388156,\n      subcat_id: d.UF_CRM_1763388469429\n    });\n    break; // Processa o chamado mais recente elegível\n  }\n}\n\nreturn validDeals.map(d => ({ json: d }));"
+      },
+      "name": "02_Validate_Deal",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [840, 96],
+      "id": "node_validate_deal"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, status, state FROM ticket_bot_sessions WHERE requester_user_id = {{ $json.requester_id }} AND status = 'ACTIVE' LIMIT 1;",
+        "additionalFields": {}
+      },
+      "name": "02_Check_Active_Session",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [1020, 96],
+      "id": "node_check_active"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 02 — PREPARAÇÃO DA SESSÃO\nconst deal = $node['02_Validate_Deal'].json;\nconst existing = $input.first().json;\n\nlet sessionStatus = 'ACTIVE';\nlet sessionState = 'INIT';\n\nif (existing && existing.id) {\n  // Solicitante já possui chamado ativo -> ENFILEIRA (QUEUE = PASS)\n  sessionStatus = 'QUEUED';\n  sessionState = 'QUEUED';\n}\n\nreturn [{\n  json: {\n    deal_id: deal.deal_id,\n    requester_id: deal.requester_id,\n    status: sessionStatus,\n    state: sessionState,\n    title: deal.title,\n    comments: deal.comments,\n    cat_id: deal.cat_id,\n    subcat_id: deal.subcat_id,\n    private_dialog_id: String(deal.requester_id)\n  }\n}];"
+      },
+      "name": "02_Create_Session",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1200, 96],
+      "id": "node_create_session"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO ticket_bot_sessions (deal_id, requester_user_id, private_dialog_id, status, state, current_question, collected_data_json, created_at, last_interaction_at) VALUES ({{ $json.deal_id }}, {{ $json.requester_id }}, '{{ $json.private_dialog_id }}', '{{ $json.status }}', '{{ $json.state }}', 'comp_q1_status', '{}'::jsonb, NOW(), NOW()) ON CONFLICT (deal_id) DO NOTHING;",
+        "additionalFields": {}
+      },
+      "name": "02_Persist_New_Session",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [1360, 96],
+      "id": "node_persist_session"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 03 — VALIDAÇÃO DE MENSAGEM RECEBIDA (DUPLICATE & SELF MESSAGE GUARD)\nconst rawMessages = $node['01_Get_New_Messages'].json.result?.messages || [];\nconst config = $node['00_Load_Config'].json.config;\nconst validReplies = [];\n\nfor (const m of rawMessages) {\n  const authorId = Number(m.author_id);\n  const msgId = String(m.id);\n  \n  // Self Message Guard (ignora mensagens emitidas pelo robô/integração)\n  if (authorId === config.INTEGRATION_USER_ID) continue;\n  \n  // Allowlist Guard\n  if (!config.BOT_ALLOWED_REQUESTERS.includes(authorId)) continue;\n  \n  validReplies.push({\n    message_id: msgId,\n    author_id: authorId,\n    text: (m.text || '').trim(),\n    dialog_id: String(authorId)\n  });\n  break;\n}\n\nreturn validReplies.map(r => ({ json: r }));"
+      },
+      "name": "03_Validate_Message",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [840, 480],
+      "id": "node_val_msg"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, deal_id, requester_user_id, state, current_question, collected_data_json, last_processed_message_id FROM ticket_bot_sessions WHERE requester_user_id = {{ $json.author_id }} AND status = 'ACTIVE' LIMIT 1;",
+        "additionalFields": {}
+      },
+      "name": "04_Load_Session",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [1020, 480],
+      "id": "node_load_session"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 03 & 04 — NORMALIZAÇÃO DE RESPOSTAS & DUPLICATE GUARD\nconst session = $input.first().json;\nconst reply = $node['03_Validate_Message'].json;\n\nif (!session || !session.id) {\n  return [{ json: { status: 'NOOP', reason: 'NO_ACTIVE_SESSION' } }];\n}\n\n// Duplicate message guard\nif (session.last_processed_message_id === reply.message_id) {\n  return [{ json: { status: 'NOOP', reason: 'DUPLICATE_MESSAGE' } }];\n}\n\nconst currQ = session.current_question || '';\nconst text = reply.text.toLowerCase();\nconst collData = session.collected_data_json || {};\nlet nextStep = 'COMPLETE_TRIAGE';\n\nif (currQ === 'optional_comment_choice') {\n  if (text.includes('sim')) {\n    nextStep = 'AWAITING_OPTIONAL_COMMENT_TEXT';\n  } else {\n    nextStep = 'COMPLETE_TRIAGE';\n  }\n} else if (currQ === 'AWAITING_OPTIONAL_COMMENT_TEXT') {\n  collData['optional_comment'] = reply.text;\n  nextStep = 'COMPLETE_TRIAGE';\n} else {\n  // Normaliza resposta temática\n  collData[`ANSWER_${currQ}`] = reply.text;\n  nextStep = 'optional_comment_choice';\n}\n\nreturn [{\n  json: {\n    session_id: session.id,\n    deal_id: session.deal_id,\n    requester_id: session.requester_user_id,\n    message_id: reply.message_id,\n    next_step: nextStep,\n    collected_data: collData,\n    current_question: currQ\n  }\n}];"
+      },
+      "name": "03_Normalize_Answer",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1200, 480],
+      "id": "node_norm_ans"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE ticket_bot_sessions SET last_interaction_at = NOW(), last_processed_message_id = '{{ $json.message_id }}', current_question = '{{ $json.next_step }}', collected_data_json = '{{ JSON.stringify($json.collected_data) }}'::jsonb WHERE id = {{ $json.session_id }};",
+        "additionalFields": {}
+      },
+      "name": "04_Update_Session_Answer",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [1360, 480],
+      "id": "node_update_session_ans"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 05 — DETECTOR CANÔNICO DE TEMA (THEME_DETECTOR)\n// Ordem estrita: CATEGORY > SUBCATEGORY > COMBINATION > HIGH-CONFIDENCE TEXT > GENERIC\nconst deal = $input.first().json;\nconst catUf = String(deal.cat_id || '');\n\nconst CAT_THEMES = {\n  '880': 'COMPUTADOR', '882': 'IMPRESSORA', '878': 'ERP_MICROWORK',\n  '908': 'ATPV_RENAVE', '874': 'BITRIX24', '918': 'DESATIVAR_ACESSO',\n  '920': 'CAMERA', '876': 'COMPRA_EQUIPAMENTO', '916': 'ACESSO_SENHA'\n};\n\nlet theme = 'GENERICO';\nif (CAT_THEMES[catUf]) {\n  theme = CAT_THEMES[catUf];\n} else {\n  const norm = `${deal.title || ''} ${deal.comments || ''}`.toLowerCase();\n  if (norm.includes('wifi') || norm.includes('internet') || norm.includes('rede')) theme = 'INTERNET_REDE';\n  else if (norm.includes('impressora')) theme = 'IMPRESSORA';\n  else if (norm.includes('computador')) theme = 'COMPUTADOR';\n}\n\ndeal.theme_id = theme;\nreturn [{ json: deal }];"
+      },
+      "name": "05_Detect_Theme",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1520, 96],
+      "id": "node_detect_theme"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 05 — KNOWLEDGE EXTRACTOR (KNOWN DATA > ASK AGAIN)\n// Invariantes estritas: DOMAIN_SCOPE != BUSINESS_IMPACT & OBSERVED_CONDITION != ROOT_CAUSE\nconst deal = $input.first().json;\nconst norm = `${deal.title || ''} ${deal.comments || ''}`.toLowerCase();\nconst knownData = {};\nconst skipped = [];\n\n// Escopo humano somente com alta confiança\nif (norm.includes('loja inteira') || norm.includes('toda a loja')) {\n  knownData['IMPACT'] = 'ENTIRE_STORE';\n  skipped.push('scope');\n} else if (norm.includes('departamento') || norm.includes('setor inteiro')) {\n  knownData['IMPACT'] = 'ENTIRE_DEPARTMENT';\n  skipped.push('scope');\n} else if (norm.includes('so eu') || norm.includes('so comigo')) {\n  knownData['IMPACT'] = 'SINGLE_USER';\n  skipped.push('scope');\n}\n\ndeal.known_data = knownData;\ndeal.skipped_questions = skipped;\ndeal.next_step = deal.theme_id === 'COMPUTADOR' ? 'comp_q1_status' : 'optional_comment_choice';\nreturn [{ json: deal }];"
+      },
+      "name": "05_Extract_Known_Data",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1700, 96],
+      "id": "node_extract_known"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 06 — QUESTION ENGINE (DYNAMIC CATALOG & COMMENT CHOICE)\nconst item = $input.first().json;\nconst nextStep = item.next_step || 'optional_comment_choice';\nlet text = 'Gostaria de deixar algum comentário?';\n\nif (nextStep === 'comp_q1_status') {\n  text = 'O computador liga normalmente?\\n\\n1. Sim\\n2. Não\\n3. Liga, mas apresenta erro\\n4. Está muito lento';\n} else if (nextStep === 'AWAITING_OPTIONAL_COMMENT_TEXT') {\n  text = 'Pode escrever agora. Seja breve e envie tudo em uma única mensagem.';\n} else if (nextStep === 'optional_comment_choice') {\n  text = 'Gostaria de deixar algum comentário?\\n\\n1. Sim, quero comentar\\n2. Não, pode finalizar';\n}\n\nreturn [{\n  json: {\n    deal_id: item.deal_id,\n    requester_id: item.requester_id,\n    dialog_id: String(item.requester_id),\n    next_question_id: nextStep,\n    question_text: text\n  }\n}];"
+      },
+      "name": "06_Get_Next_Question",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1880, 96],
+      "id": "node_get_next_q"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "DIALOG_ID", "value": "={{$json.dialog_id}}" },
+            { "name": "MESSAGE", "value": "={{$json.question_text}}" },
+            { "name": "SYSTEM", "value": "N" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "06_Send_Question",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [2060, 96],
+      "id": "node_send_q"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.next_step}}",
+              "value2": "COMPLETE_TRIAGE"
+            }
+          ]
+        }
+      },
+      "name": "04_Advance_State",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1520, 480],
+      "id": "node_advance_state"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.update",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "id", "value": "={{$json.deal_id}}" },
+            { "name": "fields[UF_CRM_TI_IMPACT]", "value": "1188" },
+            { "name": "fields[UF_CRM_TI_URGENCY]", "value": "1192" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "08_Update_CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1720, 480],
+      "id": "node_update_crm"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.update",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "id", "value": "={{$node['04_Advance_State'].json.deal_id}}" },
+            { "name": "fields[UF_CRM_TI_PRIORITY]", "value": "1204" },
+            { "name": "fields[UF_CRM_TI_NEXT_OWNER]", "value": "1148" },
+            { "name": "fields[UF_CRM_TI_WAIT_REASON]", "value": "1162" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "08_Call_Behavior_Engine",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1900, 480],
+      "id": "node_call_be"
+    },
+    {
+      "parameters": {
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.get",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "id", "value": "={{$node['04_Advance_State'].json.deal_id}}" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "08_Read_Back",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [2080, 480],
+      "id": "node_read_back"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.timeline.comment.add",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "fields[ENTITY_ID]", "value": "={{$json.result.ID}}" },
+            { "name": "fields[ENTITY_TYPE]", "value": "deal" },
+            { "name": "fields[COMMENT]", "value": "Triagem automática concluída com sucesso pelo Triage Bot V1.1." }
+          ]
+        },
+        "options": {}
+      },
+      "name": "07_Write_Timeline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [2080, 640],
+      "id": "node_write_tl"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "DIALOG_ID", "value": "={{$node['04_Advance_State'].json.requester_id}}" },
+            { "name": "MESSAGE", "value": "Obrigado! 👍\nJá organizei as informações do seu chamado e ele está pronto para a equipe de TI." },
+            { "name": "SYSTEM", "value": "N" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "08_Send_Final_Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1880, 640],
+      "id": "node_send_final"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE ticket_bot_sessions SET status = 'COMPLETED', state = 'COMPLETED', completed_at = NOW() WHERE deal_id = {{ $node['04_Advance_State'].json.deal_id }};",
+        "additionalFields": {}
+      },
+      "name": "08_Close_Session",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [1680, 640],
+      "id": "node_close_session"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, deal_id, requester_user_id, EXTRACT(EPOCH FROM (NOW() - last_interaction_at)) / 3600 AS hours_inactive FROM ticket_bot_sessions WHERE status = 'ACTIVE';",
+        "additionalFields": {}
+      },
+      "name": "09_Check_Timeouts",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [2380, 96],
+      "id": "node_check_timeout"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO ticket_bot_audit_log (deal_id, requester_user_id, question_identifier, question_text, answer_raw, created_at) VALUES ({{ $node['04_Advance_State'].json.deal_id }}, {{ $node['04_Advance_State'].json.requester_id }}, 'TRIAGE_COMPLETE', 'FINAL_STEP', 'PROCESSED', NOW());",
+        "additionalFields": {}
+      },
+      "name": "10_Audit_Event",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [2560, 96],
+      "id": "node_audit_event"
+    },
+    {
+      "parameters": {
+        "functionCode": "// 10 — ERROR HANDLING & FAIL CLOSED\nconst errorData = $input.first().json;\nreturn [{\n  json: {\n    status: 'FAIL_CLOSED',\n    error_logged: true,\n    action: 'NO_MESSAGE_SENT',\n    details: errorData\n  }\n}];"
+      },
+      "name": "10_Handle_Error",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [2560, 260],
+      "id": "node_handle_err"
+    }
+  ],
+  "connections": {
+    "00_Polling_Orchestrator_Trigger": {
+      "main": [
+        [
+          { "node": "00_Load_Config", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "00_Load_Config": {
+      "main": [
+        [
+          { "node": "00_Kill_Switch", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "00_Kill_Switch": {
+      "main": [
+        [
+          { "node": "01_Get_New_Tickets", "type": "main", "index": 0 },
+          { "node": "01_Get_New_Messages", "type": "main", "index": 0 },
+          { "node": "09_Check_Timeouts", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "01_Get_New_Tickets": {
+      "main": [
+        [
+          { "node": "02_Validate_Deal", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "02_Validate_Deal": {
+      "main": [
+        [
+          { "node": "02_Check_Active_Session", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "02_Check_Active_Session": {
+      "main": [
+        [
+          { "node": "02_Create_Session", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "02_Create_Session": {
+      "main": [
+        [
+          { "node": "02_Persist_New_Session", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "02_Persist_New_Session": {
+      "main": [
+        [
+          { "node": "05_Detect_Theme", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "05_Detect_Theme": {
+      "main": [
+        [
+          { "node": "05_Extract_Known_Data", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "05_Extract_Known_Data": {
+      "main": [
+        [
+          { "node": "06_Get_Next_Question", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "06_Get_Next_Question": {
+      "main": [
+        [
+          { "node": "06_Send_Question", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "01_Get_New_Messages": {
+      "main": [
+        [
+          { "node": "03_Validate_Message", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "03_Validate_Message": {
+      "main": [
+        [
+          { "node": "04_Load_Session", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "04_Load_Session": {
+      "main": [
+        [
+          { "node": "03_Normalize_Answer", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "03_Normalize_Answer": {
+      "main": [
+        [
+          { "node": "04_Update_Session_Answer", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "04_Update_Session_Answer": {
+      "main": [
+        [
+          { "node": "04_Advance_State", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "04_Advance_State": {
+      "main": [
+        [
+          { "node": "08_Update_CRM", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "06_Get_Next_Question", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "08_Update_CRM": {
+      "main": [
+        [
+          { "node": "08_Call_Behavior_Engine", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "08_Call_Behavior_Engine": {
+      "main": [
+        [
+          { "node": "08_Read_Back", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "08_Read_Back": {
+      "main": [
+        [
+          { "node": "07_Write_Timeline", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "07_Write_Timeline": {
+      "main": [
+        [
+          { "node": "08_Send_Final_Message", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "08_Send_Final_Message": {
+      "main": [
+        [
+          { "node": "08_Close_Session", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "08_Close_Session": {
+      "main": [
+        [
+          { "node": "10_Audit_Event", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

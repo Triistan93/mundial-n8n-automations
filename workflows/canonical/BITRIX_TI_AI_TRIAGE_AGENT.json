@@ -618,18 +618,54 @@
     },
     {
       "parameters": {
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.get",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $json.deal_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "11_Fetch_Deal_For_Description",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1840,
+        240
+      ],
+      "id": "node_fetch_deal_desc"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Combina dados do B01 com a descrição existente do Deal via all()\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst items = $input.all();\nconst results = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const b01 = b01Items[i]?.json || {};\n  const deal = items[i].json.result || items[i].json || {};\n\n  // Resumo do robô formatado (sem emojis de 4-bytes para evitar incompatibilidade no MySQL do Bitrix)\n  const milestoneSummary = b01.is_resolved_l1\n    ? `[AUTOATENDIMENTO L1 RESOLVIDO]\\n---------------------------------------------\\nTema: ${b01.tema}\\nPrioridade: ${b01.priority_label}\\n\\nResumo:\\n${b01.resumo}\\n\\n(Chamado concluído automaticamente como Ganho)`\n    : `[TRIAGEM IA CONCLUÍDA]\\n---------------------------------------------\\nTema: ${b01.tema}\\nImpacto: ${b01.impact_label}\\nUrgência: ${b01.urgency_label}\\nPrioridade B01: ${b01.priority_label} (${b01.priority_code})\\n\\nResumo:\\n${b01.resumo}\\n\\n(Histórico detalhado da conversa mantido no Chat do Card)`;\n\n  // Recupera descrição existente no campo UF_CRM_1729774515200 (Descrição)\n  let existingDescList = deal.UF_CRM_1729774515200;\n  let existingDescArray = [];\n  if (Array.isArray(existingDescList)) {\n    existingDescArray = existingDescList.map(x => String(x || '').trim()).filter(Boolean);\n  } else if (existingDescList) {\n    existingDescArray = [String(existingDescList).trim()];\n  }\n\n  // Preserva a descrição do usuário e adiciona o resumo do robô como complemento\n  const finalDescArray = [...existingDescArray, milestoneSummary];\n\n  // Recupera campo COMMENTS (Observação)\n  const existingComments = String(deal.COMMENTS || '').trim();\n  const finalComments = existingComments\n    ? `${existingComments}\\n\\n---------------------------------------------\\n${milestoneSummary}`\n    : milestoneSummary;\n\n  results.push({\n    json: {\n      ...b01,\n      final_desc_array: finalDescArray,\n      final_comments: finalComments\n    }\n  });\n}\n\nreturn results;"
+      },
+      "name": "12_Prepare_Deal_Update_Payload",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        240
+      ],
+      "id": "node_prep_deal_update_payload"
+    },
+    {
+      "parameters": {
         "method": "POST",
         "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.update",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  id: $json.deal_id,\n  fields: {\n    TITLE: $json.formatted_title,\n    STAGE_ID: $json.target_stage_id,\n    UF_CRM_TI_IMPACT: $json.impact_id,\n    UF_CRM_TI_URGENCY: $json.urgency_id,\n    UF_CRM_TI_PRIORITY: $json.priority_id,\n    UF_CRM_TI_NEXT_OWNER: $json.next_owner_id,\n    UF_CRM_TI_WAIT_REASON: $json.wait_reason_id,\n    UF_CRM_TI_SHORT_SUBJECT: $json.short_subject\n  }\n}) }}",
+        "jsonBody": "={{ JSON.stringify({\n  id: $json.deal_id,\n  fields: {\n    TITLE: $json.formatted_title,\n    STAGE_ID: $json.target_stage_id,\n    UF_CRM_TI_IMPACT: $json.impact_id,\n    UF_CRM_TI_URGENCY: $json.urgency_id,\n    UF_CRM_TI_PRIORITY: $json.priority_id,\n    UF_CRM_TI_NEXT_OWNER: $json.next_owner_id,\n    UF_CRM_TI_WAIT_REASON: $json.wait_reason_id,\n    UF_CRM_TI_SHORT_SUBJECT: $json.short_subject,\n    UF_CRM_1729774515200: $json.final_desc_array,\n    COMMENTS: $json.final_comments\n  }\n}) }}",
         "options": {}
       },
       "name": "12_Update_Deal_CRM_Bitrix",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [
-        1840,
+        2240,
         240
       ],
       "id": "node_update_deal_crm"
@@ -1041,6 +1077,28 @@
       ]
     },
     "11_B01_Priority_And_Payload": {
+      "main": [
+        [
+          {
+            "node": "11_Fetch_Deal_For_Description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11_Fetch_Deal_For_Description": {
+      "main": [
+        [
+          {
+            "node": "12_Prepare_Deal_Update_Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12_Prepare_Deal_Update_Payload": {
       "main": [
         [
           {

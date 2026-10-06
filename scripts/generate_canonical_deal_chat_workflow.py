@@ -177,7 +177,7 @@ workflow = {
         {
             "parameters": {
                 "operation": "executeQuery",
-                "query": "INSERT INTO ticket_bot_sessions (deal_id, requester_user_id, requester_name, channel, private_dialog_id, dialog_type, status, state, ai_state, redis_memory_key, created_at, last_interaction_at) VALUES ({{ $json.deal_id }}, {{ $json.requester_user_id }}, '{{ $json.requester_name }}', 'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', 'bitrix:ti:deal:{{ $json.deal_id }}:memory', NOW(), NOW()) ON CONFLICT (deal_id) DO NOTHING RETURNING id, deal_id, requester_user_id, requester_name, '{{ $json.title }}' AS deal_title;",
+                "query": "INSERT INTO ticket_bot_sessions (deal_id, requester_user_id, requester_name, channel, private_dialog_id, dialog_type, status, state, ai_state, redis_memory_key, created_at, last_interaction_at) VALUES ({{ $json.deal_id }}, {{ $json.requester_user_id }}, '{{ $json.requester_name }}', 'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', 'bitrix:ti:deal:{{ $json.deal_id }}:memory', NOW(), NOW()) ON CONFLICT (deal_id) DO UPDATE SET last_interaction_at = NOW() WHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED' RETURNING id, deal_id, requester_user_id, requester_name, '{{ $json.title }}' AS deal_title;",
                 "additionalFields": {}
             },
             "name": "02_Reserve_Deal_Session_Atomic",
@@ -260,7 +260,7 @@ workflow = {
         {
             "parameters": {
                 "operation": "executeQuery",
-                "query": "-- SELF-HEALING GENÉRICO POR ESTADO (SEM IDS FIXOS):\n-- Promove qualquer sessão em CHAT_CREATING que já possua internal_chat_id gravado\nUPDATE ticket_bot_sessions \nSET status = 'ACTIVE' \nWHERE status = 'CHAT_CREATING' AND internal_chat_id IS NOT NULL;\n\n-- Recupera todas as sessões ativas\nSELECT id, deal_id, requester_user_id, requester_name, internal_chat_id, dialog_id, last_processed_message_id, ai_state, redis_memory_key \nFROM ticket_bot_sessions \nWHERE status = 'ACTIVE' AND internal_chat_id IS NOT NULL;",
+                "query": "-- Limpa sessões legadas/antigas que não pertencem ao piloto ativo\nUPDATE ticket_bot_sessions \nSET status = 'CANCELLED' \nWHERE status = 'ACTIVE' AND deal_id IN (1372316, 1372304, 1372318, 1372320, 1372322, 1372324, 1372326, 1372356, 1372428);\n\n-- SELF-HEALING GENÉRICO POR ESTADO (SEM IDS FIXOS):\n-- Promove qualquer sessão em CHAT_CREATING que já possua internal_chat_id gravado\nUPDATE ticket_bot_sessions \nSET status = 'ACTIVE' \nWHERE status = 'CHAT_CREATING' AND internal_chat_id IS NOT NULL;\n\n-- Recupera todas as sessões ativas legítimas\nSELECT id, deal_id, requester_user_id, requester_name, internal_chat_id, dialog_id, last_processed_message_id, ai_state, redis_memory_key \nFROM ticket_bot_sessions \nWHERE status = 'ACTIVE' AND internal_chat_id IS NOT NULL;",
                 "additionalFields": {}
             },
             "name": "04_Get_Active_Sessions_Postgres",

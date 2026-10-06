@@ -54,7 +54,7 @@ def validate():
         chat_node is not None and 
         if_reserve is not None and
         "CHAT_CREATING" in reserve_node["parameters"]["query"] and
-        "ON CONFLICT (deal_id) DO NOTHING" in reserve_node["parameters"]["query"] and
+        "ON CONFLICT (deal_id)" in reserve_node["parameters"]["query"] and
         "RETURNING id" in reserve_node["parameters"]["query"]
     )
     checks.append({

@@ -1,0 +1,1802 @@
+[
+  {
+    "task_id": "21204",
+    "status": "2",
+    "created": "2026-10-06T11:05:00-03:00",
+    "closed": null,
+    "categoria": "Solicitação de compra",
+    "subcategoria": "Compra",
+    "descricao": "teste de conexão"
+  },
+  {
+    "task_id": "21202",
+    "status": "2",
+    "created": "2026-10-06T11:03:36-03:00",
+    "closed": null,
+    "categoria": "IHS Motocicletas",
+    "subcategoria": "Configuração",
+    "descricao": "WEB PEÇAS BUGADO NOVAMENTE!"
+  },
+  {
+    "task_id": "21200",
+    "status": "5",
+    "created": "2026-10-06T10:37:57-03:00",
+    "closed": "2026-10-06T10:55:00-03:00",
+    "categoria": "E-mail",
+    "subcategoria": "Reset de senha",
+    "descricao": "Bom dia,\r\nnão consigo entrar no meu e-mail\r\n\r\npode me ajudar com o reset?\r\n\r\nconsorcio@mundialmotos.com.br"
+  },
+  {
+    "task_id": "21196",
+    "status": "5",
+    "created": "2026-10-06T10:11:07-03:00",
+    "closed": "2026-10-06T10:22:44-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "preciso do ATPV 9C2KC2210TR134255 por favor"
+  },
+  {
+    "task_id": "21194",
+    "status": "5",
+    "created": "2026-10-06T10:01:51-03:00",
+    "closed": "2026-10-06T10:47:42-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia preciso que as notificações aparece no lado direito do meu computador"
+  },
+  {
+    "task_id": "21192",
+    "status": "5",
+    "created": "2026-10-06T09:55:55-03:00",
+    "closed": "2026-10-06T10:28:06-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "Solicito o ATPV da moto para que o cliente possa prosseguir com a geração da documentação. \r\nCliente JOELMA MARIA DA SILVA, Pedido 10004\r\nChassi 9C2JC9610VR042236"
+  },
+  {
+    "task_id": "21190",
+    "status": "5",
+    "created": "2026-10-06T09:20:26-03:00",
+    "closed": "2026-10-06T10:31:38-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia! Note da Karina parou de funcionar, não liga! Poderiam verificar?"
+  },
+  {
+    "task_id": "21188",
+    "status": "2",
+    "created": "2026-10-06T09:08:34-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Boa tarde, tudo bem?\r\nDesde ontem, têm 02 Notas fiscais que não concluiu a entrada.\r\nHonda 16644756\r\nGrupo - 149255\r\n\r\npor gentileza, poderia verificar o robô"
+  },
+  {
+    "task_id": "21186",
+    "status": "2",
+    "created": "2026-10-06T09:05:56-03:00",
+    "closed": null,
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "9C2KC2500TR174240"
+  },
+  {
+    "task_id": "21184",
+    "status": "2",
+    "created": "2026-10-06T08:54:53-03:00",
+    "closed": null,
+    "categoria": "Pacote Office",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia!!!!   \r\nNão esta abrindo a Ficha cadastral como atalho que tenho  salvo na area de trabalho e entre outros em excel>>. não sei o Motivo pode me ajudar?"
+  },
+  {
+    "task_id": "21182",
+    "status": "2",
+    "created": "2026-10-06T08:50:29-03:00",
+    "closed": null,
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "não consigo acessar orçamento de outros consultores \r\ne nem manutenção de apontamento"
+  },
+  {
+    "task_id": "21180",
+    "status": "2",
+    "created": "2026-10-06T08:03:13-03:00",
+    "closed": null,
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "GERAR INTENÇÃO DE VENDA chassi 9C2JC9710VR220064"
+  },
+  {
+    "task_id": "21178",
+    "status": "5",
+    "created": "2026-10-05T17:31:21-03:00",
+    "closed": "2026-10-05T17:44:21-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Boa tarde! Poderiam verificar por gentileza, a I.A parou de responder os clientes. Obrigada!"
+  },
+  {
+    "task_id": "21176",
+    "status": "2",
+    "created": "2026-10-05T16:59:20-03:00",
+    "closed": null,
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Motos de alta CC, temos que fazer a liberaçãopor campinas, mas no tipo de vendas eu preciso identificar que a venda é de Sumaré, preciso de liberação para alterar no card que a venda é de sumaré, pois nem sempre o vendedor faz o card, nesse caso eu tbm efetuo.\r\n\r\nSegue a imagem"
+  },
+  {
+    "task_id": "21174",
+    "status": "5",
+    "created": "2026-10-05T16:55:10-03:00",
+    "closed": "2026-10-05T17:38:00-03:00",
+    "categoria": "IHS Financeiro",
+    "subcategoria": "Reset de senha",
+    "descricao": "Ola preciso da recuperação de senha da cidade de Guaçu, Leme"
+  },
+  {
+    "task_id": "21172",
+    "status": "5",
+    "created": "2026-10-05T16:29:27-03:00",
+    "closed": "2026-10-05T17:43:12-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "GERAR ATPV 9C2KC2200TR550424"
+  },
+  {
+    "task_id": "21170",
+    "status": "5",
+    "created": "2026-10-05T15:34:19-03:00",
+    "closed": "2026-10-05T15:59:28-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Configuração",
+    "descricao": "Preciso que de liberação para aplicar descontos para os colaboradores Aline do pós vendas e do coordenador Vitor, ambos estão no em Sumaré"
+  },
+  {
+    "task_id": "21166",
+    "status": "5",
+    "created": "2026-10-05T14:50:43-03:00",
+    "closed": "2026-10-05T15:08:31-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "9C2JC9710VR225077"
+  },
+  {
+    "task_id": "21164",
+    "status": "5",
+    "created": "2026-10-05T14:31:05-03:00",
+    "closed": "2026-10-05T15:06:38-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "nao consigo enviar SMS no bitrix"
+  },
+  {
+    "task_id": "21160",
+    "status": "2",
+    "created": "2026-10-05T13:16:56-03:00",
+    "closed": null,
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Manutenção notebook Matheus esta de férias - desativação dos acessos\r\nMatheus Augusto de Souza"
+  },
+  {
+    "task_id": "21158",
+    "status": "2",
+    "created": "2026-10-05T12:29:05-03:00",
+    "closed": null,
+    "categoria": "Câmera",
+    "subcategoria": "Configuração",
+    "descricao": "Boa tarde, o dvr não está sincronizando histórico."
+  },
+  {
+    "task_id": "21156",
+    "status": "5",
+    "created": "2026-10-05T11:31:38-03:00",
+    "closed": "2026-10-05T13:49:59-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Foi realizado a troca do meu pc e esta pedindo certificado para uso do e-mail."
+  },
+  {
+    "task_id": "21154",
+    "status": "5",
+    "created": "2026-10-05T10:27:14-03:00",
+    "closed": "2026-10-05T11:25:48-03:00",
+    "categoria": "Câmera",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Bom dia, preciso do acesso às câmeras."
+  },
+  {
+    "task_id": "21152",
+    "status": "5",
+    "created": "2026-10-05T10:15:28-03:00",
+    "closed": "2026-10-05T11:02:51-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "scaner vilma nao esta funcionando"
+  },
+  {
+    "task_id": "21150",
+    "status": "5",
+    "created": "2026-10-05T10:15:24-03:00",
+    "closed": "2026-10-05T11:02:27-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "scaner vilma nao esta funcionando"
+  },
+  {
+    "task_id": "21146",
+    "status": "2",
+    "created": "2026-10-05T09:18:53-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Manutenção",
+    "descricao": "Bom dia! Desde semana passada o Bot não está mais faturando as requisições de transferência automaticamente, precisei abrir um card na pipe de \"Entrada de NFs\" para faturarem manualmente algumas requisições. \r\n\r\nOutras lojas também estão com esse problema, não sei se já tem ticket aberto, mas se puderem verificar, por favor!"
+  },
+  {
+    "task_id": "21144",
+    "status": "5",
+    "created": "2026-10-05T09:13:23-03:00",
+    "closed": "2026-10-05T09:56:59-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "eu anexo as expedições pelo celular e agora estão sendo salvas na minha galeria"
+  },
+  {
+    "task_id": "21142",
+    "status": "2",
+    "created": "2026-10-05T08:57:57-03:00",
+    "closed": null,
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Não estamos conseguindo fazer pedidos de venda - é o 3º hoje que não consigo, tantos modelos 2026 quanto modelos 2027\r\nsegue alguns prints de hoje"
+  },
+  {
+    "task_id": "21134",
+    "status": "5",
+    "created": "2026-10-05T08:13:40-03:00",
+    "closed": "2026-10-05T08:38:45-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia\r\nNão estou conseguindo ajustar a luminosidade da minha tela. Poderia me orientar, por favor"
+  },
+  {
+    "task_id": "21132",
+    "status": "5",
+    "created": "2026-10-05T08:12:23-03:00",
+    "closed": "2026-10-05T08:23:55-03:00",
+    "categoria": "IHS Motocicletas",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "APLICATIVO DO CONSÓRCIO NÃO ESTA ENTRANDO,ESTOU BLOQUEADA"
+  },
+  {
+    "task_id": "21128",
+    "status": "5",
+    "created": "2026-10-03T11:36:50-03:00",
+    "closed": "2026-10-03T11:45:02-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Reset de senha",
+    "descricao": "Bom dia\r\nPrecisamos da senha do José Dantas, para o login - oficinahortolandia7@mundialhonda.com.br"
+  },
+  {
+    "task_id": "21124",
+    "status": "5",
+    "created": "2026-10-03T10:12:55-03:00",
+    "closed": "2026-10-03T11:00:59-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Bom dia!\r\n\r\nNova colaboradora Ziane Loureiro não possui acesso as pipes e nem ao fale fácil para prospecção. Poderiam liberar, por gentileza? \r\n\r\nObrigada!"
+  },
+  {
+    "task_id": "21122",
+    "status": "5",
+    "created": "2026-10-03T10:04:13-03:00",
+    "closed": "2026-10-05T07:54:20-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Bom dia ! Antes de eu sair de licença eu tinha acesso a outras lojas do grupo para poder imprimir notas , expedições e outras coisas, tiraram meu acesso e conforme anexo segue autorização da Tatiana para liberar .\r\nPeço que deixe o acesso igual ao da estagiaria Eloisa Moura Barbosa, pq o dela esta igual ao que era  o meu ."
+  },
+  {
+    "task_id": "21120",
+    "status": "5",
+    "created": "2026-10-03T09:36:47-03:00",
+    "closed": "2026-10-03T10:25:56-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "POS VENDAS FAZENDO ATIVO NO MEU CANAL INDIVIDUAL"
+  },
+  {
+    "task_id": "21118",
+    "status": "5",
+    "created": "2026-10-03T09:33:29-03:00",
+    "closed": "2026-10-03T09:48:16-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia!\r\n\r\nNão consigo avançar após digitar meu email\r\n\r\nFavor conectar na maquina e me auxiliar\r\n\r\nGrata\r\nCeleste"
+  },
+  {
+    "task_id": "21116",
+    "status": "5",
+    "created": "2026-10-03T09:10:57-03:00",
+    "closed": "2026-10-03T09:53:53-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Solicito liberação da hierarquia da loja de Mogi Guaçu em vendas e pós vendas."
+  },
+  {
+    "task_id": "21114",
+    "status": "5",
+    "created": "2026-10-03T08:54:15-03:00",
+    "closed": "2026-10-03T10:49:23-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "preciso que cadastre a Ana Clara como vendedora de acessórios e coloque ela como minha subordinada pra que eu possa liberar descontos nas vendas feitas por ela nesse mês de outubro pois ela estará cobrindo as férias do Robson"
+  },
+  {
+    "task_id": "21112",
+    "status": "5",
+    "created": "2026-10-03T08:43:01-03:00",
+    "closed": "2026-10-03T11:42:33-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Não está indo as mensagens"
+  },
+  {
+    "task_id": "21108",
+    "status": "5",
+    "created": "2026-10-03T08:21:18-03:00",
+    "closed": "2026-10-03T09:07:31-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Reset de senha",
+    "descricao": "Bom dia ! Aqui é a Daniela e eu preciso de ajuda para recuperar senha no Bitrix, eu estive ausente ontem no período da tarde e foi deslogado, porém  ja tentei todas as senhas possíveis e não entra , ja tentei recuperar via e-mail, via celular , via sinal de fumaça , de todas as maneiras e nao da certo .\r\ne-mail que utilizo é o caixasbo@mundialhonda.com.br."
+  },
+  {
+    "task_id": "21106",
+    "status": "2",
+    "created": "2026-10-03T08:15:00-03:00",
+    "closed": null,
+    "categoria": "Impressora",
+    "subcategoria": "Configuração",
+    "descricao": "conectar impressora"
+  },
+  {
+    "task_id": "21104",
+    "status": "5",
+    "created": "2026-10-03T07:31:28-03:00",
+    "closed": "2026-10-03T08:59:41-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "GERAR INTENÇÃO DE VENDA  chassi  9C2ND1740VR001945"
+  },
+  {
+    "task_id": "21102",
+    "status": "5",
+    "created": "2026-10-02T17:52:46-03:00",
+    "closed": "2026-10-03T10:55:37-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Categoria: Bitrix 24\nSubcategoria: Erro\n\nDescrição:"
+  },
+  {
+    "task_id": "21100",
+    "status": "5",
+    "created": "2026-10-02T17:50:20-03:00",
+    "closed": "2026-10-03T08:52:34-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Ao realizar a integração de NFe de funcionário honda consta como inválido, não sendo possível integrar"
+  },
+  {
+    "task_id": "21098",
+    "status": "2",
+    "created": "2026-10-02T17:20:44-03:00",
+    "closed": null,
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "LIBERAÇÃO PARA DAR DESCONTO EM VENDAS E O GERENTE SER RESPONSAVEL PARA AUTORIZAR O DESCONTO"
+  },
+  {
+    "task_id": "21094",
+    "status": "5",
+    "created": "2026-10-02T16:36:05-03:00",
+    "closed": "2026-10-03T08:46:37-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "Boa tarde! \r\n\r\nEstou fazendo a dispensa do colaborador Vinicius Guimaraes Dias Vendedor \r\n\r\nPreciso que retire todos os acessos dele as plataformas \r\n\r\nGrata\r\nCeleste"
+  },
+  {
+    "task_id": "21092",
+    "status": "5",
+    "created": "2026-10-02T16:20:49-03:00",
+    "closed": "2026-10-03T08:45:35-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Ao realizar a integração de NFe de funcionário honda consta como inválido, não sendo possível integrar"
+  },
+  {
+    "task_id": "21090",
+    "status": "5",
+    "created": "2026-10-02T14:03:00-03:00",
+    "closed": "2026-10-02T15:01:52-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Erro",
+    "descricao": "nao consigo acessar o site da honda esta com erro"
+  },
+  {
+    "task_id": "21088",
+    "status": "5",
+    "created": "2026-10-02T13:25:52-03:00",
+    "closed": "2026-10-02T14:02:29-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "ERRO AO EMITIR ATPV \r\n\r\nGUA\t53957\tVENDIDO \tNOVA CG 160 TITAN\t9C2KC2210TR132373\t  CINZA PEROLIZADA\t2026/2026\tNOVO"
+  },
+  {
+    "task_id": "21086",
+    "status": "5",
+    "created": "2026-10-02T11:44:50-03:00",
+    "closed": "2026-10-02T15:10:29-03:00",
+    "categoria": "Desativar acesso",
+    "subcategoria": "Manutenção",
+    "descricao": "Bom dia, tudo bem?  Por favor deixar a Maria Rosa, caixa de Nova Odessa só com acesso do caixa de Nova Odessa, bloqueia o acesso dela de SBO por favor? Pois ela esta fazendo lançamentos errados de NVO em SBO."
+  },
+  {
+    "task_id": "21084",
+    "status": "2",
+    "created": "2026-10-02T11:39:09-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Poderia liberar acesso ao vdd Henrique Zorzo em \r\nCRM- CANAIS ABERTOS em Araras (como ele está registrado por Leme, não estão aparecendo os clientes - ele precisa ter acesso aos cards que os clientes de Araras (loja) chamam pra atender, pois ele trabalha em Araras"
+  },
+  {
+    "task_id": "21082",
+    "status": "2",
+    "created": "2026-10-02T11:08:51-03:00",
+    "closed": null,
+    "categoria": "Solicitação de compra",
+    "subcategoria": "Compra",
+    "descricao": "Bom dia, poderia comprar/se ja tiverem, um cabo de 5 metros, ou um extensor de USB (mas de preferencia o cabo) esta com desgaste. Para uso no aparelho MCS (oficina)\r\nImagem anexada"
+  },
+  {
+    "task_id": "21080",
+    "status": "5",
+    "created": "2026-10-02T10:26:57-03:00",
+    "closed": "2026-10-02T13:36:16-03:00",
+    "categoria": "IHS Motocicletas",
+    "subcategoria": "Erro",
+    "descricao": "Não estou conseguindo fazer o pedido da Biz 125 ES"
+  },
+  {
+    "task_id": "21076",
+    "status": "5",
+    "created": "2026-10-02T09:09:55-03:00",
+    "closed": "2026-10-02T10:39:35-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Erro em Araras"
+  },
+  {
+    "task_id": "21074",
+    "status": "5",
+    "created": "2026-10-02T08:54:47-03:00",
+    "closed": "2026-10-02T13:37:11-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Configuração",
+    "descricao": "Bom diaa!\r\n\r\nEstou tentando fechar esse pedido, porém esta dando erro de atualização"
+  },
+  {
+    "task_id": "21072",
+    "status": "5",
+    "created": "2026-10-02T08:49:33-03:00",
+    "closed": "2026-10-02T15:29:41-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "aparecendo essa mensagem enquanto tento fazer o vinculo desse chassi ao pedido."
+  },
+  {
+    "task_id": "21070",
+    "status": "2",
+    "created": "2026-10-02T08:49:30-03:00",
+    "closed": null,
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Configuração",
+    "descricao": "9C2KC2240TR007626"
+  },
+  {
+    "task_id": "21068",
+    "status": "2",
+    "created": "2026-10-02T08:39:04-03:00",
+    "closed": null,
+    "categoria": "Solicitação de compra",
+    "subcategoria": "Compra",
+    "descricao": "Preciso de um cabo para carregar o meu noot,\r\nQuando ele foi pra manutenção no ano passado foi enviado com outro carregador que não era o original.\r\nE agora estou com muita dificuldade em fazer carregar, o encaixe fica solto e não carrega, preciso ficar segurando \r\n\r\nFavor verificar a troca, pode ser que o que tenho pode dar certo em outro computador"
+  },
+  {
+    "task_id": "21066",
+    "status": "2",
+    "created": "2026-10-02T08:34:53-03:00",
+    "closed": null,
+    "categoria": "Solicitação de compra",
+    "subcategoria": "Compra",
+    "descricao": "Bom dia!\r\n\r\nSemana passada um HadFOne da equipe de vendas parou de funcionar e descartei, tinha outro de reserva, porém parou de funcionar tbem.\r\n\r\nSolicito compra de 2 Para repor estes \r\n\r\nInclusive peço pra comprar 1 fone de ouvido tbem igual ao que foi distribuído anteriormente pros gerentes (o meu quebrou eu colei com Superbonder)"
+  },
+  {
+    "task_id": "21064",
+    "status": "5",
+    "created": "2026-10-02T08:08:40-03:00",
+    "closed": "2026-10-02T10:05:20-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Por gentileza liberar acesso para mim e para Arielton em: Relatórios e BI > Fiscal > Apropriação de Custo - Mudança de Tributação\r\n\r\nObrigada."
+  },
+  {
+    "task_id": "21062",
+    "status": "5",
+    "created": "2026-10-02T07:49:59-03:00",
+    "closed": "2026-10-02T07:57:55-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia,\r\n\r\nPor gentileza tirar as notificações de antivirus do canto inferior direito da tela, pois é excessivo e tem atrapalhado o trabalho."
+  },
+  {
+    "task_id": "21060",
+    "status": "5",
+    "created": "2026-10-01T17:52:01-03:00",
+    "closed": "2026-10-02T07:34:29-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "9C2KC2210TR126353"
+  },
+  {
+    "task_id": "21058",
+    "status": "5",
+    "created": "2026-10-01T17:51:31-03:00",
+    "closed": "2026-10-02T07:37:25-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "ERRO DE RENAVE NOS CHASSIS:\r\n\r\n9C2KC2200TR549009\r\n9C2KC2500TR237163"
+  },
+  {
+    "task_id": "21056",
+    "status": "5",
+    "created": "2026-10-01T17:38:58-03:00",
+    "closed": "2026-10-05T08:17:12-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Boa tardee! \r\n\r\nNo card https://b24-88dbfb.bitrix24.com.br/crm/deal/details/1388522/"
+  },
+  {
+    "task_id": "21054",
+    "status": "2",
+    "created": "2026-10-01T16:53:06-03:00",
+    "closed": null,
+    "categoria": "Solicitação de compra",
+    "subcategoria": "Compra",
+    "descricao": "Solicito um fone de ouvido headset para ligações e áudios."
+  },
+  {
+    "task_id": "21052",
+    "status": "5",
+    "created": "2026-10-01T16:37:03-03:00",
+    "closed": "2026-10-01T17:35:37-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "Boa tarde, tudo bem ? Eu não estou recebendo as notificações do robô para transferências entra as lojas. Poderiam configurar ?"
+  },
+  {
+    "task_id": "21050",
+    "status": "2",
+    "created": "2026-10-01T16:07:28-03:00",
+    "closed": null,
+    "categoria": "Solicitação de compra",
+    "subcategoria": "Compra",
+    "descricao": "Gostaria de solicitar a compra de um mousepad para mim utilizar na minha mesa, por gentileza,"
+  },
+  {
+    "task_id": "21048",
+    "status": "5",
+    "created": "2026-10-01T15:49:50-03:00",
+    "closed": "2026-10-02T07:50:07-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Podem acessar o anydesk do meu computador porfavor? não consigo baixar as coisas do bitrix, nem marcar a mensagem para responder as pessoas!!!"
+  },
+  {
+    "task_id": "21046",
+    "status": "5",
+    "created": "2026-10-01T15:09:24-03:00",
+    "closed": "2026-10-01T15:36:20-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "Boa tarde, td bem?\r\nFavor inserir a cor verde na barra de busca do bitrix"
+  },
+  {
+    "task_id": "21044",
+    "status": "5",
+    "created": "2026-10-01T14:51:47-03:00",
+    "closed": "2026-10-01T15:31:20-03:00",
+    "categoria": "IHS Financeiro",
+    "subcategoria": "Reset de senha",
+    "descricao": "Por gentileza, poderiam resetar a senha das seguintes cidades IHS FINANCEIRO ( itapira - mogi mirim )"
+  },
+  {
+    "task_id": "21042",
+    "status": "5",
+    "created": "2026-10-01T14:02:06-03:00",
+    "closed": "2026-10-01T14:12:23-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "ERRO ATPV"
+  },
+  {
+    "task_id": "21040",
+    "status": "2",
+    "created": "2026-10-01T12:01:29-03:00",
+    "closed": null,
+    "categoria": "Vendas Digital",
+    "subcategoria": "Reset de senha",
+    "descricao": "preciso preencher uma proposta para o meu cliente de Itapira e meu acesso está bloqueado, help"
+  },
+  {
+    "task_id": "21034",
+    "status": "5",
+    "created": "2026-10-01T11:12:21-03:00",
+    "closed": "2026-10-05T08:16:47-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Erro",
+    "descricao": "internet com estabilidade, onde bitrix e cloud bem lentos"
+  },
+  {
+    "task_id": "21032",
+    "status": "2",
+    "created": "2026-10-01T10:39:47-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "AUTOMAÇÃO INCORRETA  - QUANDO POS VENDAS ENVIA A MENSAGEM AO CLIENTE, CHEGA PRA NOS DO SETOR DE VENDAS. FAZENDO COM QUE ATRAPALHE O DIA A DIA. POIS TEM QUE FICAR ENCAMINHANDO NOVAMENTE PRO SETOR."
+  },
+  {
+    "task_id": "21028",
+    "status": "2",
+    "created": "2026-10-01T09:14:43-03:00",
+    "closed": null,
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Bom dia \r\nPor gentileza poderia liberar o acesso da listagem de moto 0 KM que foram vendidas ?\r\nComo a menina do acessórios esta de férias nós da recepção ficaremos responsável pelas divulgações e vendas de alarme"
+  },
+  {
+    "task_id": "21026",
+    "status": "5",
+    "created": "2026-10-01T08:34:51-03:00",
+    "closed": "2026-10-01T08:54:51-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "malwarebytes não sai a msg da tela"
+  },
+  {
+    "task_id": "21024",
+    "status": "2",
+    "created": "2026-10-01T08:26:13-03:00",
+    "closed": null,
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "Olá, bom dia!! Estarei de férias no período de 02 a 25/10 ao final do dia de hoje vou entregar meu notebook para manutenção."
+  },
+  {
+    "task_id": "21022",
+    "status": "5",
+    "created": "2026-10-01T08:22:44-03:00",
+    "closed": "2026-10-01T08:49:29-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Não existe hierarquia de funcionários consórcio para o vendedor LAIS DE SA"
+  },
+  {
+    "task_id": "21020",
+    "status": "5",
+    "created": "2026-10-01T08:14:09-03:00",
+    "closed": "2026-10-02T07:51:29-03:00",
+    "categoria": "Impressora",
+    "subcategoria": "Configuração",
+    "descricao": "bom dia ! por favor consegui configurar nossa impressora"
+  },
+  {
+    "task_id": "21018",
+    "status": "5",
+    "created": "2026-10-01T08:08:35-03:00",
+    "closed": "2026-10-01T08:27:22-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Bom dia \r\nPessoal podem ajustar meu cloud para ele não bloquear as 18:01, as vezes ainda tem cliente na loja que precisamos fechar algo e o cloud bloqueia meu acesso as 18:01 em ponto, consegui deixar uma carência ?"
+  },
+  {
+    "task_id": "21014",
+    "status": "5",
+    "created": "2026-09-30T16:46:58-03:00",
+    "closed": "2026-09-30T16:49:56-03:00",
+    "categoria": "Vendas Digital",
+    "subcategoria": "Reset de senha",
+    "descricao": "preciso de reset da minha senha do cnh Araras"
+  },
+  {
+    "task_id": "21012",
+    "status": "5",
+    "created": "2026-09-30T16:04:08-03:00",
+    "closed": "2026-09-30T16:07:58-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "oii boa tarde,estou com problemas para gerar atpv da moto NOVA CG 160 TITAN\t  CINZA PEROLIZADA\t9C2KC2210TR128864"
+  },
+  {
+    "task_id": "21010",
+    "status": "2",
+    "created": "2026-09-30T14:41:24-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Manutenção",
+    "descricao": "Boa tarde, tudo bem ? O bot está demorando para processar as notas e uma está pendente de entrada desde ontem."
+  },
+  {
+    "task_id": "21008",
+    "status": "5",
+    "created": "2026-09-30T14:28:31-03:00",
+    "closed": "2026-09-30T14:53:20-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Falha ao enviar os primeiros templates \r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1385648/\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1386126/"
+  },
+  {
+    "task_id": "21006",
+    "status": "5",
+    "created": "2026-09-30T14:07:43-03:00",
+    "closed": "2026-09-30T14:26:27-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "boa tarde ! tudo bem? GERAR INTENÇÃO DE VENDA   RENAVE\r\n\r\nchassi : 9C2NC6110VR003194\r\nchassi:  9C2JK3400VR014325"
+  },
+  {
+    "task_id": "21004",
+    "status": "5",
+    "created": "2026-09-30T13:27:49-03:00",
+    "closed": "2026-10-01T17:42:14-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Categoria: Bitrix 24\nSubcategoria: Erro\n\nDescrição:"
+  },
+  {
+    "task_id": "21002",
+    "status": "2",
+    "created": "2026-09-30T12:22:42-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia!\r\n\r\nFavor verificar instabilidade no Bitrix aconteceu novamente hoje \r\n\r\nGrata \r\nCeleste"
+  },
+  {
+    "task_id": "21000",
+    "status": "5",
+    "created": "2026-09-30T12:22:13-03:00",
+    "closed": "2026-09-30T12:59:05-03:00",
+    "categoria": "Vendas Digital",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Liberar acesso Leme do vendas digital por favor , meu acesso de leme esta bloqueado"
+  },
+  {
+    "task_id": "20998",
+    "status": "5",
+    "created": "2026-09-30T11:53:34-03:00",
+    "closed": "2026-09-30T13:31:37-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Bom dia, poderia liberar meus acessos que foram restritos ao entrar de férias?"
+  },
+  {
+    "task_id": "20996",
+    "status": "2",
+    "created": "2026-09-30T11:36:48-03:00",
+    "closed": null,
+    "categoria": "Solicitação de compra",
+    "subcategoria": "Compra",
+    "descricao": "Tablet Flavio Recepção oficina esta com a tela apagando constantemente gerando transtorno nos atendimentos, caso passado para a Zélia aonde solicitou a abertura do Ticket solicitando a troca do mesmo."
+  },
+  {
+    "task_id": "20990",
+    "status": "5",
+    "created": "2026-09-30T10:39:28-03:00",
+    "closed": "2026-09-30T10:45:56-03:00",
+    "categoria": "IHS Financeiro",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Login de Araras bliqueado no IHS"
+  },
+  {
+    "task_id": "20988",
+    "status": "5",
+    "created": "2026-09-30T10:36:20-03:00",
+    "closed": "2026-09-30T15:51:45-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "bitrix"
+  },
+  {
+    "task_id": "20986",
+    "status": "5",
+    "created": "2026-09-30T10:33:42-03:00",
+    "closed": "2026-09-30T15:53:10-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia!\r\n\r\nTrocamos o fone, mas ao enviar o áudio, a voz continua saindo muito baixa.\r\n\r\nAcredito que o problema possa estar no notebook. Você poderia me ajudar a verificar, por favor?"
+  },
+  {
+    "task_id": "20984",
+    "status": "5",
+    "created": "2026-09-30T10:18:20-03:00",
+    "closed": "2026-09-30T10:30:39-03:00",
+    "categoria": "IHS Financeiro",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "meu login será bloqueado ai preciso da senha"
+  },
+  {
+    "task_id": "20982",
+    "status": "5",
+    "created": "2026-09-30T10:13:35-03:00",
+    "closed": "2026-09-30T11:23:42-03:00",
+    "categoria": "Solicitação de compra",
+    "subcategoria": "Compra",
+    "descricao": "Bom dia, solicito por gentileza a analise de compra de um direcionador de ar condicionado split para a sala da Supervisão em Araras, pois o vento mesmo direcionado para cima acaba ficando há cima da cabeça causando desconforto ao longo do dia, muito obrigado."
+  },
+  {
+    "task_id": "20980",
+    "status": "5",
+    "created": "2026-09-30T10:11:27-03:00",
+    "closed": "2026-09-30T10:40:22-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Tem como tirar a notificação do Malware da minha máquina por favor... fica aparecendo toda hora e atrapalha bastante.\r\n\r\nAny Desk: 1628933692\r\n\r\nobrigada."
+  },
+  {
+    "task_id": "20978",
+    "status": "5",
+    "created": "2026-09-30T10:04:14-03:00",
+    "closed": "2026-09-30T13:51:11-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Ao realizar o retorno de uma demonstração consta esse erro, não sendo possível seguir com o processo"
+  },
+  {
+    "task_id": "20976",
+    "status": "5",
+    "created": "2026-09-30T09:37:11-03:00",
+    "closed": "2026-09-30T16:03:40-03:00",
+    "categoria": "Impressora",
+    "subcategoria": "Configuração",
+    "descricao": "Cadastrar o nootbook na impressora de vendas para impressão e scanner"
+  },
+  {
+    "task_id": "20974",
+    "status": "5",
+    "created": "2026-09-30T09:36:10-03:00",
+    "closed": "2026-09-30T10:11:39-03:00",
+    "categoria": "E-mail",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia \r\nCaixa de email esta pedindo atualização e parou de funcionar"
+  },
+  {
+    "task_id": "20972",
+    "status": "5",
+    "created": "2026-09-30T09:02:36-03:00",
+    "closed": "2026-09-30T09:56:20-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Manutenção",
+    "descricao": "Bom dia! Estou desde ontem aguardo a entrada de algumas NFs do Grupo, mas o bot ainda não está processando os cards, pode verificar por favor?"
+  },
+  {
+    "task_id": "20970",
+    "status": "5",
+    "created": "2026-09-30T08:51:02-03:00",
+    "closed": "2026-09-30T09:38:35-03:00",
+    "categoria": "IHS Motocicletas",
+    "subcategoria": "Reset de senha",
+    "descricao": "Por gentileza, resetar a senha do IHS Guaçu\r\n1696922\r\nNATAELEN"
+  },
+  {
+    "task_id": "20968",
+    "status": "5",
+    "created": "2026-09-30T08:22:55-03:00",
+    "closed": "2026-09-30T17:34:02-03:00",
+    "categoria": "Impressora",
+    "subcategoria": "Configuração",
+    "descricao": "Conectar impressora ao novo pc"
+  },
+  {
+    "task_id": "20966",
+    "status": "5",
+    "created": "2026-09-30T08:15:22-03:00",
+    "closed": "2026-09-30T09:21:37-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia,\r\nApareceu esse erro em mogi, pode me ajudar?"
+  },
+  {
+    "task_id": "20964",
+    "status": "2",
+    "created": "2026-09-30T07:54:38-03:00",
+    "closed": null,
+    "categoria": "Impressora",
+    "subcategoria": "Erro",
+    "descricao": "Impressora não esta funcionando e precisamos dela funcionando, aparece a mensagem de erro ao imprimir."
+  },
+  {
+    "task_id": "20962",
+    "status": "5",
+    "created": "2026-09-30T07:46:18-03:00",
+    "closed": "2026-09-30T09:32:25-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Por gentileza liberar acesso para mim, para Amanda Carolina da Silva, Marina Anunciação dos Santos Ramos em Fiscal > Documento Fiscal de Terceiro > Integração XML > Download XML Chave. \r\nObrigada."
+  },
+  {
+    "task_id": "20958",
+    "status": "5",
+    "created": "2026-09-29T17:30:36-03:00",
+    "closed": "2026-09-30T09:16:24-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "Preciso que configure pra conseguir lançar o nome do lavador quando abro a OS , conseguimos lança a lavagem pra ele so puxando no apontamento .\r\nJuliana ciente ."
+  },
+  {
+    "task_id": "20956",
+    "status": "5",
+    "created": "2026-09-29T17:29:04-03:00",
+    "closed": "2026-09-30T08:47:22-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Boa tarde.\r\nTem mais duas tornados que entraram com o nome errado.\r\nEstão como especial edition e não são"
+  },
+  {
+    "task_id": "20954",
+    "status": "2",
+    "created": "2026-09-29T17:27:03-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Ola boa tarde , tive 3 reclamação de cliente hoje .\r\nTelefone não esta tocando , não recebe mensagem e nem consegui enviar ."
+  },
+  {
+    "task_id": "20952",
+    "status": "5",
+    "created": "2026-09-29T17:22:19-03:00",
+    "closed": "2026-09-29T17:32:48-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "9C2JC7000MR001752\r\n9C2KF5210VR002658\r\nITAPIRA E SBO"
+  },
+  {
+    "task_id": "20950",
+    "status": "5",
+    "created": "2026-09-29T17:19:56-03:00",
+    "closed": "2026-09-29T17:32:20-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "GERAR ATPV 9C2KC2200TR546838"
+  },
+  {
+    "task_id": "20948",
+    "status": "5",
+    "created": "2026-09-29T16:57:00-03:00",
+    "closed": "2026-09-29T17:18:17-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "ERRO AO EMITIR ATPV \r\n\r\nGUA\t53863\tVENDIDO \tADV 160\t9C2KF4300VR004708\t  PRATA METÁLICA\t2026/2027\tNOVO"
+  },
+  {
+    "task_id": "20946",
+    "status": "5",
+    "created": "2026-09-29T16:56:22-03:00",
+    "closed": "2026-09-30T11:47:51-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "oiee, td bem?\r\nno dia 25/09 dei entrada em uma nf da honda, um trx foutrax, porem esta dando erro, poderiam me ajudar pf ?"
+  },
+  {
+    "task_id": "20944",
+    "status": "5",
+    "created": "2026-09-29T16:42:41-03:00",
+    "closed": "2026-09-30T07:38:29-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Bitrix apresentou falha novamente, por 4 minutos ficou fora do ar, \r\ndepois voltou mas esta com intabilidade Favor verificar \r\n\r\nFiquei na duvida se é internet ? \r\n\r\nfavor verificar\r\n\r\nGrata"
+  },
+  {
+    "task_id": "20942",
+    "status": "5",
+    "created": "2026-09-29T16:35:53-03:00",
+    "closed": "2026-09-29T16:58:39-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "erro atpv"
+  },
+  {
+    "task_id": "20940",
+    "status": "5",
+    "created": "2026-09-29T16:33:33-03:00",
+    "closed": "2026-09-30T15:54:58-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "ERRO NO ATPV"
+  },
+  {
+    "task_id": "20938",
+    "status": "5",
+    "created": "2026-09-29T16:13:47-03:00",
+    "closed": "2026-09-30T17:34:44-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Boa tarde! meu crm está aparecendo como se estivesse vazio, mas tem clientes com a I.A  e as chamadas não estão caindo, quando caem já estão como finalizadas. Poderiam verificar por gentileza."
+  },
+  {
+    "task_id": "20936",
+    "status": "5",
+    "created": "2026-09-29T16:04:45-03:00",
+    "closed": "2026-09-29T16:52:15-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "9C2KC2200TR546838"
+  },
+  {
+    "task_id": "20934",
+    "status": "5",
+    "created": "2026-09-29T15:54:34-03:00",
+    "closed": "2026-09-30T17:35:52-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Erro",
+    "descricao": "Computador muito lento"
+  },
+  {
+    "task_id": "20932",
+    "status": "5",
+    "created": "2026-09-29T15:53:39-03:00",
+    "closed": "2026-09-30T07:39:21-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Manutenção",
+    "descricao": "Boa tarde!"
+  },
+  {
+    "task_id": "20930",
+    "status": "5",
+    "created": "2026-09-29T15:42:37-03:00",
+    "closed": "2026-09-30T15:55:19-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "erro atpv"
+  },
+  {
+    "task_id": "20928",
+    "status": "5",
+    "created": "2026-09-29T15:25:39-03:00",
+    "closed": "2026-09-30T16:29:49-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "No dia do problema com o virus eu desconectei do meu celular e agora nao consigo conectar novamente"
+  },
+  {
+    "task_id": "20926",
+    "status": "2",
+    "created": "2026-09-29T15:12:24-03:00",
+    "closed": null,
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Muitos Orçamentos não estão aparecendo pra mim, mesmo se jogar o numero do orçamento ou o chassi da moto ele não aprece. Tentei pelo computador da outra consultora e apareceu normalmente"
+  },
+  {
+    "task_id": "20924",
+    "status": "5",
+    "created": "2026-09-29T15:02:20-03:00",
+    "closed": "2026-09-29T16:13:26-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "MENSAGENS NÃO ESTÃO CHEGANDO PARA O CLIENTE"
+  },
+  {
+    "task_id": "20920",
+    "status": "5",
+    "created": "2026-09-29T14:39:29-03:00",
+    "closed": "2026-09-29T16:13:50-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "as mensagens não estão chegando para o cliente"
+  },
+  {
+    "task_id": "20916",
+    "status": "5",
+    "created": "2026-09-29T13:46:25-03:00",
+    "closed": "2026-09-29T15:09:35-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "9C2KF5220VR004686"
+  },
+  {
+    "task_id": "20914",
+    "status": "5",
+    "created": "2026-09-29T12:31:11-03:00",
+    "closed": "2026-09-29T12:36:21-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "Boa tarde,\r\n\r\nPara ciência, precisei solicitar um fone por mensagem, pois estava tentando entrar em contato com um cliente e precisava de atendimento com prioridade.\r\n\r\nEntreguei o fone antigo para o Eduardo, que me disponibilizou um dos fones que estavam disponíveis.\r\n\r\nObrigada."
+  },
+  {
+    "task_id": "20910",
+    "status": "5",
+    "created": "2026-09-29T12:09:08-03:00",
+    "closed": "2026-09-29T12:35:24-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "Minhas mensagens não estão chegando pros clientes"
+  },
+  {
+    "task_id": "20908",
+    "status": "5",
+    "created": "2026-09-29T12:06:15-03:00",
+    "closed": "2026-09-29T15:41:42-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia tudo bem?\r\n\r\nO robo que da entrada na NF ele não está dando entrada desde manha, poderia ver"
+  },
+  {
+    "task_id": "20906",
+    "status": "5",
+    "created": "2026-09-29T11:17:06-03:00",
+    "closed": "2026-09-29T15:36:39-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia! \r\nSistema esta com lentidão, e instabilidade \r\nSegue vídeo registrado no momento, \r\n\r\nFavor verificar\r\nGrata\r\nCeleste"
+  },
+  {
+    "task_id": "20902",
+    "status": "5",
+    "created": "2026-09-29T10:54:49-03:00",
+    "closed": "2026-09-30T07:37:56-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "CARD ESTA COM TODAS INFORMAÇÕES CORRETAS MAS NAO DA ENTRADA E FICA CAINDO EM ERRO"
+  },
+  {
+    "task_id": "20900",
+    "status": "5",
+    "created": "2026-09-29T10:33:35-03:00",
+    "closed": "2026-09-29T15:22:01-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Reset de senha",
+    "descricao": "NÃO LEMBRO A SENHA"
+  },
+  {
+    "task_id": "20898",
+    "status": "5",
+    "created": "2026-09-29T10:31:03-03:00",
+    "closed": "2026-09-29T13:18:52-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Reset de senha",
+    "descricao": "Bom dia\r\npor favor resetar a senha do meu cloud\r\nadm@mundialhonda.com.br"
+  },
+  {
+    "task_id": "20896",
+    "status": "5",
+    "created": "2026-09-29T10:28:34-03:00",
+    "closed": "2026-09-29T15:08:04-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "não estou conseguindo imprimir o atpv da moto 9C2ND1740VR002640"
+  },
+  {
+    "task_id": "20894",
+    "status": "5",
+    "created": "2026-09-29T10:24:36-03:00",
+    "closed": "2026-09-30T17:37:58-03:00",
+    "categoria": "FANDI",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia, não estou conseguindo simular e nem enviar ficha para analise pelo fandi."
+  },
+  {
+    "task_id": "20892",
+    "status": "5",
+    "created": "2026-09-29T10:23:38-03:00",
+    "closed": "2026-10-05T10:03:19-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia, minha tela do PC esta amarela, e nao volta a cor normal.. a tela no not esta normal, apenas a tela do PC que esta desconfigura, apenas empurramos a mesa e ficou assim."
+  },
+  {
+    "task_id": "20890",
+    "status": "5",
+    "created": "2026-09-29T10:21:38-03:00",
+    "closed": "2026-09-29T15:29:11-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "boa tarde \r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1382420/\r\n\r\nessa nf não está entrando, já tentamos subir novamente e analisamos e não achamos nenhum erro.\r\nPoderiam me ajudar pois estão precisando com urgencia"
+  },
+  {
+    "task_id": "20888",
+    "status": "5",
+    "created": "2026-09-29T09:43:45-03:00",
+    "closed": "2026-09-29T15:19:59-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia . Erro ao enviar mensagem no 2º template de utilitário\r\n\r\nO primeiro foi\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1381714/"
+  },
+  {
+    "task_id": "20886",
+    "status": "5",
+    "created": "2026-09-29T09:16:13-03:00",
+    "closed": "2026-09-29T14:53:33-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Erro ao enviar mensagem no 2º template de utilitário"
+  },
+  {
+    "task_id": "20884",
+    "status": "5",
+    "created": "2026-09-29T09:05:42-03:00",
+    "closed": "2026-09-29T15:15:51-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Troquei de pc e preciso baixar o bitrix"
+  },
+  {
+    "task_id": "20880",
+    "status": "5",
+    "created": "2026-09-29T07:41:45-03:00",
+    "closed": "2026-09-30T16:05:49-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia.\r\n\r\nNão está aparecendo as informações do cliente na opção Contas Receber dentro da Ficha Financeira.\r\n\r\nPodem verificar, por favor."
+  },
+  {
+    "task_id": "20878",
+    "status": "5",
+    "created": "2026-09-28T17:58:54-03:00",
+    "closed": "2026-09-29T08:35:31-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "ERRO AO EMITIR ATPV \r\n\r\nGUA\t53918\tVENDIDO \tNXR 160 BROS ABS\t9C2KD0820TR076329\t  CINZA\t2026/2026\tNOVO"
+  },
+  {
+    "task_id": "20876",
+    "status": "5",
+    "created": "2026-09-28T17:04:32-03:00",
+    "closed": "2026-09-30T17:38:24-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "não sei se significa algo, mas quando eu liguei o pc apareceu isso"
+  },
+  {
+    "task_id": "20872",
+    "status": "5",
+    "created": "2026-09-28T16:35:01-03:00",
+    "closed": "2026-09-28T17:23:51-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "renave  com erro chassi 9C2KC2500TR167112"
+  },
+  {
+    "task_id": "20870",
+    "status": "5",
+    "created": "2026-09-28T15:57:47-03:00",
+    "closed": "2026-10-06T07:26:18-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Ola boa tarde tudo bem?\r\nnão consigo puxar o estoque de terceiros\r\n\r\naparece a seguinte mensagem:\r\nAtenção!\r\nA exportação para o MicroWork Central de Mercadorias não é realizada há mais de 10 dias.\r\nSomente será possível visualizar o estoque de terceiros após exportar.\r\n\r\nquando vou pra exportar da acesso negado\r\npoderiam verificar pra mim por favor?"
+  },
+  {
+    "task_id": "20868",
+    "status": "5",
+    "created": "2026-09-28T15:25:43-03:00",
+    "closed": "2026-09-28T16:44:36-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "SOLICITO CORREÇÃO DO NOME DO CLIENTE, NO ATPV QUE CONSTA COMO SUNIA , CORRETO É CONFORME O QUE ESTA NA NOTA SUENIA DOCS EM ANEXIO."
+  },
+  {
+    "task_id": "20866",
+    "status": "5",
+    "created": "2026-09-28T15:10:13-03:00",
+    "closed": "2026-09-28T17:45:57-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "card de entrada Honda não está processando\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1381996/"
+  },
+  {
+    "task_id": "20864",
+    "status": "5",
+    "created": "2026-09-28T14:29:25-03:00",
+    "closed": "2026-09-28T14:56:23-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "9C2KC2500TR517221\t erro nesse chassi"
+  },
+  {
+    "task_id": "20862",
+    "status": "5",
+    "created": "2026-09-28T14:25:16-03:00",
+    "closed": "2026-09-29T11:03:06-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Boa tarde!\r\nNão estamos conseguindo acessar a plataforma que vocês criaram pra consultar os My Honda recebidos. Poderia verificar por gentileza!"
+  },
+  {
+    "task_id": "20860",
+    "status": "5",
+    "created": "2026-09-28T14:14:49-03:00",
+    "closed": "2026-10-06T07:27:19-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "ERRO AO EMITIR ATPV \r\n\r\nGUA\t53754\tVENDIDO \tNOVA CG 160 TITAN\t9C2KC2210TR110624\t  PRETA METÁLICA\t2026/2026\tNOVO"
+  },
+  {
+    "task_id": "20858",
+    "status": "5",
+    "created": "2026-09-28T14:04:07-03:00",
+    "closed": "2026-09-28T15:01:51-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "ERRO AO EMITIR ATPV \r\n\r\nGUA\t53921\tVENDIDO \tNOVA CG 160 TITAN\t9C2KC2210TR130243\t  CINZA PEROLIZADA\t2026/2026\tNOVO"
+  },
+  {
+    "task_id": "20856",
+    "status": "5",
+    "created": "2026-09-28T13:57:07-03:00",
+    "closed": "2026-09-28T16:50:21-03:00",
+    "categoria": "E-mail",
+    "subcategoria": "Manutenção",
+    "descricao": "Boa tarde, tudo bem? Gostaria de liberar o acesso ao outlook por favor"
+  },
+  {
+    "task_id": "20854",
+    "status": "5",
+    "created": "2026-09-28T11:11:34-03:00",
+    "closed": "2026-09-28T15:04:43-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Por gentileza liberar acesso para mim e para o Arielton Ivan Soares de Souza na rotina:\r\nFiscal > Configurações > Tributação Estadual > Apropriação de custo\r\n\r\nObrigada."
+  },
+  {
+    "task_id": "20852",
+    "status": "5",
+    "created": "2026-09-28T11:04:24-03:00",
+    "closed": "2026-09-28T15:05:56-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Manutenção",
+    "descricao": "Não está chegando nenhum contato para o time de vendas e pós vendas. Equipe relatou que estão sem o número novo pelo bitrix."
+  },
+  {
+    "task_id": "20850",
+    "status": "2",
+    "created": "2026-09-28T10:41:25-03:00",
+    "closed": null,
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Não estou conseguindo conectar o Wi-Fi no computador."
+  },
+  {
+    "task_id": "20848",
+    "status": "5",
+    "created": "2026-09-28T10:26:32-03:00",
+    "closed": "2026-09-29T10:48:15-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Impressora não está mais funcionando no meu pc"
+  },
+  {
+    "task_id": "20846",
+    "status": "5",
+    "created": "2026-09-28T10:14:49-03:00",
+    "closed": "2026-09-28T17:29:41-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia,\r\nfui fazer a integração e apareceu esse erro"
+  },
+  {
+    "task_id": "20844",
+    "status": "5",
+    "created": "2026-09-28T09:59:41-03:00",
+    "closed": "2026-10-06T07:28:03-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "nao libera a opcçao de abrir/listar chamado no site"
+  },
+  {
+    "task_id": "20842",
+    "status": "5",
+    "created": "2026-09-28T09:58:54-03:00",
+    "closed": "2026-09-28T15:17:47-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "erro atpv"
+  },
+  {
+    "task_id": "20840",
+    "status": "5",
+    "created": "2026-09-28T09:54:24-03:00",
+    "closed": "2026-09-28T17:11:22-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Erro",
+    "descricao": "Não consigo clicar nos campos de pesquisa do site webpeças, pois aparece como site não seguro e não abre."
+  },
+  {
+    "task_id": "20838",
+    "status": "5",
+    "created": "2026-09-28T09:40:06-03:00",
+    "closed": "2026-09-30T17:39:54-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "Bom dia.\r\nMeu WebPeças não está carregando a pagina ao clicar em usuarios. Preciso fazer liberações de funcionarios."
+  },
+  {
+    "task_id": "20836",
+    "status": "5",
+    "created": "2026-09-28T09:28:07-03:00",
+    "closed": "2026-09-30T10:49:39-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Manutenção",
+    "descricao": "Entrada não realizada, pode dar uma olhada pfv?"
+  },
+  {
+    "task_id": "20834",
+    "status": "5",
+    "created": "2026-09-28T09:22:18-03:00",
+    "closed": "2026-09-28T16:02:20-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "erro atpv"
+  },
+  {
+    "task_id": "20830",
+    "status": "5",
+    "created": "2026-09-28T08:57:49-03:00",
+    "closed": "2026-09-28T15:54:03-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia.\r\n\r\nPreciso muito dá uma verificação em e-mail.\r\n\r\nEstou enviando e-mails de minhas tarefas para os responsáveis e me informaram que não estão recebendo.\r\n\r\nPreciso desta verificação urgentemente para seguir em meio aos processos de minhas atividades.\r\n\r\nQualquer dúvida, estou a disposição."
+  },
+  {
+    "task_id": "20828",
+    "status": "5",
+    "created": "2026-09-28T08:30:24-03:00",
+    "closed": "2026-09-28T17:54:27-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "LENTIDÃO NA PLATAFORMA"
+  },
+  {
+    "task_id": "20826",
+    "status": "5",
+    "created": "2026-09-28T08:29:40-03:00",
+    "closed": "2026-09-30T17:44:16-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "a internet  nao esta conectando e nn abre nada , o computador das duas"
+  },
+  {
+    "task_id": "20824",
+    "status": "5",
+    "created": "2026-09-28T08:25:46-03:00",
+    "closed": "2026-09-28T17:54:05-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "bitrix esta muito lento"
+  },
+  {
+    "task_id": "20822",
+    "status": "5",
+    "created": "2026-09-28T08:15:43-03:00",
+    "closed": "2026-09-28T17:53:38-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Estamos com uma lentidão grande para acesso à plataforma.\r\nTodas as outras páginas estão funcionando normalmente. Somente o BITRIX não esta funcionando normalmente."
+  },
+  {
+    "task_id": "20818",
+    "status": "5",
+    "created": "2026-09-28T07:27:38-03:00",
+    "closed": "2026-09-30T16:36:58-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Erro",
+    "descricao": "PC do estoque (luciana) não esta ligando"
+  },
+  {
+    "task_id": "20812",
+    "status": "5",
+    "created": "2026-09-26T11:40:41-03:00",
+    "closed": "2026-09-26T12:18:39-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia, chegou a proposta de um cliente sem whatsapp, pedi para a Supervisora Karina verificar no my honda se tinha outro numero, e tinha. Porem ao chamar o cliente, era outro com o nome de Victor, que até entao me confirmou que não tinha mandado nenhuma proposta. \r\n\r\nNo entanto, havia mandado um e-mail para o cliente certo com meu whatsapp e ele me chamou, sendo assim consegui conversar com ele, porem se ele não tivesse me chamado, não teria o numero correto dele. \r\n\r\nSegue cards\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1379552/\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1380390/"
+  },
+  {
+    "task_id": "20810",
+    "status": "2",
+    "created": "2026-09-26T11:37:22-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "Bom dia!\r\nA Zélia pediu algum tempo atrás pra automatizar a Ficha site e o MobiAuto, pra que todas as propostas cheguem dentro do Bitrix.\r\nAs fichas deram certo, porém o MobiAuto ainda não.\r\nPegamos tudo pelo sistema e enviamos por fora pra cada vendedora.\r\nVerifica assim que possível, por favor!\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1260804/"
+  },
+  {
+    "task_id": "20808",
+    "status": "2",
+    "created": "2026-09-26T11:26:50-03:00",
+    "closed": null,
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "O COmputador esta com senha de acesso ao Desktop não consigo abrir, não lembro quem usava este computador \r\npreciso que configure e deixe sem senha\r\n\r\ngrata\r\nCeleste"
+  },
+  {
+    "task_id": "20806",
+    "status": "5",
+    "created": "2026-09-26T11:13:40-03:00",
+    "closed": "2026-09-28T07:41:35-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "preciso que me coloque também como responsável pelos orçamentos emitidos pela mariana de Araras, pois como ela atende os clientes online ela tem feito orçamentos pra Mogi mirim e eu não estou conseguindo liberar, no caso anexo alteramos para o nome da Lucimara mas mesmo assim não permitiu que eu fizesse a liberação"
+  },
+  {
+    "task_id": "20804",
+    "status": "5",
+    "created": "2026-09-26T10:45:08-03:00",
+    "closed": "2026-09-28T14:54:13-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Ao realizar a integração da NFe de funcionário honda, constou erro, não sendo possível realizar correção"
+  },
+  {
+    "task_id": "20802",
+    "status": "5",
+    "created": "2026-09-26T10:11:52-03:00",
+    "closed": "2026-09-26T12:00:16-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "requisições de transferencia grupo não estão sendo processadas pelo bot."
+  },
+  {
+    "task_id": "20800",
+    "status": "5",
+    "created": "2026-09-26T09:48:34-03:00",
+    "closed": "2026-09-30T17:51:15-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "por favor, poderia configuras as 2 impressoras da loja nesse PC?"
+  },
+  {
+    "task_id": "20798",
+    "status": "5",
+    "created": "2026-09-26T09:38:26-03:00",
+    "closed": "2026-09-28T14:46:20-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "REMOVER NOTIFICAÇÃO DE ANTIVIRUS"
+  },
+  {
+    "task_id": "20796",
+    "status": "5",
+    "created": "2026-09-26T09:37:29-03:00",
+    "closed": "2026-09-28T14:45:34-03:00",
+    "categoria": "IHS Motocicletas",
+    "subcategoria": "Erro",
+    "descricao": "Ao tentar utilizar a aba \"Informe de Venda Estoque\" ela carrega e logo em seguida já fecha, não tendo acesso ao informe, tanto na cidade de Araras, quanto as demais"
+  },
+  {
+    "task_id": "20794",
+    "status": "2",
+    "created": "2026-09-26T09:27:44-03:00",
+    "closed": null,
+    "categoria": "Bitrix 24",
+    "subcategoria": "Configuração",
+    "descricao": "Categoria: Bitrix 24\nSubcategoria: Configuração\n\nDescrição:"
+  },
+  {
+    "task_id": "20792",
+    "status": "5",
+    "created": "2026-09-26T09:22:15-03:00",
+    "closed": "2026-09-28T15:39:27-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "TELA MALWARE, NAO FECHA"
+  },
+  {
+    "task_id": "20790",
+    "status": "5",
+    "created": "2026-09-26T09:21:12-03:00",
+    "closed": "2026-09-30T17:55:45-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "Ver se ficou certo ou tem algum virus"
+  },
+  {
+    "task_id": "20788",
+    "status": "5",
+    "created": "2026-09-26T09:15:13-03:00",
+    "closed": "2026-09-26T09:40:25-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Novamente, meu cloud não está puxando os orçamentos."
+  },
+  {
+    "task_id": "20784",
+    "status": "5",
+    "created": "2026-09-25T17:46:48-03:00",
+    "closed": "2026-09-26T09:33:21-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Erro",
+    "descricao": "o antivírus notificando  atrapalhando  , o antivírus notificando  atrapalhando"
+  },
+  {
+    "task_id": "20782",
+    "status": "5",
+    "created": "2026-09-25T17:40:22-03:00",
+    "closed": "2026-09-30T17:14:22-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Retirar notificação antivírus, fica aparecendo na tela atrapalhando"
+  },
+  {
+    "task_id": "20780",
+    "status": "5",
+    "created": "2026-09-25T17:10:15-03:00",
+    "closed": "2026-09-25T17:43:48-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Solicito liberação de acesso no vdd Henrique Eduardo Zorzo em Araras\r\n\r\n Veículos > Pedido de Venda\r\nMUNDIAL - ARARAS (ORG > GAR > ARA)"
+  },
+  {
+    "task_id": "20778",
+    "status": "5",
+    "created": "2026-09-25T17:07:15-03:00",
+    "closed": "2026-09-30T17:17:41-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "As requisições de transferências ainda não foram faturadas desde ontem"
+  },
+  {
+    "task_id": "20776",
+    "status": "5",
+    "created": "2026-09-25T16:09:50-03:00",
+    "closed": "2026-09-25T17:08:08-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Solicito por gentileza, liberação de acesso para CAIXA GERAL CENTER E COMÉRCIO para lançamento de Adiantamento a Fornecedor."
+  },
+  {
+    "task_id": "20774",
+    "status": "5",
+    "created": "2026-09-25T16:01:47-03:00",
+    "closed": "2026-09-29T15:36:06-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Boa tarde!\r\nNão sai da tela a notifação do anti virus, não consigo selecionar arquivos, devido a notificação. Consegue remover por favor?"
+  },
+  {
+    "task_id": "20770",
+    "status": "5",
+    "created": "2026-09-25T14:43:46-03:00",
+    "closed": "2026-09-25T17:08:19-03:00",
+    "categoria": "IHS Motocicletas",
+    "subcategoria": "Reset de senha",
+    "descricao": "preciso que reset minha senha , meu login bloqueou"
+  },
+  {
+    "task_id": "20768",
+    "status": "5",
+    "created": "2026-09-25T14:24:19-03:00",
+    "closed": "2026-09-30T17:16:00-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Configuração",
+    "descricao": "Boa tarde, está aparecendo toda hora a imagem do Malware. Tem como configurar algo para ele sumir da tela?\r\nJá tentei modificar as notificações, mas não deu certo."
+  },
+  {
+    "task_id": "20762",
+    "status": "5",
+    "created": "2026-09-25T11:28:25-03:00",
+    "closed": "2026-09-25T17:08:29-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Solicito por gentileza a liberação no caixa geral center e comercio a opção de Pagamentos de contas por gentileza."
+  },
+  {
+    "task_id": "20760",
+    "status": "5",
+    "created": "2026-09-25T11:27:46-03:00",
+    "closed": "2026-10-05T11:25:21-03:00",
+    "categoria": "Computador",
+    "subcategoria": "Erro",
+    "descricao": "Bom dia, mudamos de sala e a tela do monitor fica toda hora desligando, acredito que seja mal contato com a tomada, poderia verificar por favor?"
+  },
+  {
+    "task_id": "20758",
+    "status": "5",
+    "created": "2026-09-25T11:24:26-03:00",
+    "closed": "2026-10-01T09:28:13-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "Bom dia preciso do QR code pra conectar o zap no bitrix"
+  },
+  {
+    "task_id": "20754",
+    "status": "5",
+    "created": "2026-09-25T10:52:58-03:00",
+    "closed": "2026-09-28T14:33:52-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Manutenção",
+    "descricao": "Requisição não faturada"
+  },
+  {
+    "task_id": "20750",
+    "status": "5",
+    "created": "2026-09-25T09:31:47-03:00",
+    "closed": "2026-09-30T17:37:37-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Erro",
+    "descricao": "Ao faturar as todas as trocas ele não esta reconhecendo a emissão e anexando ao card gerando pendência, mesmo já estando faturado"
+  },
+  {
+    "task_id": "20748",
+    "status": "2",
+    "created": "2026-09-25T09:27:05-03:00",
+    "closed": null,
+    "categoria": "Computador",
+    "subcategoria": "Manutenção",
+    "descricao": "Durante o uso normal, o computador apresentou tela preta momentâneos (piscamentos) até que o vídeo apagou por completo,ou seja, o equipamento tinha imagem."
+  },
+  {
+    "task_id": "20746",
+    "status": "5",
+    "created": "2026-09-25T09:12:21-03:00",
+    "closed": "2026-09-28T14:11:02-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "Nao estou conseguindo entrar em contato com os clientes."
+  },
+  {
+    "task_id": "20742",
+    "status": "5",
+    "created": "2026-09-25T08:45:35-03:00",
+    "closed": "2026-10-01T09:28:57-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "na data de 25/09 sem acesso a mandar mensagem para os clientes"
+  },
+  {
+    "task_id": "20740",
+    "status": "5",
+    "created": "2026-09-25T08:35:34-03:00",
+    "closed": "2026-09-25T17:24:14-03:00",
+    "categoria": "RENAVE",
+    "subcategoria": "Erro",
+    "descricao": "ERRO ATPV"
+  },
+  {
+    "task_id": "20738",
+    "status": "5",
+    "created": "2026-09-25T08:35:03-03:00",
+    "closed": "2026-09-28T14:01:02-03:00",
+    "categoria": "Bitrix 24",
+    "subcategoria": "Erro",
+    "descricao": "https://b24-88dbfb.bitrix24.com.br/crm/deal/details/1376382/\r\n\r\nMinha mensagem não chega para o cliente"
+  },
+  {
+    "task_id": "20736",
+    "status": "2",
+    "created": "2026-09-25T07:50:40-03:00",
+    "closed": null,
+    "categoria": "Computador",
+    "subcategoria": "Compra",
+    "descricao": "Favor comprar mais memoria para o notebook que eu utilizo, pois atualmente ele esta ficando sobrecarregado e tem travado totalmente, sendo necessário desligar no botão, e nos testes feitos na loja em visita do T.I. foi identificado essa necessidade."
+  },
+  {
+    "task_id": "20734",
+    "status": "5",
+    "created": "2026-09-25T07:28:45-03:00",
+    "closed": "2026-09-25T17:28:14-03:00",
+    "categoria": "Microwork Cloud",
+    "subcategoria": "Liberação de acesso",
+    "descricao": "No domingo 27/9 teremos o Passeio Dream na loja de Araras, por favor, solicito deixar o acesso ao sistema Cloud liberado para a colaboradora Débora (acessórios)"
+  }
+]

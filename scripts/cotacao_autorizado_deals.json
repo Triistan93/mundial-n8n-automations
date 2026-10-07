@@ -1,0 +1,515 @@
+[
+  {
+    "deal_id": "1257544",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Compra de um headset",
+    "created_name": "Anderson   Viotto da Silva (Gerente Itapira)",
+    "assigned_name": "Anderson   Viotto da Silva (Gerente Itapira)",
+    "date_create": "2026-07-14T16:57:19+03:00",
+    "date_modify": "2026-07-21T15:42:16+03:00",
+    "description": "Bom dia \r\n\r\nPreciso que me envie um Headset para a colaboradora Brenda porque o que ela possui está com problema e parou de funcionar.",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "17276",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1282300",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Equipamento, Nova Recepcionista",
+    "created_name": "Carolina Macedo - Gerente Mundial Motos Hortolandia (Gerente de Loja Hortolândia)",
+    "assigned_name": "Carolina Macedo - Gerente Mundial Motos Hortolandia (Gerente de Loja Hortolândia)",
+    "date_create": "2026-07-29T17:25:26+03:00",
+    "date_modify": "2026-07-30T18:13:49+03:00",
+    "description": "Preciso de um tablet e fone para nova recepcionista que vai iniciar segunda-feira dia 03/08.\r\n\r\nE pedi um fone pra meu uso também faz tempo e não enviaram.",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "18068",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1010468",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "MARCIO  ( NOTEBOOK)",
+    "created_name": "MARCIO JOSE ALVES (GERENTE LOJA GUAÇU)",
+    "assigned_name": "MARCIO JOSE ALVES (GERENTE LOJA GUAÇU)",
+    "date_create": "2026-03-02T17:56:47+03:00",
+    "date_modify": "2026-04-13T16:56:43+03:00",
+    "description": "Bom dia, solicito a compra de um NOTEBOOK, já informei ao Raphael sobre a necessidade, Eduardo tbem ciente\r\n\r\nobg",
+    "comments": null,
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "12132",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1377818",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "MEMORIA NOTEBOOK HADNER",
+    "created_name": "Hadner Sulato (Gerente Mogi Mirim - almoço 12:15 as 14:15 (Gerente de Loja)",
+    "assigned_name": "Hadner Sulato (Gerente Mogi Mirim - almoço 12:15 as 14:15 (Gerente de Loja)",
+    "date_create": "2026-09-25T13:50:39+03:00",
+    "date_modify": "2026-10-02T00:11:30+03:00",
+    "description": "Favor comprar mais memoria para o notebook que eu utilizo, pois atualmente ele esta ficando sobrecarregado e tem travado totalmente, sendo necessário desligar no botão, e nos testes feitos na loja em visita do T.I. foi identificado essa necessidade.",
+    "comments": "",
+    "timeline_comments": [
+      {
+        "author": "Zelia Silva (Araras - Diretoria) (Diretoria)",
+        "created": "2026-10-02T00:11:29+03:00",
+        "text": "Autorizado"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "20736",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1317680",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Denilson Luiz Pulcinelli",
+    "created_name": "ID 5490",
+    "assigned_name": "ID 5490",
+    "date_create": "2026-08-20T14:58:20+03:00",
+    "date_modify": "2026-08-28T14:20:30+03:00",
+    "description": "Bom dia \r\nPreciso de um Headset",
+    "comments": "",
+    "timeline_comments": [
+      {
+        "author": "Zelia Silva (Araras - Diretoria) (Diretoria)",
+        "created": "2026-08-28T14:20:29+03:00",
+        "text": "Autorizado"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "19048",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1321710",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "MARINA APARECIDA DA SILVA",
+    "created_name": "ID 5870",
+    "assigned_name": "ID 5870",
+    "date_create": "2026-08-22T14:22:00+03:00",
+    "date_modify": "2026-09-23T14:58:06+03:00",
+    "description": "Olá! Preciso de um monitor, pois o meu está desligando toda hora. Já havia solicitado um fio para vocês e vocês me enviaram. Fiz a troca do fio, porém, mesmo assim, o problema não foi resolvido. Acredito que o problema não esteja no fio, mas sim no próprio monitor. Poderiam, por favor, verificar a possibilidade de realizar a troca?",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "19150",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1374358",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "ELIANE",
+    "created_name": "ID 5910",
+    "assigned_name": "ID 5910",
+    "date_create": "2026-09-23T16:10:09+03:00",
+    "date_modify": "2026-10-02T00:13:41+03:00",
+    "description": "Bom diaaa\r\nSolicito um teclado novo, o meu parou de funcionar",
+    "comments": "",
+    "timeline_comments": [
+      {
+        "author": "Zelia Silva (Araras - Diretoria) (Diretoria)",
+        "created": "2026-10-02T00:13:43+03:00",
+        "text": "Autorizado"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "20634",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1362214",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Negócio #1362214",
+    "created_name": "ID 54292",
+    "assigned_name": "ID 54292",
+    "date_create": "2026-09-15T20:29:35+03:00",
+    "date_modify": "2026-10-02T00:15:30+03:00",
+    "description": "Gerente solicitou um teclado novo, está em falta um no computador da oficina.\r\nPoderia nos enviar?\r\n",
+    "comments": "",
+    "timeline_comments": [
+      {
+        "author": "Zelia Silva (Araras - Diretoria) (Diretoria)",
+        "created": "2026-10-02T00:15:29+03:00",
+        "text": "Autorizado"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "20216",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1303940",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Substituição de headseat",
+    "created_name": "ID 287244",
+    "assigned_name": "ID 287244",
+    "date_create": "2026-08-11T23:15:50+03:00",
+    "date_modify": "2026-08-28T14:20:54+03:00",
+    "description": "Meu headseat parou de funcionar, o fio esta com mal contato e não consigo mais enviar áudios para os clientes porque o microfone n funciona.",
+    "comments": "",
+    "timeline_comments": [
+      {
+        "author": "Zelia Silva (Araras - Diretoria) (Diretoria)",
+        "created": "2026-08-28T14:20:53+03:00",
+        "text": "Autorizado"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "18722",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1295578",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Negócio #1295578",
+    "created_name": "ID 342040",
+    "assigned_name": "ID 342040",
+    "date_create": "2026-08-06T16:00:29+03:00",
+    "date_modify": "2026-08-14T13:59:55+03:00",
+    "description": " O boot do faturamento tem dado erro desde ontem dia 05/08, onde por vezes tive que enviar o mesmo CARD mais de 3x para faturar.\r\n Cheguei a solicitar ajuda pelo ocorrido ontem, mas não obtive retorno e o erro continua acontecendo hoje, 06/08.\r\n\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1151670/\r\n ",
+    "comments": "[p]\nAjustado\n[/p]",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "18464",
+        "title": "Ticket",
+        "status": "5",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1293480",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Solicitação de Fone ",
+    "created_name": "ID 362344",
+    "assigned_name": "ID 362344",
+    "date_create": "2026-08-05T16:01:19+03:00",
+    "date_modify": "2026-08-11T18:10:32+03:00",
+    "description": "Bom dia tudo bem?\r\n\r\nSolicito compra de 2 fone de ouvido, sendo 1 para o caixa e 1 para estagiária ,pois atualmente não temos fones disponível para uso. Obrigada!",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "18422",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1251408",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Fone ",
+    "created_name": "ID 416404",
+    "assigned_name": "ID 416404",
+    "date_create": "2026-07-10T17:08:24+03:00",
+    "date_modify": "2026-07-21T15:42:00+03:00",
+    "description": "Bom dia, meu fone parou de funcionar o microfone, então não consigo atender as ligações dos clientes, preciso com urgência, obrigada.",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "17144",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1328192",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Solicitação de troca de teclado",
+    "created_name": "ID 440328",
+    "assigned_name": "ID 440328",
+    "date_create": "2026-08-26T17:17:20+03:00",
+    "date_modify": "2026-08-28T14:19:31+03:00",
+    "description": "Solicito por gentileza a troca do meu teclado, pois está sumindo a tinta dele com as marcação das teclas.",
+    "comments": null,
+    "timeline_comments": [
+      {
+        "author": "Zelia Silva (Araras - Diretoria) (Diretoria)",
+        "created": "2026-08-28T14:19:42+03:00",
+        "text": "Autorizado"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "19424",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1300310",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Bitrix não atende chamada no celular",
+    "created_name": "ID 443046",
+    "assigned_name": "ID 443046",
+    "date_create": "2026-08-10T14:26:13+03:00",
+    "date_modify": "2026-08-14T19:00:10+03:00",
+    "description": "Bom diaaaa, tudo bem? \r\nMeu Bitrix toca no telefone e fica mudo, eu atendo normalmente e mantem se mudo.\r\nForam 6 vezes que aconteceu. Se estou fora da loja e o cliente me liga, eu não consigo atender.\r\n\r\nMe ajuda anjo, não funciona \r\n",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "18618",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1388298",
+    "stage_id": "C160:UC_YUL75I",
+    "stage_name": "Em Cotação",
+    "title": "Comprar Mousepad",
+    "created_name": "ID 505846",
+    "assigned_name": "ID 505846",
+    "date_create": "2026-10-01T22:07:27+03:00",
+    "date_modify": "2026-10-02T00:10:53+03:00",
+    "description": "Gostaria de solicitar a compra de um mousepad para mim utilizar na minha mesa, por gentileza,",
+    "comments": "",
+    "timeline_comments": [
+      {
+        "author": "Zelia Silva (Araras - Diretoria) (Diretoria)",
+        "created": "2026-10-02T00:10:52+03:00",
+        "text": "Autorizado"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "21050",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1389566",
+    "stage_id": "C160:UC_AR9ORZ",
+    "stage_name": "Autorizado",
+    "title": "Negócio #1389566",
+    "created_name": "ID 5854",
+    "assigned_name": "ID 5854",
+    "date_create": "2026-10-02T17:08:49+03:00",
+    "date_modify": "2026-10-02T20:57:34+03:00",
+    "description": "Bom dia, poderia comprar/se ja tiverem, um cabo de 5 metros, ou um extensor de USB (mas de preferencia o cabo) esta com desgaste. Para uso no aparelho MCS (oficina)\r\nImagem anexada",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "21082",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1389016",
+    "stage_id": "C160:UC_JIOBG8",
+    "stage_name": "Aguardando autorização",
+    "title": "compra HAD FONe",
+    "created_name": "ID 4880",
+    "assigned_name": "ID 4880",
+    "date_create": "2026-10-02T14:34:53+03:00",
+    "date_modify": "2026-10-02T21:44:23+03:00",
+    "description": "Bom dia!\r\n\r\nSemana passada um HadFOne da equipe de vendas parou de funcionar e descartei, tinha outro de reserva, porém parou de funcionar tbem.\r\n\r\nSolicito compra de 2 Para repor estes \r\n\r\nInclusive peço pra comprar 1 fone de ouvido tbem igual ao que foi distribuído anteriormente pros gerentes (o meu quebrou eu colei com Superbonder) ",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "21066",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1389032",
+    "stage_id": "C160:UC_JIOBG8",
+    "stage_name": "Aguardando autorização",
+    "title": "Compra Cabo carregador NootBOOk gerencia (celeste) ",
+    "created_name": "ID 4880",
+    "assigned_name": "ID 4880",
+    "date_create": "2026-10-02T14:39:03+03:00",
+    "date_modify": "2026-10-02T21:07:54+03:00",
+    "description": "Preciso de um cabo para carregar o meu noot,\r\nQuando ele foi pra manutenção no ano passado foi enviado com outro carregador que não era o original.\r\nE agora estou com muita dificuldade em fazer carregar, o encaixe fica solto e não carrega, preciso ficar segurando \r\n\r\nFavor verificar a troca, pode ser que o que tenho pode dar certo em outro computador \r\n\r\n",
+    "comments": "",
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "21068",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1352700",
+    "stage_id": "C160:UC_JIOBG8",
+    "stage_name": "Aguardando autorização",
+    "title": "Compra de celular ou tablet",
+    "created_name": "ID 21810",
+    "assigned_name": "ID 21810",
+    "date_create": "2026-09-09T23:30:13+03:00",
+    "date_modify": "2026-09-24T16:43:26+03:00",
+    "description": "Boa tarde.\r\nPrecisamos que seja realizada a compra de um celular ou tablet que comporte o uso do WhatsApp para que continuemos com os grupos de trocas entre as concessionárias.\r\nO tablet que o estoque usava parou de funcionar o WhatsApp e sem ele não temos mais acesso aos grupos de troca.",
+    "comments": "",
+    "timeline_comments": [
+      {
+        "author": "ID 32598",
+        "created": "2026-09-09T23:55:46+03:00",
+        "text": "Não temos tablets ou celulares disponíveis, seria necessário a compra realmente."
+      },
+      {
+        "author": "ID 21810",
+        "created": "2026-09-24T16:02:24+03:00",
+        "text": "Bom dia\nJá não tenho mais acesso aos grupos de trocas. Whtas caiu no PC e não tem mais como eu entrar com o QRcode do tablet\n[DISK FILE ID=n7016468]"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "20010",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  },
+  {
+    "deal_id": "1328154",
+    "stage_id": "C160:UC_JIOBG8",
+    "stage_name": "Aguardando autorização",
+    "title": "Suporte para notebook",
+    "created_name": "ID 443046",
+    "assigned_name": "ID 443046",
+    "date_create": "2026-08-26T17:02:04+03:00",
+    "date_modify": "2026-09-02T22:54:49+03:00",
+    "description": "Bom dia Igor, preciso de um suporte para colocar o notebook para ele ficar inclinado. \r\n\r\nE tem apoio de pé? \r\n\r\nTe aguardo, obrigada ",
+    "comments": null,
+    "timeline_comments": [],
+    "tasks": [
+      {
+        "id": "19420",
+        "title": "Ticket",
+        "status": "2",
+        "responsible": "Dev Bot",
+        "comments": []
+      }
+    ],
+    "chat_messages": []
+  }
+]

@@ -225,7 +225,7 @@
         240
       ],
       "parameters": {
-        "functionCode": "// GATE FAIL-CLOSED ABSOLUTO:\n// Verifica se o Deal pertence EXCLUSIVAMENTE à Categoria 160 e ao usuário 32598 (Eduardo)\nconst items = $input.all();\nconst allowed = [];\nconst ALLOWED_REQUESTERS = [32598]; // Piloto restrito Eduardo Alaminos\n\nfor (const item of items) {\n  const deal = item.json.result || item.json;\n  const categoryId = String(deal.CATEGORY_ID || '');\n  const stageId = String(deal.STAGE_ID || '');\n  const createdBy = Number(deal.CREATED_BY_ID || 0);\n  const title = deal.TITLE || `Chamado #${deal.ID}`;\n\n  if (categoryId === '160' && stageId === 'C160:NEW' && ALLOWED_REQUESTERS.includes(createdBy)) {\n    allowed.push({\n      json: {\n        deal_id: Number(deal.ID),\n        title: title,\n        requester_user_id: createdBy,\n        requester_name: 'Eduardo Alaminos'\n      }\n    });\n  }\n}\n\nreturn allowed;"
+        "functionCode": "// GATE FAIL-CLOSED ABSOLUTO:\n// Verifica se o Deal pertence EXCLUSIVAMENTE à Categoria 160 e ao usuário 32598 (Eduardo)\nconst items = $input.all();\nconst allowed = [];\nconst ALLOWED_REQUESTERS = [32598]; // Piloto restrito Eduardo Alaminos\n\nfor (const item of items) {\n  const deal = item.json.result || item.json;\n  const categoryId = String(deal.CATEGORY_ID || '');\n  const stageId = String(deal.STAGE_ID || '');\n  const createdBy = Number(deal.CREATED_BY_ID || 0);\n  const title = deal.TITLE || `Chamado #${deal.ID}`;\n  const ufCategory = String(deal.UF_CRM_1763388156 || '');\n\n  if (categoryId === '160' && (stageId === 'C160:NEW' || stageId === 'C160:UC_JIOBG8') && ALLOWED_REQUESTERS.includes(createdBy)) {\n    const isPurchase = ufCategory === '876' || title.toLowerCase().includes('compra');\n    allowed.push({\n      json: {\n        deal_id: Number(deal.ID),\n        title: title,\n        requester_user_id: createdBy,\n        requester_name: 'Eduardo Alaminos',\n        is_purchase: isPurchase\n      }\n    });\n  }\n}\n\nreturn allowed;"
       }
     },
     {
@@ -239,7 +239,7 @@
       ],
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO ticket_bot_sessions (deal_id, requester_user_id, requester_name, channel, private_dialog_id, dialog_type, status, state, ai_state, redis_memory_key, created_at, last_interaction_at) VALUES ({{ $json.deal_id }}, {{ $json.requester_user_id }}, '{{ $json.requester_name }}', 'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', 'bitrix:ti:deal:{{ $json.deal_id }}:memory', NOW(), NOW()) ON CONFLICT (deal_id) DO UPDATE SET last_interaction_at = NOW() WHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED' RETURNING id, deal_id, requester_user_id, requester_name, '{{ $json.title }}' AS deal_title;",
+        "query": "INSERT INTO ticket_bot_sessions (deal_id, requester_user_id, requester_name, channel, private_dialog_id, dialog_type, status, state, ai_state, redis_memory_key, created_at, last_interaction_at) VALUES ({{ $json.deal_id }}, {{ $json.requester_user_id }}, '{{ $json.requester_name }}', 'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', 'bitrix:ti:deal:{{ $json.deal_id }}:memory', NOW(), NOW()) ON CONFLICT (deal_id) DO UPDATE SET last_interaction_at = NOW() WHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED' RETURNING id, deal_id, requester_user_id, requester_name, '{{ $json.title }}' AS deal_title, {{ $json.is_purchase ? 'TRUE' : 'FALSE' }} AS is_purchase;",
         "additionalFields": {}
       },
       "credentials": {
@@ -298,7 +298,7 @@
         240
       ],
       "parameters": {
-        "functionCode": "// Preserva deal context via all(), associando item a item\nconst reserveItems = $('02_Reserve_Deal_Session_Atomic').all();\nconst items = $input.all();\nreturn items.map((item, idx) => {\n  const chatId = Number(item.json.result || 0);\n  const r = reserveItems[idx]?.json || {};\n  return {\n    json: {\n      deal_id: r.deal_id,\n      chat_id: chatId,\n      dialog_id: `chat${chatId}`\n    }\n  };\n});"
+        "functionCode": "// Preserva deal context via all(), associando item a item\nconst reserveItems = $('02_Reserve_Deal_Session_Atomic').all();\nconst items = $input.all();\nreturn items.map((item, idx) => {\n  const chatId = Number(item.json.result || 0);\n  const r = reserveItems[idx]?.json || {};\n  return {\n    json: {\n      deal_id: r.deal_id,\n      deal_title: r.deal_title || `Chamado #${r.deal_id}`,\n      is_purchase: Boolean(r.is_purchase),\n      chat_id: chatId,\n      dialog_id: `chat${chatId}`\n    }\n  };\n});"
       }
     },
     {
@@ -856,6 +856,70 @@
           "name": "OpenAi account 3"
         }
       }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Filtra apenas solicitações de compra para envio dos botões\nconst items = $('03_Prepare_Activation').all();\nconst purchases = [];\n\nfor (const item of items) {\n  if (item.json.is_purchase) {\n    purchases.push(item);\n  }\n}\n\nreturn purchases;"
+      },
+      "id": "node_filter_purchase",
+      "name": "03_Filter_Purchase_Only",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        400,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.dialog_id,\n  MESSAGE: '📦 [b]SOLICITAÇÃO DE COMPRA DE TI[/b]\\nOlá ' + $json.deal_title + '!\\nIdentifiquei a abertura de uma solicitação de compra neste chamado #' + $json.deal_id + '.\\n\\nPor favor, utilize os botões abaixo para definir a autorização:',\n  KEYBOARD: [\n    {\n      TEXT: '✅ Autorizar Compra',\n      LINK: 'https://sophia-n8nsophia.timft8.easypanel.host/webhook/purchase-action?deal_id=' + $json.deal_id + '&action=approve&user=32598',\n      BG_COLOR: '#29b24f',\n      TEXT_COLOR: '#ffffff',\n      DISPLAY: 'LINE'\n    },\n    {\n      TEXT: '❌ Negar',\n      LINK: 'https://sophia-n8nsophia.timft8.easypanel.host/webhook/purchase-action?deal_id=' + $json.deal_id + '&action=reject&user=32598',\n      BG_COLOR: '#e84343',\n      TEXT_COLOR: '#ffffff',\n      DISPLAY: 'LINE'\n    }\n  ]\n}) }}"
+      },
+      "id": "node_send_deal_chat_buttons",
+      "name": "03_Send_Buttons_Deal_Chat",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: '32598',\n  MESSAGE: '📦 [b]NOVA SOLICITAÇÃO DE COMPRA PENDENTE[/b]\\nChamado #' + $json.deal_id + ': ' + $json.deal_title + '\\n\\nClique no botão abaixo para autorizar ou negar:',\n  KEYBOARD: [\n    {\n      TEXT: '✅ Autorizar Compra',\n      LINK: 'https://sophia-n8nsophia.timft8.easypanel.host/webhook/purchase-action?deal_id=' + $json.deal_id + '&action=approve&user=32598',\n      BG_COLOR: '#29b24f',\n      TEXT_COLOR: '#ffffff',\n      DISPLAY: 'LINE'\n    },\n    {\n      TEXT: '❌ Negar',\n      LINK: 'https://sophia-n8nsophia.timft8.easypanel.host/webhook/purchase-action?deal_id=' + $json.deal_id + '&action=reject&user=32598',\n      BG_COLOR: '#e84343',\n      TEXT_COLOR: '#ffffff',\n      DISPLAY: 'LINE'\n    }\n  ]\n}) }}"
+      },
+      "id": "node_send_direct_chat_buttons",
+      "name": "03_Send_Buttons_Direct_Chat",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        840,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.update",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  id: $json.deal_id,\n  fields: {\n    STAGE_ID: 'C160:UC_JIOBG8'\n  }\n}) }}"
+      },
+      "id": "node_move_stage_aguardando",
+      "name": "03_Move_To_Aguardando_Autorizacao",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1060,
+        20
+      ]
     }
   ],
   "connections": {
@@ -1269,6 +1333,50 @@
           {
             "node": "KB_TI_PGVector_Tool",
             "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "03_Activate_Session_With_Chat": {
+      "main": [
+        [
+          {
+            "node": "03_Filter_Purchase_Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "03_Filter_Purchase_Only": {
+      "main": [
+        [
+          {
+            "node": "03_Send_Buttons_Deal_Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "03_Send_Buttons_Deal_Chat": {
+      "main": [
+        [
+          {
+            "node": "03_Send_Buttons_Direct_Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "03_Send_Buttons_Direct_Chat": {
+      "main": [
+        [
+          {
+            "node": "03_Move_To_Aguardando_Autorizacao",
+            "type": "main",
             "index": 0
           }
         ]

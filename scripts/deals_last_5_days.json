@@ -1,0 +1,2919 @@
+[
+  {
+    "ID": "1402348",
+    "TITLE": "Acesso Certificado Digital",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T18:12:58+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "485536",
+    "ASSIGNED_BY_ID": "485536",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Por gentileza, solicito a utilização do certificado digital para as consultas de NFe no FSist para a realização das integração do XML com a estrutura correta para não constar os erros "
+    ],
+    "UF_CRM_1763388156": "1218",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1402306",
+    "TITLE": "[RESOLVIDO-L1] - Internet voltou após reconexão do cabo de rede (Eduardo Alaminos)",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T17:50:39+03:00",
+    "DATE_MODIFY": "2026-10-09T17:53:05+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "32598",
+    "ASSIGNED_BY_ID": "32598",
+    "COMMENTS": "\n---------------------------------------------\nTema: INTERNET_REDE\nPrioridade: P4 - Resolvido L1\n\nResumo:\nColaborador estava sem internet porque o cabo de rede estava desconectado. Reconectou o cabo e a internet voltou.\n\n(Chamado concluído automaticamente como Ganho)",
+    "UF_CRM_1729774515200": [
+      "teste",
+      "[AUTOATENDIMENTO L1 RESOLVIDO]\n---------------------------------------------\nTema: INTERNET_REDE\nPrioridade: P4 - Resolvido L1\n\nResumo:\nColaborador estava sem internet porque o cabo de rede estava desconectado. Reconectou o cabo e a internet voltou.\n\n(Chamado concluído automaticamente como Ganho)"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "1250",
+    "UF_CRM_TI_SHORT_SUBJECT": "Internet voltou após reconexão do cabo de rede",
+    "UF_CRM_TI_PRIORITY": "1208"
+  },
+  {
+    "ID": "1402102",
+    "TITLE": "GERAR ATPV 9C2KC2210TR110624",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T17:00:12+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "12190",
+    "ASSIGNED_BY_ID": "12190",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "GERAR ATPV 9C2KC2210TR110624"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "1240",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1402076",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T16:55:26+03:00",
+    "DATE_MODIFY": "2026-10-09T17:10:26+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "6516",
+    "ASSIGNED_BY_ID": "6516",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "MEU WPP PROFISSIONAL NÃO ESTÁ ESPELHANDO NO BITRIX"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1230",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1402060",
+    "TITLE": "Pipelaine Fat Grupo - Erro Desconhecio",
+    "STAGE_ID": "C160:PREPARATION",
+    "DATE_CREATE": "2026-10-09T16:50:10+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "71",
+    "ASSIGNED_BY_ID": "71",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Bom dia, Eduardo, preciso que seja criada uma rotina, de pelo menos 4 x ao dia checar Pipelaine, Fat.Grupo, a etapa Erro desconecido, quando houver se ser sanada a pendencia, e colocar novamente para entrada.\r\n\r\nHoje temos 4 Cards parados ali, um deles que esta abaixo, é do dia 07/10 e ainda não foi feita a entrada no estoque.\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1397670/\r\n\r\nPreciso também que libere acesso para que Coordenadores e Estoquistas, tenham acesso somente para visualizar a etapa Erro Desconhecido, para que saibam que a entrada ainda não foi feita, e se possível, notificar aos responsaveis do Card toda a movimentação feita no Card.\r\n\r\nLIbera também para os Gerentes das lojas o acesso a visualisar os Cards dessa Pipelaine, mesmas etapas que Estoquistas"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1224",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1402016",
+    "TITLE": "Negócio #1402016",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T16:31:13+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "177792",
+    "ASSIGNED_BY_ID": "177792",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia, podem me enviar um teclado novo, por favor? O meu está com as letras apagadas :/"
+    ],
+    "UF_CRM_1763388156": "876",
+    "UF_CRM_1763388469429": "1256",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1402008",
+    "TITLE": "Espelhamento atrasado",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T16:28:36+03:00",
+    "DATE_MODIFY": "2026-10-09T16:46:42+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "3932",
+    "ASSIGNED_BY_ID": "3932",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Alguns clientes de ontem, so cairam hoje pela manhã\r\nDeu falha no espelhamento e chegou tudo atrasado"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401972",
+    "TITLE": "MENSAGEM BITRIX",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T16:14:08+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "2644",
+    "ASSIGNED_BY_ID": "2644",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Quando o vdd atende o lead, tem que alterar a etapa para negociação, mas nem todo lead conseguimos, como o print em anexo...o vdd não tem acesso a alterar para responsável do contato, toda vez que dá esse erro, o vdd tem que chamar a Lauane para fazer a alteração, mas não seria o correto o vdd toda vez chamar a Lauane para alterar, correto? ou elas chamar o vdd como os prints em anexo\r\nPoderia nos ajudar nesses casos?"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401942",
+    "TITLE": "ERRO FALE FACIL",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T16:01:34+03:00",
+    "DATE_MODIFY": "2026-10-09T17:37:43+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "474966",
+    "ASSIGNED_BY_ID": "474966",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "não esta chegando mensagem para o cliente, nem as mensagens deles para nós"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401936",
+    "TITLE": "MENSAGEM BITRIX",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T16:00:50+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "2644",
+    "ASSIGNED_BY_ID": "2644",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia\r\n\r\nAs mensagens não estão chegando aos clientes, como o print em anexo - nesse caso da Julia (recepção)"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401928",
+    "TITLE": "NÃO ESTÁ INDO MENSAGENS AO CLIENTE",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T16:00:06+03:00",
+    "DATE_MODIFY": "2026-10-09T17:37:00+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "4736",
+    "ASSIGNED_BY_ID": "4736",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "NÃO ESTÁ ENVIANDO MENSAGEM AOS CLIENTES PELO CANAL F&I DOC"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401922",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T15:58:56+03:00",
+    "DATE_MODIFY": "2026-10-09T16:28:15+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "3924",
+    "ASSIGNED_BY_ID": "3924",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia, as mensagens do meu canal individual não estão espelhando no bitrix"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401902",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T15:56:09+03:00",
+    "DATE_MODIFY": "2026-10-09T16:45:24+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "4382",
+    "ASSIGNED_BY_ID": "4382",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Mensagens do canal individual não estão espelhando"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401894",
+    "TITLE": "Canal não esta conectado e não estava espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T15:54:20+03:00",
+    "DATE_MODIFY": "2026-10-09T16:21:45+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "20072",
+    "ASSIGNED_BY_ID": "20072",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "meu canal esta desconectado pois nao estava espelhando"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401890",
+    "TITLE": "Canal Individual Desconectado do Bitrix",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T15:53:42+03:00",
+    "DATE_MODIFY": "2026-10-09T16:47:47+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "461338",
+    "ASSIGNED_BY_ID": "461338",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Meu canal individual desconectou do Btrix"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401878",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:PREPARATION",
+    "DATE_CREATE": "2026-10-09T15:51:05+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "217284",
+    "ASSIGNED_BY_ID": "217284",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Mensagens do canal individual não estão espelhando\r\n\r\n5519996757220\r\n\r\n"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1286",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401876",
+    "TITLE": "Mensagens não estão espelhando no bitrix ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T15:50:45+03:00",
+    "DATE_MODIFY": "2026-10-09T16:03:39+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "409196",
+    "ASSIGNED_BY_ID": "409196",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Minhas mensagens não estão espelhando no britrix e meu whatsapp não permanece conectado na web"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401838",
+    "TITLE": "Maria Rosa",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T15:31:55+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "437540",
+    "ASSIGNED_BY_ID": "437540",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia tudo bem?\r\n\r\nNão tenho a opção no pipe de Fat.grupo"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1224",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401826",
+    "TITLE": "NUMERO DOC NÃO ESTÁ INDO MENSAGENS",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T15:28:03+03:00",
+    "DATE_MODIFY": "2026-10-09T17:37:12+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "12190",
+    "ASSIGNED_BY_ID": "12190",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Não está enviando nenhuma mensagem ao cliente"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401802",
+    "TITLE": "CÓD REQUISIÇÃO",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T15:16:45+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "25282",
+    "ASSIGNED_BY_ID": "25282",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom diaa\r\n\r\nA opção de venda online não está sendo carregada no sistema ao informar o código 47. Podem verificar a liberação dessa opção, por favor?"
+    ],
+    "UF_CRM_1763388156": "1218",
+    "UF_CRM_1763388469429": "1286",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401774",
+    "TITLE": "Trocar Recipiente de Resíduos Impressora",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-09T15:06:21+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "3628",
+    "ASSIGNED_BY_ID": "3628",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Trocar Recipiente de Resíduos Impressora"
+    ],
+    "UF_CRM_1763388156": "882",
+    "UF_CRM_1763388469429": "890",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401772",
+    "TITLE": "Vendedora Brenda Flois Sem Internet",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T15:05:54+03:00",
+    "DATE_MODIFY": "2026-10-09T15:32:54+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "3922",
+    "ASSIGNED_BY_ID": "3922",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Computado da Vendedora Brenda esta sem internet."
+    ],
+    "UF_CRM_1763388156": "1214",
+    "UF_CRM_1763388469429": "1270",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401766",
+    "TITLE": "NUMERO DOC NÃO ESTÁ INDO MENSAGENS ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T15:02:03+03:00",
+    "DATE_MODIFY": "2026-10-09T17:37:24+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "18436",
+    "ASSIGNED_BY_ID": "18436",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia \r\nNosso numero 19 31200044 não está indo as mensagens "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401748",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T14:53:46+03:00",
+    "DATE_MODIFY": "2026-10-09T16:27:51+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "3922",
+    "ASSIGNED_BY_ID": "3922",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Mensagens que estão sendo enviadas para o cliente dentro da plataforma não esta sendo espelhada para o Whatsapp Particular."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401724",
+    "TITLE": "template enviado e a resposta nao abre no contact center",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T14:47:53+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "210096",
+    "ASSIGNED_BY_ID": "210096",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "resposta nao abre no contact center"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401714",
+    "TITLE": "template enviado e a resposta nao abre no contact center",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T14:45:21+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "332084",
+    "ASSIGNED_BY_ID": "332084",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "ENVIEI TEMPLATE ONTEM, O CLIENTE RESPONDEU MAS NAO ABRIU PRA MIM, SÓ VI POIS FUI ENVIAR O SEGUNDO TEMPLATE"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401700",
+    "TITLE": "Acesso ao E-mail",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T14:42:37+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "454712",
+    "ASSIGNED_BY_ID": "454712",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Não tenho acesso ao meu e-mail profissional"
+    ],
+    "UF_CRM_1763388156": "916",
+    "UF_CRM_1763388469429": "886",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401694",
+    "TITLE": "Gustavo Antonio  Marcato",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T14:40:04+03:00",
+    "DATE_MODIFY": "2026-10-09T16:27:00+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "115138",
+    "ASSIGNED_BY_ID": "115138",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "vincular o colaborador a unidade Campinas sob minha gestão .\r\ngrato"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401646",
+    "TITLE": "Negócio #1401646",
+    "STAGE_ID": "C160:PREPARATION",
+    "DATE_CREATE": "2026-10-09T14:20:38+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "9172",
+    "ASSIGNED_BY_ID": "9172",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia! Desde o dia 07/10/2026 estamos como problemas para dar entrada nas NFs de fabrica. Estamos com várias carenagens parada aguardando entrada. Está apresentando sem vínculos com contas a pagar"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1220",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401414",
+    "TITLE": "Liberação de Acessos",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-09T13:53:17+03:00",
+    "DATE_MODIFY": "2026-10-09T15:07:44+03:00",
+    "CLOSEDATE": "2026-10-09T03:00:00+03:00",
+    "CREATED_BY_ID": "429",
+    "ASSIGNED_BY_ID": "429",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Prezados, preciso de acesso ao módulo abaixo para emissão de relatórios.\r\n\r\nRelatórios e BI > Serviço > Contrato de serviço\r\n"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1278",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401398",
+    "TITLE": "Vanisse",
+    "STAGE_ID": "C160:NEW",
+    "DATE_CREATE": "2026-10-09T13:26:49+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "3928",
+    "ASSIGNED_BY_ID": "3928",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Bom dia\r\nConforme conversado com Du por Bitrix gostaria de fazer uma alteração quanto ao e-mail usado pelo Thomas. Peço gentileza liberar para ele voltar a usar o e-mail: financeiro1araras@mundialmotos.com.br.\r\nE que os e-mails que chegassem no assistfinanceiro@mundialhonda.com.br, fossem direcionados automaticamente para o financeiro1....\r\nQualquer duvida estou a disposição\r\natt, "
+    ],
+    "UF_CRM_1763388156": "916",
+    "UF_CRM_1763388469429": "1286",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401364",
+    "TITLE": "TELEFONE BITIRX",
+    "STAGE_ID": "C160:PREPARATION",
+    "DATE_CREATE": "2026-10-09T00:02:39+03:00",
+    "CLOSEDATE": "2026-10-16T03:00:00+03:00",
+    "CREATED_BY_ID": "2644",
+    "ASSIGNED_BY_ID": "2644",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "A Mariana me informou hoje que transferiu ligações para Julia e Flávio, mas os 2 informaram que o telefone não tocou, poderia verificar novamente por favor o que está acontecendo?"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1232",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401250",
+    "TITLE": "Bot com problema",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T22:59:12+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "435758",
+    "ASSIGNED_BY_ID": "435758",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "O Bot não está finalizando a entrada da NF no PC da Kaendra e no meu, comentei com Arielton e ele me recomendou abrir um ticket, já que todas as notas acabam indo para \"Sem vinculo contas a pagar\" na pipeline Entrada Honda"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401142",
+    "TITLE": "Outras Midias Desconectado do Bitrix",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T22:17:26+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "2604",
+    "ASSIGNED_BY_ID": "2604",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde! Partou de cair clientes novos no outras midias, poderia verificar se houve desconexão do número por favor."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401116",
+    "TITLE": "as mensagens não estão chegando para o cliente",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T22:06:31+03:00",
+    "DATE_MODIFY": "2026-10-08T23:09:11+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "3932",
+    "ASSIGNED_BY_ID": "3932",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "erro ao enviar mensagens para o cliente"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401108",
+    "TITLE": "equipamentos para novo vendedor",
+    "STAGE_ID": "C160:UC_JIOBG8",
+    "DATE_CREATE": "2026-10-08T22:01:59+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "2646",
+    "ASSIGNED_BY_ID": "2646",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "vai começar um novo vendedor, preciso de notebook e material completo para monta a mesa dele"
+    ],
+    "UF_CRM_1763388156": "876",
+    "UF_CRM_1763388469429": "890",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401084",
+    "TITLE": "Cameras",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T21:59:56+03:00",
+    "DATE_MODIFY": "2026-10-08T23:02:34+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "2646",
+    "ASSIGNED_BY_ID": "2646",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Nao estou conseguindo acessar as cameras"
+    ],
+    "UF_CRM_1763388156": "920",
+    "UF_CRM_1763388469429": "1284",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1401006",
+    "TITLE": "mensagens não estão chegando para o cliente",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T21:35:18+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "474966",
+    "ASSIGNED_BY_ID": "474966",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "mensagens não estão chegando para o cliente\r\n5519987219962"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1400984",
+    "TITLE": "ERRO DE ENVIO DE MENSAGENS E RECEBIMENTO DE LIGAÇÃO NO BITRIX",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T21:28:48+03:00",
+    "DATE_MODIFY": "2026-10-08T23:18:08+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "5822",
+    "ASSIGNED_BY_ID": "5822",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "S/D\r\n\r\n"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1400970",
+    "TITLE": "fone",
+    "STAGE_ID": "C160:UC_JIOBG8",
+    "DATE_CREATE": "2026-10-08T21:26:19+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "194490",
+    "ASSIGNED_BY_ID": "194490",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "preciso de um fone,pois não consigo fazer os cursos e nem ligar pra lugar nenhum"
+    ],
+    "UF_CRM_1763388156": "876",
+    "UF_CRM_1763388469429": "890",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1400936",
+    "TITLE": "Erro entrada Honda",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T21:12:32+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "380492",
+    "ASSIGNED_BY_ID": "380492",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Todas as NFs que dei entrada na aba entrada Honda estão dando erro, aparece em entrada concluída porém o robô mandou a mensagem do erro e as peças não entraram."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1400794",
+    "TITLE": "Seleane ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T20:17:02+03:00",
+    "DATE_MODIFY": "2026-10-08T20:34:02+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "6020",
+    "ASSIGNED_BY_ID": "6020",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "fazer uma nova senha \r\nalterei cedo \r\n\r\npra uma nova e agora fui utilizar esta dando erro "
+    ],
+    "UF_CRM_1763388156": "868",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1400266",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T17:23:08+03:00",
+    "DATE_MODIFY": "2026-10-08T22:25:44+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "217284",
+    "ASSIGNED_BY_ID": "217284",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Mensagens do canal individual não estão espelhando canal 10\r\n\r\n5519996757220\r\n\r\n"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1286",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1400112",
+    "TITLE": "erro atpv",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T16:33:20+03:00",
+    "DATE_MODIFY": "2026-10-08T19:43:40+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "482200",
+    "ASSIGNED_BY_ID": "482200",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "ERRO ATPV "
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "1242",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1400004",
+    "TITLE": "CANCELAR UM CPF NO CLOUD",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T16:20:50+03:00",
+    "DATE_MODIFY": "2026-10-08T20:39:49+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "352950",
+    "ASSIGNED_BY_ID": "352950",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Oiee, tudo bem? \r\nEstou suindo um pedido, porém o cliente ja esta cadastro, porém está com os dados errados.\r\nPoderiam apagar esse cadastro:\r\nEDUARDO ALENCAR CPF: 490.987.918-83\r\npor gentileza?\r\n\r\nAgradeço desde já :)"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1222",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399968",
+    "TITLE": "chassi com erro 9C2KC2210TR132000",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T16:01:44+03:00",
+    "DATE_MODIFY": "2026-10-08T19:51:52+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "4272",
+    "ASSIGNED_BY_ID": "4272",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "erro renave motoasa\r\n\r\n9C2KC2210TR132000"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "1224",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399800",
+    "TITLE": "TECLADO",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T15:15:05+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "163284",
+    "ASSIGNED_BY_ID": "163284",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "TECLADO QUEBROU "
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "1256",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399796",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T15:12:30+03:00",
+    "DATE_MODIFY": "2026-10-08T22:10:50+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "409196",
+    "ASSIGNED_BY_ID": "409196",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "As mensagens do canal individual não estão espelhando"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399780",
+    "TITLE": "NF sem vinculo contas a pagar",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T15:07:16+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "85872",
+    "ASSIGNED_BY_ID": "85872",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "NF 16648755, está parada no pipeline 'sem vinculo contas a pagar\"\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1398964/\r\n"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1220",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399778",
+    "TITLE": "Compra de fone de ouvido - Regilaine",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T15:07:08+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "17744",
+    "ASSIGNED_BY_ID": "17744",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Compra de Headset para Regilaine, pois o antigo estava com a parte plástica ressecada e quebrou."
+    ],
+    "UF_CRM_1763388156": "876",
+    "UF_CRM_1763388469429": "1272",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399776",
+    "TITLE": "Não esta indo mensagem no bitrix ",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T15:06:17+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "5896",
+    "ASSIGNED_BY_ID": "5896",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Ola bom dia tudo bem ?\r\nminhas mensagem não vai ."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399770",
+    "TITLE": "Negócio #1399770",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T15:04:12+03:00",
+    "DATE_MODIFY": "2026-10-08T16:50:16+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "177792",
+    "ASSIGNED_BY_ID": "177792",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "cloud não está abrindo, diz que a organização está inativa.\r\neu estava de férias, acho que precisa de alguma liberação"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1230",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399738",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T14:59:37+03:00",
+    "DATE_MODIFY": "2026-10-08T22:19:44+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "4382",
+    "ASSIGNED_BY_ID": "4382",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Meu canal individual não está espelhando as mensagens."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399728",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T14:57:38+03:00",
+    "DATE_MODIFY": "2026-10-08T20:20:17+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "3924",
+    "ASSIGNED_BY_ID": "3924",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boom dia, minhas mensagens do canal individual não estão espelhando no bitrix, consigo responder os clientes, mais quando eles respondem não espelha pra mim. "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399720",
+    "TITLE": "Liberação de acesso",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T14:55:09+03:00",
+    "DATE_MODIFY": "2026-10-08T16:48:30+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "491252",
+    "ASSIGNED_BY_ID": "491252",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Por favor, liberar acesso para ''PAGAMENTO DE CONTAS'' no caminho abaixo: Financeiro > Movimento de Caixa/Banco > Lançamento\r\n\r\nNos bancos\r\nItau\r\nBrasil\r\nBradesco\r\nSantander\r\nSicoob\r\nCaixa economica"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399682",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T14:46:50+03:00",
+    "DATE_MODIFY": "2026-10-08T15:56:25+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "3922",
+    "ASSIGNED_BY_ID": "3922",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Canal Individual não esta sendo espelhado no Bitrix"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399628",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T14:32:24+03:00",
+    "DATE_MODIFY": "2026-10-08T21:01:27+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "20072",
+    "ASSIGNED_BY_ID": "20072",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "não estou recebendo as mensagens que os clientes me mandam no meu whatsapp no bitrix"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399598",
+    "TITLE": "Negócio #1399598",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T14:27:15+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "300238",
+    "ASSIGNED_BY_ID": "300238",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "NFS que chegaram ontem da Honda até agora não entraram. Falei com a Amanda e ela disse que seria com o TI."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1286",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399564",
+    "TITLE": "Mensagens do canal individual não estão espelhando",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-08T14:20:26+03:00",
+    "DATE_MODIFY": "2026-10-08T16:34:42+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "210096",
+    "ASSIGNED_BY_ID": "210096",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "as mensagens dos clientes não estão espelhando para mim no bitrix "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399534",
+    "TITLE": "Troca de peça CPU",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T14:06:01+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "268214",
+    "ASSIGNED_BY_ID": "268214",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Por gentileza, seguir com troca do COOLER da minha CPU, a mesma faz muito barulho, diferente das outras"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "898",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1399510",
+    "TITLE": "ERRO ENTRADA TERCEIROS ",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-08T14:04:16+03:00",
+    "CLOSEDATE": "2026-10-15T03:00:00+03:00",
+    "CREATED_BY_ID": "424036",
+    "ASSIGNED_BY_ID": "424036",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Todas as informações do card estão corretos mas o card cai em erro "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1220",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398920",
+    "TITLE": "Oscilação de Conexão dos Canais",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T23:03:35+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "12190",
+    "ASSIGNED_BY_ID": "12190",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Oscilação de Conexão dos Canais"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1236",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398910",
+    "TITLE": "Erro de Integração",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T23:01:23+03:00",
+    "DATE_MODIFY": "2026-10-07T23:24:00+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "485536",
+    "ASSIGNED_BY_ID": "485536",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Ao realizar a integração de uma NFe de func honda, consta inconsistência, não sendo possível alterar no lápis"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1230",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398680",
+    "TITLE": "MENSAGEM ",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T22:07:59+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "5886",
+    "ASSIGNED_BY_ID": "5886",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Mensagem não envia pro cliente e não da pra come"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398668",
+    "TITLE": "\"Oscilação de Conexão dos Canais\"",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T21:58:37+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "151792",
+    "ASSIGNED_BY_ID": "151792",
+    "COMMENTS": "[p]\nO CLIENTE ENVIA MENSAGENS NO OUTRAS MÍDIAS E FICA SEM RESPOSTA PORQUE NOSSAS MENSAGENS NÃO CHEGAM PARA ELES... \n[/p]",
+    "UF_CRM_1729774515200": [
+      "ESTÁ FALHANDO, AS MENSAGENS NÃO ESTÃO INDO, TUDO VERMELHO, CLIENTE ESTÁ NO VACUO"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": "ASA MENSAGENS NÃO CHEGAM PRO CLIENTE",
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398576",
+    "TITLE": "[TI-COMPUTADOR] - Monitor apagou e não dá mais sinal de vídeo (Eduardo Alaminos)",
+    "STAGE_ID": "C160:UC_JIOBG8",
+    "DATE_CREATE": "2026-10-07T21:22:15+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "32598",
+    "ASSIGNED_BY_ID": "32598",
+    "COMMENTS": "\n---------------------------------------------\nTema: COMPUTADOR\nImpacto: Usuário Individual\nUrgência: Operação Parada (Crítico)\nPrioridade B01: P3 - Médio (P3_MEDIUM)\nEtapa: Aguardando autorização (Compra)\n\nResumo:\nMonitor do colaborador não exibe imagem. Testes L1 realizados: cabos de vídeo firmes, monitor ligado e entrada correta selecionada. Não há monitor reserva disponível na loja para substituição temporária.\n\n(Histórico detalhado da conversa mantido no Chat do Card)",
+    "UF_CRM_1729774515200": [
+      "Meu monitor secundário queimou e preciso de um novo para as planilhas da loja",
+      "[TRIAGEM IA CONCLUÍDA]\n---------------------------------------------\nTema: COMPUTADOR\nImpacto: Usuário Individual\nUrgência: Operação Parada (Crítico)\nPrioridade B01: P3 - Médio (P3_MEDIUM)\nEtapa: Aguardando autorização (Compra)\n\nResumo:\nMonitor do colaborador não exibe imagem. Testes L1 realizados: cabos de vídeo firmes, monitor ligado e entrada correta selecionada. Não há monitor reserva disponível na loja para substituição temporária.\n\n(Histórico detalhado da conversa mantido no Chat do Card)"
+    ],
+    "UF_CRM_1763388156": "876",
+    "UF_CRM_1763388469429": "890",
+    "UF_CRM_TI_SHORT_SUBJECT": "Monitor apagou e não dá mais sinal de vídeo",
+    "UF_CRM_TI_PRIORITY": "1206"
+  },
+  {
+    "ID": "1398524",
+    "TITLE": "Entrada NF 151390",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T20:53:07+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "85872",
+    "ASSIGNED_BY_ID": "85872",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "https://b24-88dbfb.bitrix24.com.br/crm/deal/details/1397670/\r\n\r\nNF 151390 a entrada na está concluindo.\r\nUrgência da entrada desse saldo "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1220",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398512",
+    "TITLE": "Negócio #1398512",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T20:51:36+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "28358",
+    "ASSIGNED_BY_ID": "28358",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Por gentileza, poderia me ajudar a conectar o scanner da impressora da sala no meu pc "
+    ],
+    "UF_CRM_1763388156": "882",
+    "UF_CRM_1763388469429": "1264",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398508",
+    "TITLE": "Oscilação de Conexão dos Canais",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T20:50:05+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "387942",
+    "ASSIGNED_BY_ID": "387942",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "As mensagens não estão chegando para os clientes, e a I.A também parou, acho que devido a isso, podem verificar. Obrigadaaa! "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398494",
+    "TITLE": "Oscilação de Conexão dos Canais",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T20:46:32+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "20072",
+    "ASSIGNED_BY_ID": "20072",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Outras midias e meu canal estão desconectados do bitrix"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398478",
+    "TITLE": "Acesso duplo no icloud",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T20:42:25+03:00",
+    "DATE_MODIFY": "2026-10-07T21:27:01+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "5822",
+    "ASSIGNED_BY_ID": "5822",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "ola boa tarde tudo bem?\r\nestou cobrindo férias da estoquista, e consequentemente usando meu acesso nos dois computadores, porém o acesso cai toda hora e isso atrasa o trabalho na correria...\r\nhaveria uma forma de usar esse login em dois computadores sem que o acesso caia por favor?\r\npoderiam me ajudar?"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1236",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398456",
+    "TITLE": "NFs Honda sem vínculo com contas a pagar ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T20:31:22+03:00",
+    "DATE_MODIFY": "2026-10-07T22:37:49+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "518992",
+    "ASSIGNED_BY_ID": "518992",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde, tudo bem ? algumas NFS da Honda apresentaram um erro dizendo que estão sem vínculo com contas a pagar "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398432",
+    "TITLE": "Automação recebimento e-mail",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T20:21:13+03:00",
+    "DATE_MODIFY": "2026-10-07T20:24:16+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "2576",
+    "ASSIGNED_BY_ID": "2576",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde,\r\n\r\nO e-mail gerenciaadm@mundialhonda.com.br recebe e-mails desse remetente:\r\nPagamento Premiado <site@pagamentopremiado.com.br>\r\n\r\nfavor direcionar automaticamente para o e-mail:\r\n\r\ngerenciaadmgeral@mundialhonda.com.br\r\n\r\n\r\n"
+    ],
+    "UF_CRM_1763388156": "916",
+    "UF_CRM_1763388469429": "1282",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398424",
+    "TITLE": "Negócio #1398424",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T20:16:03+03:00",
+    "DATE_MODIFY": "2026-10-07T23:16:33+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "5896",
+    "ASSIGNED_BY_ID": "5896",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde , preciso acha a conversa do agendamento da moto \r\nLIEDSON BUENO DE MORAES  ( nome do cliente)\r\n9C2KC2210TR109158\t\tchassi da moto"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398418",
+    "TITLE": "Oscilação de Conexão dos Canais",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T20:14:15+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "3924",
+    "ASSIGNED_BY_ID": "3924",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde canal individual e outras midias deconectaram e quando volta fica oscilando"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398412",
+    "TITLE": "VANESSA CRISTINA MARTINS DE CAMARGO",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T20:12:14+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "387772",
+    "ASSIGNED_BY_ID": "387772",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "\"Oscilação de Conexão dos Canais\""
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398402",
+    "TITLE": "Oscilação de Conexão dos Canais",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T20:10:47+03:00",
+    "DATE_MODIFY": "2026-10-08T20:11:33+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "3932",
+    "ASSIGNED_BY_ID": "3932",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "canal individual e outras midias desconectado"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398334",
+    "TITLE": "Oscilação de Conexão dos Canais",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T19:39:40+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "3922",
+    "ASSIGNED_BY_ID": "3922",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Os Canais estão com oscilação de conexão, impactando no recebimento e envio de mensagens."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1234",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1398208",
+    "TITLE": "Mensagens não estão sendo entregues para os clientes",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T18:43:27+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "409196",
+    "ASSIGNED_BY_ID": "409196",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Estou enviando mensagens para clientes tanto no outras midias quanto no meu canal individual mas não estão chegado"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397922",
+    "TITLE": "Erro ContactCenter",
+    "STAGE_ID": "C160:PREPARATION",
+    "DATE_CREATE": "2026-10-07T16:56:01+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "4278",
+    "ASSIGNED_BY_ID": "4278",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Não consigo transferir o candidato para a Heloisa solicitar a documentação de admissão, pois não consta no Chat de contact center, somente o WhatsApp - Fale Fácil Chat."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397672",
+    "TITLE": "Assinatura do e-mail",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T16:29:49+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "525196",
+    "ASSIGNED_BY_ID": "525196",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Alterar a assinatura do responsável do SAC: Ziane Teresa Gomes Loureiro"
+    ],
+    "UF_CRM_1763388156": "916",
+    "UF_CRM_1763388469429": "1286",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397656",
+    "TITLE": "Erro BOT",
+    "STAGE_ID": "C160:PREPARATION",
+    "DATE_CREATE": "2026-10-07T16:27:07+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "485536",
+    "ASSIGNED_BY_ID": "485536",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Ao realizar a correção de uma pendência e colocar o card para faturar novamente, o BOT não fatura mesmo já corrigido, ficando parado no faturamento e os demais que não houve pendencia faturando normalmente.\r\n\r\nEx: https://b24-88dbfb.bitrix24.com.br/crm/deal/details/1396144/"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1220",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397608",
+    "TITLE": "chassi com erro 9C2KC2200TR550079",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T16:09:23+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "4272",
+    "ASSIGNED_BY_ID": "4272",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "esse chassi 9C2KC2200TR550079 esta com erro na santa emilia, mas emitimos certinho aqui com consumidor final nao\r\n"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "1240",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397470",
+    "TITLE": "MICROSOFT EDGE",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T15:22:00+03:00",
+    "DATE_MODIFY": "2026-10-07T15:58:12+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "25282",
+    "ASSIGNED_BY_ID": "25282",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia, pessoal! Tudo bem? \r\nPreciso de uma ajuda: o Microsoft Edge não está abrindo aqui na minha máquina. Preciso dele para abrir um chamado e realizar as consultas de mercadorias no site da Honda, então acabou travando o meu fluxo de trabalho por aqui. Compreendo perfeitamente o alto volume de chamados de vocês, mas agradeço muito se puderem dar uma olhada assim que possível. \r\nMuito obrigada!"
+    ],
+    "UF_CRM_1763388156": "1218",
+    "UF_CRM_1763388469429": "1286",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397446",
+    "TITLE": "bitrix da oficina",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-07T15:18:20+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "2606",
+    "ASSIGNED_BY_ID": "2606",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "precisamos fazer a verificação de duas etapas para o usuário dos mecânicos e não estamos conseguindo porque estava logado apenas no computador da oficina e não tem ninguém que tinha no celular, e agora eles não estão mais conseguindo acessar"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "1238",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397436",
+    "TITLE": "Nome errado",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T15:14:39+03:00",
+    "DATE_MODIFY": "2026-10-07T15:40:33+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "21810",
+    "ASSIGNED_BY_ID": "21810",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Bom dia, td bem?\r\nEstão fazendo a integração das tornados com o nome errado.\r\n\r\n9C2ND1910 os chassis com esse final não são especial edition\r\nE estão entrando com o nome de especial.\r\npoderiam arrumar por favor"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1230",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397396",
+    "TITLE": "Robô transferências parado!",
+    "STAGE_ID": "C160:PREPARATION",
+    "DATE_CREATE": "2026-10-07T15:05:02+03:00",
+    "CLOSEDATE": "2026-10-14T03:00:00+03:00",
+    "CREATED_BY_ID": "429",
+    "ASSIGNED_BY_ID": "429",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia!\r\n\r\nO robô de transferências está parado desde ontem."
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1228",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397388",
+    "TITLE": "Liberação de Acesso",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T15:03:01+03:00",
+    "DATE_MODIFY": "2026-10-07T15:14:58+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "429",
+    "ASSIGNED_BY_ID": "429",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia, senhores!\r\n\r\nSolicito acesso ao módulo: Relatórios e BI > Serviço > Agendamento Oficina.\r\nÉ para uma tarefa a pedido do Alex"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1278",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1397306",
+    "TITLE": "Erro Integração",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-07T14:20:38+03:00",
+    "DATE_MODIFY": "2026-10-07T14:36:51+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "3640",
+    "ASSIGNED_BY_ID": "3640",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia, poderia me ajudar?"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "1230",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1396854",
+    "TITLE": "VANESSA CRISTINA MARTINS DE CAMARGO",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-06T23:28:54+03:00",
+    "CLOSEDATE": "2026-10-13T03:00:00+03:00",
+    "CREATED_BY_ID": "387772",
+    "ASSIGNED_BY_ID": "387772",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Algumas mensagens não estão indo\r\ne áudio não estou conseguindo enviar"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1396824",
+    "TITLE": "ERRO",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T23:14:45+03:00",
+    "DATE_MODIFY": "2026-10-06T23:48:20+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "344400",
+    "ASSIGNED_BY_ID": "344400",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "ERRO AO EMITIR ATPV \r\n\r\nGUA\t53984\tVENDIDO \tELITE 125\t9C2JK3400VR015524\t  CINZA METÁLICA\t2026/2027\tNOVO"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1396722",
+    "TITLE": "liberação de acesso ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T22:34:25+03:00",
+    "DATE_MODIFY": "2026-10-06T22:56:02+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "147444",
+    "ASSIGNED_BY_ID": "147444",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde\r\nSolicito por gentileza a liberação de acesso das requisições e orçamento de peças, pois a responsável  pelo departamento de acessório e peças esta de ferias "
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1396540",
+    "TITLE": "Liberação de Visualização do Estoque",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-06T21:31:21+03:00",
+    "CLOSEDATE": "2026-10-13T03:00:00+03:00",
+    "CREATED_BY_ID": "508318",
+    "ASSIGNED_BY_ID": "508318",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde, espero que estejam bem.\r\nSolicito liberação de acesso a visualizar todas as motos em estoque, pois o meu cloud esta aparecendo apenas a cidade de Leme. "
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1396518",
+    "TITLE": "::Bloqueio de Acesso::",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T21:16:14+03:00",
+    "DATE_MODIFY": "2026-10-06T22:02:49+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "108288",
+    "ASSIGNED_BY_ID": "108288",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "informe que a partir de hoje a colaboradora Aline do pós vendas não faz parte do nosso quadro, por favor, desativar os acessos"
+    ],
+    "UF_CRM_1763388156": "918",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1396428",
+    "TITLE": "ERRO",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-06T20:37:10+03:00",
+    "CLOSEDATE": "2026-10-13T03:00:00+03:00",
+    "CREATED_BY_ID": "344400",
+    "ASSIGNED_BY_ID": "344400",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "EERO AO EMITIR O ATPV \r\n\r\nGUA\t53821\tVENDIDO \tNOVA CG 160 FAN\t9C2KC2200TR550147\t  PRETA METÁLICA\t2026/2026\tNOVO"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1396052",
+    "TITLE": "renave",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T18:01:25+03:00",
+    "DATE_MODIFY": "2026-10-06T21:45:56+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "32598",
+    "ASSIGNED_BY_ID": "32598",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "ererer"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1396046",
+    "TITLE": "[RESOLVIDO-L1] - Computador não ligava, mas voltou após checagem de cabos (Eduardo Alaminos)",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T17:58:37+03:00",
+    "DATE_MODIFY": "2026-10-06T17:59:36+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "32598",
+    "ASSIGNED_BY_ID": "32598",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Meu computador não está ligando"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": "Computador não ligava, mas voltou após checagem de cabos",
+    "UF_CRM_TI_PRIORITY": "1208"
+  },
+  {
+    "ID": "1395942",
+    "TITLE": "[TI-COMPUTADOR] - Computador não liga, colaborador impedido de trabalhar (Eduardo Alaminos)",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T17:05:00+03:00",
+    "DATE_MODIFY": "2026-10-06T17:58:07+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "32598",
+    "ASSIGNED_BY_ID": "32598",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "teste de conexão "
+    ],
+    "UF_CRM_1763388156": "876",
+    "UF_CRM_1763388469429": "890",
+    "UF_CRM_TI_SHORT_SUBJECT": "Computador não liga, colaborador impedido de trabalhar",
+    "UF_CRM_TI_PRIORITY": "1206"
+  },
+  {
+    "ID": "1395938",
+    "TITLE": "Web peças bugado",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T17:03:35+03:00",
+    "DATE_MODIFY": "2026-10-06T20:07:53+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "281526",
+    "ASSIGNED_BY_ID": "281526",
+    "COMMENTS": "[p]\nWeb peças com bug de não conseguir clicar nas opções\n[/p]",
+    "UF_CRM_1729774515200": [
+      "WEB PEÇAS BUGADO NOVAMENTE!"
+    ],
+    "UF_CRM_1763388156": "868",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395748",
+    "TITLE": "E-mail",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T16:37:57+03:00",
+    "DATE_MODIFY": "2026-10-06T16:55:00+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "3640",
+    "ASSIGNED_BY_ID": "3640",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia,\r\nnão consigo entrar no meu e-mail\r\n\r\npode me ajudar com o reset?\r\n\r\nconsorcio@mundialmotos.com.br"
+    ],
+    "UF_CRM_1763388156": "916",
+    "UF_CRM_1763388469429": "886",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395644",
+    "TITLE": "Juliana",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T16:11:06+03:00",
+    "DATE_MODIFY": "2026-10-06T16:22:44+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "4736",
+    "ASSIGNED_BY_ID": "4736",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "preciso do ATPV 9C2KC2210TR134255 por favor "
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395614",
+    "TITLE": "Notificações no canto da tela ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T16:01:50+03:00",
+    "DATE_MODIFY": "2026-10-06T16:47:42+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "151874",
+    "ASSIGNED_BY_ID": "151874",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia preciso que as notificações aparece no lado direito do meu computador  "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395596",
+    "TITLE": "Kemilly Franco Maria",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T15:55:54+03:00",
+    "DATE_MODIFY": "2026-10-06T16:28:06+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "495464",
+    "ASSIGNED_BY_ID": "495464",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Solicito o ATPV da moto para que o cliente possa prosseguir com a geração da documentação. \r\nCliente JOELMA MARIA DA SILVA, Pedido 10004\r\nChassi 9C2JC9610VR042236"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395470",
+    "TITLE": "NOTEBOOK KARINA",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T15:20:25+03:00",
+    "DATE_MODIFY": "2026-10-06T16:31:38+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "3932",
+    "ASSIGNED_BY_ID": "3932",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia! Note da Karina parou de funcionar, não liga! Poderiam verificar?"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395346",
+    "TITLE": "Entrada de Notas fiscais Grupo e Honda",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T15:08:33+03:00",
+    "DATE_MODIFY": "2026-10-06T22:57:03+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "85872",
+    "ASSIGNED_BY_ID": "85872",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde, tudo bem?\r\nDesde ontem, têm 02 Notas fiscais que não concluiu a entrada.\r\nHonda 16644756\r\nGrupo - 149255\r\n\r\npor gentileza, poderia verificar o robô "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395340",
+    "TITLE": "ATPV C ERRO ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T15:05:55+03:00",
+    "DATE_MODIFY": "2026-10-07T23:36:15+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "184294",
+    "ASSIGNED_BY_ID": "184294",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "9C2KC2500TR174240\t"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395302",
+    "TITLE": "RICARDO CARDOSO DE FARIA ",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-06T14:54:52+03:00",
+    "CLOSEDATE": "2026-10-13T03:00:00+03:00",
+    "CREATED_BY_ID": "6012",
+    "ASSIGNED_BY_ID": "6012",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia!!!!   \r\nNão esta abrindo a Ficha cadastral como atalho que tenho  salvo na area de trabalho e entre outros em excel>>. não sei o Motivo pode me ajudar?"
+    ],
+    "UF_CRM_1763388156": "904",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395298",
+    "TITLE": "liberar acesso ",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-06T14:50:28+03:00",
+    "CLOSEDATE": "2026-10-13T03:00:00+03:00",
+    "CREATED_BY_ID": "441526",
+    "ASSIGNED_BY_ID": "441526",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "não consigo acessar orçamento de outros consultores \r\ne nem manutenção de apontamento "
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1395088",
+    "TITLE": "Juliana Regina Masson",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-06T14:03:13+03:00",
+    "DATE_MODIFY": "2026-10-06T19:37:08+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "4736",
+    "ASSIGNED_BY_ID": "4736",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "GERAR INTENÇÃO DE VENDA chassi 9C2JC9710VR220064"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1394808",
+    "TITLE": "I.A parou de responder",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T23:31:20+03:00",
+    "DATE_MODIFY": "2026-10-05T23:44:20+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "387942",
+    "ASSIGNED_BY_ID": "387942",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Boa tarde! Poderiam verificar por gentileza, a I.A parou de responder os clientes. Obrigada!"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1394692",
+    "TITLE": "::Liberação de acesso::",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T22:59:19+03:00",
+    "DATE_MODIFY": "2026-10-06T21:55:15+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "108288",
+    "ASSIGNED_BY_ID": "108288",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Motos de alta CC, temos que fazer a liberaçãopor campinas, mas no tipo de vendas eu preciso identificar que a venda é de Sumaré, preciso de liberação para alterar no card que a venda é de sumaré, pois nem sempre o vendedor faz o card, nesse caso eu tbm efetuo.\r\n\r\nSegue a imagem"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1394686",
+    "TITLE": "RECUPERAÇÃO DE SENHA IHS FINANCEIRO",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T22:55:10+03:00",
+    "DATE_MODIFY": "2026-10-05T23:38:00+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "4732",
+    "ASSIGNED_BY_ID": "4732",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Ola preciso da recuperação de senha da cidade de Guaçu, Leme "
+    ],
+    "UF_CRM_1763388156": "870",
+    "UF_CRM_1763388469429": "886",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1394576",
+    "TITLE": "GERAR ATPV 9C2KC2200TR550424",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T22:29:27+03:00",
+    "DATE_MODIFY": "2026-10-05T23:43:12+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "12190",
+    "ASSIGNED_BY_ID": "12190",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "GERAR ATPV 9C2KC2200TR550424"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1394400",
+    "TITLE": "::liberação de acesso",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T21:34:19+03:00",
+    "DATE_MODIFY": "2026-10-05T21:59:28+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "108288",
+    "ASSIGNED_BY_ID": "108288",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Preciso que de liberação para aplicar descontos para os colaboradores Aline do pós vendas e do coordenador Vitor, ambos estão no em Sumaré"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1394286",
+    "TITLE": "ATPV ERRO ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T20:50:42+03:00",
+    "DATE_MODIFY": "2026-10-05T21:08:31+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "184294",
+    "ASSIGNED_BY_ID": "184294",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "9C2JC9710VR225077"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1394218",
+    "TITLE": "janaina",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T20:31:05+03:00",
+    "DATE_MODIFY": "2026-10-05T21:06:37+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "26478",
+    "ASSIGNED_BY_ID": "26478",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "nao consigo enviar SMS no bitrix"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1394014",
+    "TITLE": "Manutenção notebook Matheus esta de férias - desativação dos acessos",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-05T19:16:56+03:00",
+    "CLOSEDATE": "2026-10-12T03:00:00+03:00",
+    "CREATED_BY_ID": "4272",
+    "ASSIGNED_BY_ID": "4272",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Manutenção notebook Matheus esta de férias - desativação dos acessos\r\nMatheus Augusto de Souza"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1393930",
+    "TITLE": "Sincronização DVR",
+    "STAGE_ID": "C160:UC_4Y908A",
+    "DATE_CREATE": "2026-10-05T18:29:05+03:00",
+    "CLOSEDATE": "2026-10-12T03:00:00+03:00",
+    "CREATED_BY_ID": "223776",
+    "ASSIGNED_BY_ID": "223776",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Boa tarde, o dvr não está sincronizando histórico."
+    ],
+    "UF_CRM_1763388156": "920",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1393798",
+    "TITLE": "e-mail",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T17:31:36+03:00",
+    "DATE_MODIFY": "2026-10-05T19:49:59+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "327",
+    "ASSIGNED_BY_ID": "327",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Foi realizado a troca do meu pc e esta pedindo certificado para uso do e-mail."
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1393584",
+    "TITLE": "Acesso",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T16:27:14+03:00",
+    "DATE_MODIFY": "2026-10-05T17:25:47+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "223776",
+    "ASSIGNED_BY_ID": "223776",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Bom dia, preciso do acesso às câmeras."
+    ],
+    "UF_CRM_1763388156": "920",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1393522",
+    "TITLE": "vilma",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T16:15:28+03:00",
+    "DATE_MODIFY": "2026-10-05T17:02:51+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "5894",
+    "ASSIGNED_BY_ID": "5894",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "scaner vilma nao esta funcionando"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1393520",
+    "TITLE": "vilma",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T16:15:23+03:00",
+    "DATE_MODIFY": "2026-10-05T17:02:27+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "5894",
+    "ASSIGNED_BY_ID": "5894",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "scaner vilma nao esta funcionando"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1393220",
+    "TITLE": "Bot não está faturando transferências ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T15:18:52+03:00",
+    "DATE_MODIFY": "2026-10-06T20:38:41+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "306740",
+    "ASSIGNED_BY_ID": "306740",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia! Desde semana passada o Bot não está mais faturando as requisições de transferência automaticamente, precisei abrir um card na pipe de \"Entrada de NFs\" para faturarem manualmente algumas requisições. \r\n\r\nOutras lojas também estão com esse problema, não sei se já tem ticket aberto, mas se puderem verificar, por favor!\r\n\r\n"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "898",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1393210",
+    "TITLE": "fotos sendo anexadas , estao ficando salvas no meu celular ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T15:13:23+03:00",
+    "DATE_MODIFY": "2026-10-05T15:56:58+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "184294",
+    "ASSIGNED_BY_ID": "184294",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "eu anexo as expedições pelo celular e agora estão sendo salvas na minha galeria "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1393170",
+    "TITLE": "ERRO EM PEDIDO -  TABELA MODELOS VIGENTE",
+    "STAGE_ID": "C160:PREPAYMENT_INVOI",
+    "DATE_CREATE": "2026-10-05T14:57:54+03:00",
+    "CLOSEDATE": "2026-10-12T03:00:00+03:00",
+    "CREATED_BY_ID": "2644",
+    "ASSIGNED_BY_ID": "2644",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Não estamos conseguindo fazer pedidos de venda - é o 3º hoje que não consigo, tantos modelos 2026 quanto modelos 2027\r\nsegue alguns prints de hoje\r\n"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1392958",
+    "TITLE": "Bianca",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T14:13:38+03:00",
+    "DATE_MODIFY": "2026-10-05T14:38:44+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "18712",
+    "ASSIGNED_BY_ID": "18712",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia\r\nNão estou conseguindo ajustar a luminosidade da minha tela. Poderia me orientar, por favor"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1392944",
+    "TITLE": "Michiely",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-05T14:12:21+03:00",
+    "DATE_MODIFY": "2026-10-05T14:23:55+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "285198",
+    "ASSIGNED_BY_ID": "285198",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "APLICATIVO DO CONSÓRCIO NÃO ESTA ENTRANDO,ESTOU BLOQUEADA"
+    ],
+    "UF_CRM_1763388156": "868",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1391808",
+    "TITLE": "Liberaçao de acesso a outras lojas ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-03T16:04:12+03:00",
+    "DATE_MODIFY": "2026-10-05T13:54:20+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "35026",
+    "ASSIGNED_BY_ID": "35026",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia ! Antes de eu sair de licença eu tinha acesso a outras lojas do grupo para poder imprimir notas , expedições e outras coisas, tiraram meu acesso e conforme anexo segue autorização da Tatiana para liberar .\r\nPeço que deixe o acesso igual ao da estagiaria Eloisa Moura Barbosa, pq o dela esta igual ao que era  o meu ."
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1389868",
+    "TITLE": "Bloquear acesso Maria Rosa ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-02T17:44:49+03:00",
+    "DATE_MODIFY": "2026-10-05T14:41:44+03:00",
+    "CLOSEDATE": "2026-10-02T03:00:00+03:00",
+    "CREATED_BY_ID": "2638",
+    "ASSIGNED_BY_ID": "2638",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia, tudo bem?  Por favor deixar a Maria Rosa, caixa de Nova Odessa só com acesso do caixa de Nova Odessa, bloqueia o acesso dela de SBO por favor? Pois ela esta fazendo lançamentos errados de NVO em SBO."
+    ],
+    "UF_CRM_1763388156": "918",
+    "UF_CRM_1763388469429": "898",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1388566",
+    "TITLE": "Erro - entrada NF terceiros",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-01T23:38:58+03:00",
+    "DATE_MODIFY": "2026-10-05T14:17:11+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "306740",
+    "ASSIGNED_BY_ID": "306740",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tardee! \r\n\r\nNo card https://b24-88dbfb.bitrix24.com.br/crm/deal/details/1388522/"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1387650",
+    "TITLE": "internet com instabilidade",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-10-01T17:12:21+03:00",
+    "DATE_MODIFY": "2026-10-05T14:16:47+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "7370",
+    "ASSIGNED_BY_ID": "7370",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "internet com estabilidade, onde bitrix e cloud bem lentos"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1383436",
+    "TITLE": "TELA AMARELA",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-29T16:23:38+03:00",
+    "DATE_MODIFY": "2026-10-05T16:03:19+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "4732",
+    "ASSIGNED_BY_ID": "4732",
+    "COMMENTS": "[p]\nBom dia, minha tela do PC esta amarela, e nao volta a cor normal.. a tela no not esta normal, apenas a tela do PC que esta desconfigura, apenas empurramos a mesa e ficou assim. \n[/p]",
+    "UF_CRM_1729774515200": [
+      "Bom dia, minha tela do PC esta amarela, e nao volta a cor normal.. a tela no not esta normal, apenas a tela do PC que esta desconfigura, apenas empurramos a mesa e ficou assim. "
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1382376",
+    "TITLE": "PROBLEMAS DE CONSULTA NO CLOUD",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-28T21:57:46+03:00",
+    "DATE_MODIFY": "2026-10-06T13:26:18+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "5822",
+    "ASSIGNED_BY_ID": "5822",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Ola boa tarde tudo bem?\r\nnão consigo puxar o estoque de terceiros\r\n\r\naparece a seguinte mensagem:\r\nAtenção!\r\nA exportação para o MicroWork Central de Mercadorias não é realizada há mais de 10 dias.\r\nSomente será possível visualizar o estoque de terceiros após exportar.\r\n\r\nquando vou pra exportar da acesso negado\r\npoderiam verificar pra mim por favor?"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1382090",
+    "TITLE": "ERRO ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-28T20:14:48+03:00",
+    "DATE_MODIFY": "2026-10-06T13:27:19+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "344400",
+    "ASSIGNED_BY_ID": "344400",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "ERRO AO EMITIR ATPV \r\n\r\nGUA\t53754\tVENDIDO \tNOVA CG 160 TITAN\t9C2KC2210TR110624\t  PRETA METÁLICA\t2026/2026\tNOVO"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1381580",
+    "TITLE": "web peças",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-28T15:59:41+03:00",
+    "DATE_MODIFY": "2026-10-06T13:28:02+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "510440",
+    "ASSIGNED_BY_ID": "510440",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "nao libera a opcçao de abrir/listar chamado no site"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "898",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1378478",
+    "TITLE": "tela com mal contato",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-25T17:27:46+03:00",
+    "DATE_MODIFY": "2026-10-05T17:25:21+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "4904",
+    "ASSIGNED_BY_ID": "4904",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia, mudamos de sala e a tela do monitor fica toda hora desligando, acredito que seja mal contato com a tomada, poderia verificar por favor? "
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1376762",
+    "TITLE": "RICARDO CARDOSO ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-24T17:28:33+03:00",
+    "DATE_MODIFY": "2026-10-06T22:47:53+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "6012",
+    "ASSIGNED_BY_ID": "6012",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Bom dia, a tempo que não consigo acessar  Secretaria da fazenda, fiz teste aqui com a Lvia outra veendedora e o dela emntra normal peelo gov, eu tnho o gov mas diz que nao sou autorizado.  segue print da pagina"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1376600",
+    "TITLE": "NÃO CHEGA MYHONDA",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-24T16:45:42+03:00",
+    "DATE_MODIFY": "2026-10-06T22:49:00+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "461338",
+    "ASSIGNED_BY_ID": "461338",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Faz alguns dias que não chega contato no MYHONDA para mim."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1374032",
+    "TITLE": "preenchimento campos para envio de template",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-23T13:45:29+03:00",
+    "DATE_MODIFY": "2026-10-07T14:51:39+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "4272",
+    "ASSIGNED_BY_ID": "4272",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "bom dia, solicito que os campos para envio dos templates dos números de F&I Doc e Seguro sejam preenchidos automaticamente conforme informações constantes no card.\r\n"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1372330",
+    "TITLE": "Outras Midias Desconectado do Bitrix",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-22T14:59:43+03:00",
+    "DATE_MODIFY": "2026-10-07T15:06:44+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "217284",
+    "ASSIGNED_BY_ID": "217284",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Outras Midias Desconectado do Bitrix\r\n\r\nJá estamos enfrentando essas instabilidades há algumas semanas, e as mensagens não estão chegando para vários clientes. Inclusive, já aconteceu diversas vezes comigo de precisar reenviar a mesma mensagem até 3 vezes para conseguir entregar.\r\n\r\nEnviei alguns links de outras mídias para mostrar o erro e ajudar na identificação do problema, mas isso também já aconteceu várias vezes no meu canal. muitos clientes ficam sem receber as mensagens e, consequentemente, sem retorno.\r\n\r\nIsso tem atrapalhado bastante o atendimento, fazendo com que eu perca oportunidades e prejudicando diretamente os nossos resultados.\r\n\r\n https://b24-88dbfb.bitrix24.com.br/crm/deal/details/1364836/\r\n\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1368592/\r\n\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1368772/"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1370960",
+    "TITLE": "Sem acesso NO",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-21T19:54:31+03:00",
+    "DATE_MODIFY": "2026-10-06T13:30:03+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "2646",
+    "ASSIGNED_BY_ID": "2646",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "A maquina da Maria de NO nao esta abrindo o campo Ticket pra criar e no cloud nao abre o campo Orçamento e catalogo de vendas"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1370132",
+    "TITLE": "Negócio #1370132",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-21T15:48:27+03:00",
+    "DATE_MODIFY": "2026-10-06T13:30:31+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "2646",
+    "ASSIGNED_BY_ID": "2646",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Modelo no sistema esta com edição especial e a moto é a modelo normal, alterar por favor\r\n\r\n"
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1369944",
+    "TITLE": "Capacidade Internet",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-21T14:50:37+03:00",
+    "DATE_MODIFY": "2026-10-07T16:30:05+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "9",
+    "ASSIGNED_BY_ID": "9",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia!\r\n\r\nTudo bem pro ai?\r\nEduardo, conforme nos falamos, e agradeço de forma antecipada, rpeciso de ajuda urgente para o aumento da capacidade de dados de internet para nosso escritório.\r\n\r\nPara qualquer ajuda que precisar, estoua  disposição."
+    ],
+    "UF_CRM_1763388156": "876",
+    "UF_CRM_1763388469429": "890",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1368744",
+    "TITLE": "Canal Individual Desconectado do Bitrix",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-19T14:15:16+03:00",
+    "DATE_MODIFY": "2026-10-06T13:30:59+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "409196",
+    "ASSIGNED_BY_ID": "409196",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "Meu canal individual desconectou do Bitrix. Não esta espelhando"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1368738",
+    "TITLE": "ERRO ATPV",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-19T14:14:10+03:00",
+    "DATE_MODIFY": "2026-10-06T22:50:41+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "482200",
+    "ASSIGNED_BY_ID": "482200",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "ERRO ATPV"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1368730",
+    "TITLE": "Canal Individual Desconectado do Bitrix",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-19T14:11:15+03:00",
+    "DATE_MODIFY": "2026-10-06T13:32:36+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "4382",
+    "ASSIGNED_BY_ID": "4382",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia!\r\n\r\nO meu canal individual e de mais algumas meninas não está espelhando no bitrix, nem para fazer ativo. "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1368724",
+    "TITLE": "FALHA NO ENVIO DO PRIMEIRO TEMPLADE",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-19T14:07:17+03:00",
+    "DATE_MODIFY": "2026-10-06T13:33:14+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "331604",
+    "ASSIGNED_BY_ID": "331604",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "ERRO NO ENVIO DO PRIMEIRO TEMPLADE, CLIENTE TEM WHATSAPP ENVIEI O TEMPLADE PELO MEU CANAL E FOI"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1368322",
+    "TITLE": "não estou recebendo ligações ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-18T22:51:18+03:00",
+    "DATE_MODIFY": "2026-10-07T16:01:57+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "441526",
+    "ASSIGNED_BY_ID": "441526",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "não estou recebendo ligações  \r\nclientes reclamam que não conseguem entrar em contato  \r\nque  liga no nosso número mais não  chama \r\n"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1368284",
+    "TITLE": "TELEFONE BITRIX",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-18T22:35:26+03:00",
+    "DATE_MODIFY": "2026-10-07T16:03:19+03:00",
+    "CLOSEDATE": "2026-10-07T03:00:00+03:00",
+    "CREATED_BY_ID": "184294",
+    "ASSIGNED_BY_ID": "184294",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "meu telefone nn esta tocando , fizemos o teste mais nn toca e a o da hosana nn esta saindo som "
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1366308",
+    "TITLE": "CLOUD NAO CARREGA",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-17T21:13:24+03:00",
+    "DATE_MODIFY": "2026-10-06T13:34:38+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "134208",
+    "ASSIGNED_BY_ID": "134208",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde, preciso fazer uma devolução de compra do cliente ( troca de capa de chuva) e o sistema só fica carregando, poderiam verificar por favor ? "
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1365598",
+    "TITLE": "Bloco de Notas Windows",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-17T16:26:57+03:00",
+    "DATE_MODIFY": "2026-10-06T13:35:00+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "9",
+    "ASSIGNED_BY_ID": "9",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Bom dia!\r\n\r\nPor favor, preciso de ajuda para a configuração do bloco de notas do meu note.\r\n\r\nFico no aguardo e agradeço.\r\n\r\n"
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1364568",
+    "TITLE": "ERRO EM ABERTURA DE GARANTIA ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-16T23:27:11+03:00",
+    "DATE_MODIFY": "2026-10-06T13:35:44+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "5328",
+    "ASSIGNED_BY_ID": "5328",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde, não estou conseguindo fazer abertura de garantia. Liguei na Honda por achar que era algum erro do portal, mas a mesma me informou que ou seria meu computador ou a internet. Em vista que o coordenador João Paulo conseguiu dar continuidade e abertura da mesma garantia utilizando a internet da loja, creio que seja meu computador. Poderia analisar, por favor "
+    ],
+    "UF_CRM_1763388156": "880",
+    "UF_CRM_1763388469429": "898",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1364488",
+    "TITLE": "erro atpv",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-16T22:57:19+03:00",
+    "DATE_MODIFY": "2026-10-06T13:37:38+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "482200",
+    "ASSIGNED_BY_ID": "482200",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "erro atpv"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1364482",
+    "TITLE": "Vinculo Mariana Araras",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-16T22:56:50+03:00",
+    "DATE_MODIFY": "2026-10-06T13:38:08+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "115138",
+    "ASSIGNED_BY_ID": "115138",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Preciso que a Mariana de Araras apareça na minha Hierarquia para eu poder liberar descontos "
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1364380",
+    "TITLE": "LIBERAR CRM HELONARA ZIMMERMAN",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-16T22:24:08+03:00",
+    "DATE_MODIFY": "2026-10-06T13:50:49+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "4278",
+    "ASSIGNED_BY_ID": "4278",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "LIBERAÇÃO DE ACESSO PARA HELONARA (RECRUTAMENTO E SELEÇÃO)"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1364356",
+    "TITLE": "Ligações - Bitrix ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-16T22:18:54+03:00",
+    "DATE_MODIFY": "2026-10-06T14:37:10+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "64706",
+    "ASSIGNED_BY_ID": "64706",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Boa tarde, todas as ligações que os clientes realizam ao setor de  peças de mogi mirim, esta caindo somente para mim e tocando somente no meu celular e não no computador, podemos estar perdendo cliente com isso."
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1364182",
+    "TITLE": "SENHA VENDA DIGITAL ",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-16T21:15:09+03:00",
+    "DATE_MODIFY": "2026-10-06T14:42:30+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "3926",
+    "ASSIGNED_BY_ID": "3926",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "boa tarde, por gentileza preciso da confirmação da senha da vendas digital do vendedor Henrique da loja de Araras \r\n\r\ndesde já muito obrigado "
+    ],
+    "UF_CRM_1763388156": "872",
+    "UF_CRM_1763388469429": "886",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1363658",
+    "TITLE": "VANESSA CRISTINA MARTINS DE CAMARGO",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-09-16T16:59:47+03:00",
+    "DATE_MODIFY": "2026-10-08T20:14:59+03:00",
+    "CLOSEDATE": "2026-10-08T03:00:00+03:00",
+    "CREATED_BY_ID": "387772",
+    "ASSIGNED_BY_ID": "387772",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "O TEMPLATE DANDO ERRO"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1311002",
+    "TITLE": "Mudança de Nome do Email",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-08-17T17:52:59+03:00",
+    "DATE_MODIFY": "2026-10-06T22:52:54+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "419794",
+    "ASSIGNED_BY_ID": "419794",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Solicito a mundança do nome Leonardo Ribeiro para Vitória Theodoro do email do caixa de Hortolândia."
+    ],
+    "UF_CRM_1763388156": "916",
+    "UF_CRM_1763388469429": "888",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1309806",
+    "TITLE": "ACESSO",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-08-15T16:03:12+03:00",
+    "DATE_MODIFY": "2026-10-06T22:53:15+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "280472",
+    "ASSIGNED_BY_ID": "280472",
+    "COMMENTS": null,
+    "UF_CRM_1729774515200": [
+      "gostaria de ter acesso para emitir boleto para os clientes"
+    ],
+    "UF_CRM_1763388156": "870",
+    "UF_CRM_1763388469429": "884",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1308752",
+    "TITLE": "cloud",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-08-14T17:52:52+03:00",
+    "DATE_MODIFY": "2026-10-06T22:53:52+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "423166",
+    "ASSIGNED_BY_ID": "423166",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "cloud não está abrindo, já reiniciei o computador e não resolveu "
+    ],
+    "UF_CRM_1763388156": "878",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1307194",
+    "TITLE": "BASE BIN POP",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-08-13T20:15:38+03:00",
+    "DATE_MODIFY": "2026-10-06T22:54:52+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "2644",
+    "ASSIGNED_BY_ID": "2644",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Poderia verificar o chassi em anexo?\r\ncliente está falando que o chassi não está cadastrado na BASE BIN"
+    ],
+    "UF_CRM_1763388156": "908",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1302736",
+    "TITLE": "Impressora nova",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-08-11T16:38:40+03:00",
+    "DATE_MODIFY": "2026-10-05T16:47:19+03:00",
+    "CLOSEDATE": "2026-10-05T03:00:00+03:00",
+    "CREATED_BY_ID": "5984",
+    "ASSIGNED_BY_ID": "5984",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Solicitação de compra de uma impressora nova "
+    ],
+    "UF_CRM_1763388156": "882",
+    "UF_CRM_1763388469429": "890",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1293318",
+    "TITLE": "Negócio #1293318",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-08-05T14:55:18+03:00",
+    "DATE_MODIFY": "2026-10-06T22:55:06+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "461338",
+    "ASSIGNED_BY_ID": "461338",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Nesse card há histórico de conversa, porém não tem a opção de abrir o chat\r\nhttps://b24-88dbfb.bitrix24.com.br/crm/deal/details/1293052/"
+    ],
+    "UF_CRM_1763388156": "874",
+    "UF_CRM_1763388469429": "906",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  },
+  {
+    "ID": "1292246",
+    "TITLE": "Angeica Campanelli",
+    "STAGE_ID": "C160:WON",
+    "DATE_CREATE": "2026-08-04T21:29:33+03:00",
+    "DATE_MODIFY": "2026-10-06T22:55:20+03:00",
+    "CLOSEDATE": "2026-10-06T03:00:00+03:00",
+    "CREATED_BY_ID": "443046",
+    "ASSIGNED_BY_ID": "443046",
+    "COMMENTS": "",
+    "UF_CRM_1729774515200": [
+      "Oiiii, Igor... Boas !!!\r\nNo IHS aparece como eu estou bloqueada... \r\nNenhuma senha aqui entra, socorro Jesus rsrsr"
+    ],
+    "UF_CRM_1763388156": "870",
+    "UF_CRM_1763388469429": "886",
+    "UF_CRM_TI_SHORT_SUBJECT": null,
+    "UF_CRM_TI_PRIORITY": null
+  }
+]

@@ -2,83 +2,82 @@
 id: "KB-015"
 titulo: "WhatsApp Corporativo, Contact Center Bitrix24 e Plataforma Fale Fácil"
 sistemas: ["WhatsApp Corporativo", "Bitrix24 Contact Center", "Plataforma Fale Fácil", "Meta WhatsApp Business"]
-palavras_chave: ["whatsapp", "wpp", "fale facil", "contact center", "espelhamento", "canal desconectado", "qr code", "qrcode", "ler qr code", "mensagens não chegam", "não envia mensagem", "número banido", "tudo vermelho", "canal individual", "f&i doc", "linha corporativa", "desconectou do bitrix", "mensagens atrasadas", "template bitrix"]
+palavras_chave: ["whatsapp", "wpp", "fale facil", "contact center", "espelhamento", "canal desconectado", "qr code", "qrcode", "dispositivos conectados", "aparelhos conectados", "mensagens não chegam", "não envia mensagem", "número banido", "tudo vermelho", "canal individual", "f&i doc", "linha corporativa", "desconectou do bitrix"]
 ---
 
 # KB-015 - WhatsApp Corporativo, Contact Center Bitrix24 e Plataforma Fale Fácil
 
 ## Quando usar
 O colaborador relata qualquer um dos seguintes sintomas:
-- *"As mensagens do meu WhatsApp não estão espelhando no Bitrix"*
-- *"O canal individual desconectou e precisa de QR Code"*
-- *"Não consigo enviar mensagens para os clientes pelo Bitrix (aparece ponto de exclamação vermelho)"*
-- *"Clientes dizem que mandam mensagens mas não recebo nada no Contact Center"*
-- *"Canal Fale Fácil / F&I DOC / Canal da Loja está com erro ou tudo vermelho"*
-- *"A IA ou as mensagens pararam de funcionar"*
+- *"As mensagens do meu WhatsApp profissional não estão espelhando no Bitrix"*
+- *"O canal individual desconectou do Bitrix / precisa de QR Code"*
+- *"Não consigo enviar mensagens para os clientes pelo Bitrix (erro ao enviar / ponto de exclamação vermelho)"*
+- *"Clientes dizem que enviaram mensagens mas não chegam no Contact Center"*
+- *"Canal Fale Fácil / F&I DOC / Canal da Loja está com oscilação ou tudo vermelho"*
+- *"A IA ou o recebimento de mensagens parou"*
 
 ## Aplica-se a
-Consultores de vendas de motocicletas, pós-venda, recepção, peças, gestores e equipes de atendimento que utilizam o Bitrix24 Contact Center integrado à plataforma Fale Fácil em todas as concessionárias da Rede Mundial Honda.
+Consultores de vendas de motocicletas novas/usadas, pós-venda, recepção, peças, F&I e gestores que utilizam canais de WhatsApp integrados ao Bitrix24 Contact Center através da plataforma parceira **Fale Fácil**.
 
 ---
 
-## Procedimento Operacional Padrão (Passo a Passo Oficial)
+## Divisão de Papéis e Diretriz de Atendimento
 
-Nas ocorrências envolvendo números e canais corporativos de WhatsApp, o atendimento de suporte de TI segue rigorosamente o seguinte roteiro:
-
-### 1. Identificar qual é a conexão e a linha afetada
-- O agente / operador de TI identifica exatamente qual linha está com instabilidade:
-  - **Número corporativo com DDD** (ex: `19 9xxxx-xxxx` ou `19 3120-0044`);
-  - **Tipo de canal:** Canal individual do consultor (celular físico) ou Canal geral da loja/departamento (Fale Fácil, F&I DOC, Sophia, Recepção);
-  - **Nome completo do consultor e loja/filial.**
-
-### 2. Diagnosticar o sintoma real da conexão
-- Verificar qual comportamento está ocorrendo:
-  - **Problema de envio:** O consultor digita no Bitrix, mas a mensagem fica com ícone de erro/relógio ou falha na entrega.
-  - **Problema de recebimento:** O cliente externo responde pelo WhatsApp, mas o chat não abre ou não atualiza no Bitrix Contact Center.
-  - **Oscilação total / Desconexão:** O canal exibe aviso de desconectado, barra vermelha ou ausência de sincronização.
-
-### 3. Realizar testes práticos de envio e recebimento
-- **Teste de envio:** Enviar uma mensagem de teste pelo Bitrix Contact Center diretamente para o número de teste da equipe ou para o próprio celular do consultor.
-- **Teste de recebimento:** Enviar uma mensagem a partir de outro celular para o número corporativo e checar se o card/chat é criado no Bitrix.
-- **Checagem de internet do celular:** No caso de canal individual, certificar-se de que o aparelho físico do consultor está ligado, com bateria e conectado a uma rede Wi-Fi estável ou dados móveis 4G/5G.
-
-### 4. Verificar se o número foi banido pela Meta / WhatsApp
-- Conferir diretamente na tela do aplicativo WhatsApp instalado no smartphone corporativo da loja/consultor:
-  - **Se o número foi BANIDO:** O aplicativo exibe uma mensagem explícita da Meta: *"Esta conta está impedida de usar o WhatsApp"* ou *"Esta conta não tem permissão para usar o WhatsApp"*.
-  - **Ação em caso de banimento:** O autoatendimento L1 não pode reverter banimento. O chamado é escalonado com **Urgência Alta (P2)** para a equipe de TI / Gestão de Telefonia para protocolo formal de contestação e suporte com a Meta/operadora ou providência de nova linha SIM.
-
-### 5. Desconectar da plataforma e reconectar lendo o QR Code
-- Caso o número **NÃO** esteja banido (o WhatsApp no aparelho abre normalmente):
-  - A falha trata-se de desautenticação de sessão na API da plataforma integradora (**Fale Fácil**).
-  - A equipe de TI ou o painel administrativo da Fale Fácil realiza a desconexão forçada da instância vinculada à linha.
-  - É gerado um novo **QR Code** de autenticação para o canal.
-  - O consultor abre o WhatsApp no smartphone corporativo ➔ toca em **Menu / Configurações (três pontinhos ou engrenagem)** ➔ **Aparelhos Conectados** ➔ **Conectar um aparelho** e realiza a leitura do novo QR Code exibido.
-  - Aguarda 1 a 2 minutos para sincronização das conversas e refaz o teste de envio e recebimento.
-
-### 6. Escalonar para o Suporte da Fale Fácil (se o problema persistir)
-- Caso após a leitura do QR Code a conexão ainda não suba, exiba erro de WebSocket/API ou continue sem transmitir mensagens:
-  - Acionar imediatamente o canal oficial de **Suporte da Fale Fácil** informando:
-    1. Nome da Instância / ID da Conexão;
-    2. Número corporativo completo com DDD;
-    3. Horário do início da falha e comportamento observado (print do erro na plataforma e no Bitrix);
-    4. Confirmação de que o aparelho físico está ativo e que o QR Code já foi lido sem sucesso.
-  - O chamado no Bitrix24 é atualizado com prioridade **P2 (Alta)** com todas as evidências registradas na Timeline.
+> [!IMPORTANT]
+> **ATENÇÃO AO ESCOPO DO BOT / AUTOATENDIMENTO:**  
+> O colaborador da concessionária **NÃO tem acesso administrativo à plataforma Fale Fácil** e não deve ser instruído a mexer em configurações de servidor, desconectar instâncias de sistema ou tentar gerar QR Code por conta própria.  
+> **O papel do Bot de IA é exclusivamente COLHER e CONFIRMAR as informações essenciais** no chat, orientando apenas a checagem que o usuário consegue fazer no próprio celular, para entregar o chamado 100% diagnosticado para a equipe técnica de TI atuar no painel.
 
 ---
 
-## O que Coletar no Chamado para a TI
-Para que o atendimento seja imediato sem idas e vindas de mensagens:
-1. **Número corporativo com DDD** afetado;
-2. **Nome do Consultor e Filial/Loja**;
-3. **Tipo de canal:** Individual ou Geral da Loja;
-4. **Comportamento:** Não envia, não recebe ou desconectou;
-5. **Status no aparelho físico:** Se o WhatsApp está abrindo normalmente no celular e se o número NÃO está banido;
-6. **Print da tela** do erro no Bitrix ou no celular.
+## 1. Roteiro de Coleta e Confirmação pelo Bot de IA (L1)
 
-## Resultado Esperado
-O canal é reautenticado via QR Code na plataforma Fale Fácil, as mensagens voltam a ser transmitidas bidirecionalmente e o colaborador continua seu atendimento comercial sem perder leads.
+Ao receber um chamado sobre WhatsApp Corporativo ou canal do Bitrix, o bot realiza uma triagem acolhedora coletando os seguintes pontos:
+
+1. **Identificação da Conexão e Linha:**
+   - Solicita o **número corporativo com DDD** afetado (ex: `19 9xxxx-xxxx` ou `19 3120-0044`);
+   - Confirma a loja/unidade e o nome do consultor responsável.
+
+2. **Diagnóstico do Comportamento:**
+   - Pergunta se o problema é **para enviar mensagens**, **para receber mensagens** ou se **parou tudo (ambos)**.
+
+3. **Checagem Guiada no Smartphone Corporativo:**
+   - O bot orienta o colaborador a fazer uma verificação visual simples no próprio aparelho físico:
+     * *Passo no celular:* Abrir o WhatsApp ➔ tocar em **Configurações** (ou Ajustes / três pontinhos) ➔ **Dispositivos conectados** (ou Aparelhos conectados);
+     * *Pergunta ao colaborador:* `"Você consegue dar uma olhadinha no seu WhatsApp em Configurações > Dispositivos conectados e me dizer se a conexão aparece como conectada ou se aparece desconectada?"`
+     * *Verificação de banimento:* O colaborador confirma se o WhatsApp está abrindo normalmente no aparelho (sem aviso de conta banida/suspensa pela Meta).
+
+4. **Conclusão Imediata da Triagem (`action: COMPLETE`):**
+   - Com o número com DDD, o sintoma (envio/recebimento) e o status visto em *Dispositivos conectados*, o bot **NÃO tenta inventar procedimentos complexos**:
+   - Conclui a triagem com mensagem amigável e registra todas as evidências na timeline para que a TI execute as ações na plataforma.
+
+---
+
+## 2. Roteiro de Resolução Técnica pela Equipe de TI (N2 / Fale Fácil)
+
+Com os dados coletados pelo bot, o técnico de TI executa o fluxo oficial no painel:
+
+1. **Acessar a Plataforma Fale Fácil:**
+   - Localiza a conexão correspondente ao número corporativo informado pelo colaborador.
+2. **Avaliar o Status da Conexão:**
+   - Se o colaborador relatou desconectado ou se a instância estiver com status vermelho/falha:
+   - Realizar a **desconexão da sessão** na plataforma Fale Fácil;
+   - Gerar um novo **QR Code** de autenticação;
+   - Disponibilizar o QR Code para o colaborador realizar a leitura no aparelho (*Configurações > Dispositivos conectados > Conectar um aparelho*).
+3. **Se o Número Estiver Banido pela Meta:**
+   - Se o colaborador relatou a mensagem *"Esta conta está impedida de usar o WhatsApp"*, a TI aciona o protocolo de contestação junto ao suporte da Meta/operadora ou providencia a troca do chip SIM.
+4. **Acionamento do Suporte da Fale Fácil:**
+   - Caso após a leitura do QR Code a conexão ainda não suba ou persista sem tráfego de mensagens, a TI abre chamado com o suporte oficial da Fale Fácil informando o ID da instância, número com DDD e prints do erro.
+
+---
+
+## Dados Estruturados Registrados no Chamado
+- **Número Corporativo:** (com DDD)
+- **Consultor / Filial:**
+- **Tipo de Falha:** Envio, Recebimento ou Queda Total
+- **Status em Dispositivos Conectados:** Conectado / Desconectado
+- **Status do WhatsApp no Celular:** Normal / Suspeita de Banimento
 
 ## Artigos Relacionados
-- **KB-011:** Bitrix24 (Cache Ctrl+F5 e Telefonia de Voz)
-- **KB-003:** Verificar conexão com a internet e rede da loja
+- **KB-011:** Bitrix24 (Cache Ctrl+F5 e Telefonia)
 - **KB-010:** Como escalar um chamado para o N2

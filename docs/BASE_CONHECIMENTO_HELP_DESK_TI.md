@@ -87,13 +87,17 @@ pie title Distribuição Real das Demandas de TI (Mundial Honda)
 
 #### 2.4 WhatsApp Corporativo, Contact Center & Plataforma Fale Fácil (Passo a Passo Oficial)
 * **Sintoma Típico:** *"Meu WhatsApp individual não está espelhando"*, *"Não está chegando mensagens"*, *"Erro no Fale Fácil / F&I DOC"*, *"Tudo vermelho / precisa de QR Code"*.
-* **Roteiro Canônico de Resolução (6 Passos):**
-  1. **Identificar a Conexão:** Coletar qual é o número corporativo com DDD (ex: `19 9xxxx-xxxx` ou `19 3120-0044`), consultor e loja afetada.
-  2. **Diagnosticar o Sintoma:** Identificar se o problema é de envio, recebimento ou desconexão total da instância.
-  3. **Testes de Envio e Recebimento:** Testar envio pelo Bitrix Contact Center e conferir se o smartphone do consultor está conectado à internet.
-  4. **Verificar Banimento:** Checar no aparelho físico se aparece mensagem de conta banida/suspensa pela Meta. *(Se banido: acionar TI/telefonia imediatamente com P2).*
-  5. **Reconexão via QR Code:** Se não estiver banido, desconectar da plataforma Fale Fácil, gerar novo QR Code e realizar a leitura no aparelho pelo WhatsApp (*Aparelhos Conectados*).
-  6. **Escalonamento:** Se o problema persistir após ler o QR Code, acionar o suporte da Fale Fácil informando o ID da conexão, número e prints, e registrar na timeline do Bitrix com prioridade P2.
+* **Escopo e Papel do Bot de IA:** O colaborador não mexe na plataforma Fale Fácil. O bot atua **exclusivamente na coleta e confirmação de dados** com o colaborador:
+  1. **Coletar Linha e Conexão:** Solicitar o número corporativo com DDD (ex: `19 9xxxx-xxxx` ou `19 3120-0044`), consultor e loja.
+  2. **Diagnosticar Sintoma:** Identificar se o problema ocorre no envio de mensagens, no recebimento ou se parou tudo.
+  3. **Checagem Guiada no Smartphone:** Pedir para o colaborador abrir o WhatsApp no celular e olhar em: **Configurações > Dispositivos conectados** (ou Aparelhos conectados) para informar se aparece conectado ou desconectado.
+  4. **Checagem de Banimento:** Confirmar se o WhatsApp abre normal no celular sem mensagem de conta banida/suspensa pela Meta.
+  5. **Conclusão:** Concluir a triagem (`COMPLETE`) entregando todos os dados mastigados para a TI na Timeline.
+* **Ação da TI / N2 (no Painel Fale Fácil):**
+  - A TI avalia a instância na Fale Fácil com base nos dados coletados pelo bot;
+  - Se desconectado/instável (e não banido), desconecta a sessão na Fale Fácil e disponibiliza o novo QR Code para o colaborador ler;
+  - Se banido, aciona protocolo com a Meta/operadora;
+  - Se o erro persistir após a leitura do QR Code, a TI aciona diretamente o suporte da Fale Fácil com prioridade P2.
 
 ---
 

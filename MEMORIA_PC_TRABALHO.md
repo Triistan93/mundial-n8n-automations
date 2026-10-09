@@ -196,16 +196,37 @@ Ele serve para restauração completa de contexto, replicação em outros comput
 | **Vulnerabilidade de Autoaprovação** | Teclado interativo era enviado dentro do chat público do chamado (visível ao funcionário que pediu a compra). | Isolamento total: chat do card sem botões; botões enviados **exclusivamente** no privado 1:1 do gestor/diretoria. |
 | **Retrabalho da Zélia (Diretoria)** | Zélia sempre precisava perguntar se tinha peça no setor antes de aprovar. | IA agora pergunta preventivamente na triagem e grava a resposta pronta no Resumo do CRM. |
 | **Saudação Robótica e "Tecniquês"** | Saudação padrão formal de cartório assustava colaboradores leigos de concessionária. | Reformulada mensagem inicial por primeiro nome, contextualizada pelo título e modo DIY com linguagem cotidiana visual. |
+| **Silêncio Pós-Conclusão & Chamados Carona** | Sessões em `status = 'COMPLETED'` eram ignoradas no polling, deixando o colaborador no vácuo e sem controle de reabertura ou caronas. | Implementado Roteador de Pós-Atendimento e Classificador LLM (`PostRes`) com tolerância de 7 dias, tratando os 3 cenários de forma atômica e simultânea. |
 
 ---
 
-## 📋 8. Próximo Passo Planejado: Protocolo Pós-Atendimento & Filtro Anti-Carona
+## 🛡️ 8. Protocolo Pós-Atendimento & Filtro Anti-Carona (Consolidado & Homologado)
 
-* **Objetivo:** Monitorar o fechamento de tickets (`C160:WON`).
-* **Regra de Negócio dos 3 Cenários:**
-  1. *Usuário agradece ou confirma ("Tudo certo", "Valeu"):* Robô agradece com carinho e encerra definitivamente.
-  2. *Mesmo problema persiste ("Ainda tá travando", "Voltou a apagar"):* Robô reabre o chamado para *Em atendimento* (`C160:PREPARATION`), registra na timeline e avisa o técnico.
-  3. *Problema NOVO / Diferente ("Aproveitando, a impressora parou"):* Robô **barra educadamente**, explica que o chamado anterior já foi concluído e orienta o usuário a abrir um novo ticket no Bitrix24 para garantir prioridade e organização.
+* **Objetivo:** Manter a escuta ativa em tickets concluídos (`C160:WON` / `COMPLETED`) por uma janela de tolerância de 7 dias, garantindo suporte humanizado, reabertura justa e blindagem total contra mistura de demandas ("caronas").
+* **Topologia e Nós do Fluxo (`PostRes`):**
+  1. `04_Get_Active_Sessions_Postgres`: Query estendida para buscar sessões `ACTIVE` e sessões `COMPLETED` recentes (`last_interaction_at > NOW() - INTERVAL '7 days'`).
+  2. `06_Route_Session_Status`: If node que bifurca:
+     - `ACTIVE` -> Segue o fluxo normal de triagem L1.
+     - `COMPLETED` -> Segue para o subsistema de Pós-Atendimento.
+  3. `PostRes_01_Fetch_Deal` & `PostRes_02_Prepare_Prompt`: Carrega o contexto do problema original resolvido (`TITLE`, `UF_CRM_1729774515200`).
+  4. `PostRes_03_Classify_Intent` (`chainLlm` + OpenAI GPT-4.1-mini): Classifica a mensagem do colaborador em tempo real.
+  5. `PostRes_04_Parse_Classification`: Extrai a intenção e monta payloads estruturados.
+* **Comportamento Homologado dos 3 Cenários:**
+  1. **`THANKS` (Agradecimento / Confirmação):**
+     - O robô agradece carinhosamente no chat (`im.message.add`) desejando um ótimo trabalho.
+     - Mantém o card como Ganho (`C160:WON`) e atualiza o cursor de mensagem no Postgres.
+  2. **`REOPEN` (Mesmo problema persistiu):**
+     - O robô reabre imediatamente o card no CRM para `C160:PREPARATION` ("Em atendimento").
+     - Adiciona comentário na Linha do Tempo (`crm.timeline.comment.add`) com alerta para a equipe técnica.
+     - Avisa o colaborador no chat que o ticket foi reaberto com prioridade.
+     - Atualiza sessão no Postgres para `state = 'REOPENED'`, `ai_state = 'AI_PAUSED'` para handover seguro ao técnico.
+  3. **`CARONA` (Problema novo diferente do original):**
+     - O robô **bloqueia educadamente** a contaminação do chamado.
+     - Responde no chat explicando com carinho que como o chamado anterior foi resolvido, para esse novo tema ele deve abrir um **novo card no Bitrix24**.
+     - Registra a tentativa de carona na timeline do CRM sem reabrir o card.
+     - O chamado **permanece `C160:WON`** e o cursor é avançado no Postgres.
+* **Teste de Campo Concluído:**
+  - Card `#1402306` (Eduardo Alaminos): Mensagem *"Agora aproveitando, meu celular ta travando"* classificada instantaneamente como `CARONA`, respondida com sucesso no chat Bitrix e registrada na Timeline!
 
 ---
 

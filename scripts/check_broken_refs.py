@@ -4,7 +4,7 @@ import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-path = r'C:\mundial-n8n-automations\workflows\AGENTE_RH_COM_CORRECOES_8OvNSMmZFZWxiW9A_SPRINT2.json'
+path = r'C:\mundial-n8n-automations\workflows\AGENTE_RH_COM_CORRECOES_8OvNSMmZFZWxiW9A_SPRINT3.json'
 with open(path, 'r', encoding='utf-8-sig') as f:
     wf = json.load(f)
 

@@ -618,6 +618,31 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
   - Validação estática executada com sucesso (97 nós e 0 referências quebradas).
   - Deploy em produção realizado com sucesso no workflow `8OvNSMmZFZWxiW9A` (ativo: true).
 
+
 ---
 
-*Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA & TI).*
+## 8. Evolução SDR Comercial: Agente de IA para Vendas e Qualificação de Leads (Bitrix24 C18 & WhatsApp Evolution API)
+
+### 8.1. Redesign Visual do Canvas: De "Linha Reta Infinita" para Arquitetura Modular Bento Grid
+
+* **Problema Identificado:** O fluxo do SDR Comercial de Vendas (`HTbHT6SLugyAn3NO` / `SDR - Mundial Motos (Unificado)`) encontrava-se estruturado em uma esteira horizontal contínua e esticada de **14.336 pixels de largura** por apenas **800 pixels de altura** (proporção de quase **18 : 1**). A visualização no editor do n8n era extremamente cansativa, exigindo rolagem horizontal infinita e zoom extremo para qualquer manutenção ou inspeção de execução.
+* **Solução Implantada (Redesign Arquitetural do Canvas):**
+  - **Redução de 76% na Dispersão Horizontal:** Largura total reduzida de 14.336px para **3.360px**, equilibrada com altura de **2.160px** (proporção widescreen áurea ergonômica de **1.56 : 1**).
+  - **Zoneamento Modular Bento Grid:** O fluxo foi reorganizado em 8 zonas funcionais perfeitamente encaixadas em 4 camadas visuais:
+    1. **Zona 1 (Topo Esquerdo):** `📥 01. Ingestão & Saneamento WhatsApp` (Webhook `testesdr`, JID, Entrada, Triagem Receptivo vs Ativo e Switch de Tipo);
+    2. **Zona 2 (Topo Centro):** `🎙️ 02. Transcrição de Áudio (Groq Whisper)` (Download de mídia base64, conversão binária e transcrição com Groq Whisper);
+    3. **Zona 3 (Topo Direito):** `⏱️ 03. Fila de Buffer & Debounce (15s)` (LPUSH temporário no Redis, espera de 15s e consolidação de mensagens picadas do cliente);
+    4. **Zona 4 (Meio Esquerdo):** `🔒🛑 04. Concorrência, Lock Atômico & Human Takeover` (Detecção `fromMe`, silenciamento instantâneo caso o vendedor responda, lock atômico Redis `INCR` + `EXPIRE` e inserção de fala na memória);
+    5. **Zona 5 (Meio Direito):** `🧠🤖 05. Núcleo Cognitivo de IA (LangChain ReAct)` (AI Agent comercial com persona empática da Mundial Motos, OpenAI Chat Model, Tool Think, Redis Chat Memory, formatador seguro de output e roteador de rotas);
+    6. **Zona 6 (Meio Inferior):** `📇🔎 06. Resolução, Saneamento & Deduplicação de Contatos Bitrix24` (Tratamento de telefone com 9º dígito, busca em cascata, criação de novos contatos, checagem OpenLines e mesclagem nativa via `crm.entity.mergeBatch`);
+    7. **Zona 7 (Base Esquerda):** `🏢📋 07. Gestão de Cards no Funil (Categoria 18) & Linha do Tempo` (Busca global de deals abertos `STAGE_SEMANTIC_ID='P'`, atualização de card existente ou criação de novo card, preenchimento de campos `UF_CRM` e log pericial na Timeline);
+    8. **Zona 8 (Base Direita):** `🚀 08. Transição de Etapa, Handover OpenLines & Despedida WhatsApp` (Mapeamento de etapa triada na Categoria 18, `crm.deal.update`, transferência de chat na OpenLines para o operador `5316`, trava atômica de silêncio de 24h e envio de despedida cordial no WhatsApp).
+  - **8 Sticky Notes de Alta Legibilidade:** Documentação visual moderna com cores temáticas oficiais do n8n, títulos com emojis e descrições técnicas claras de cada subsistema.
+* **Integridade 100% Preservada:**
+  - Nenhuma conexão lógica, query HTTP, credencial, código JavaScript ou prompt foi alterado.
+  - Validação estática executada com sucesso (77 nós funcionais + 8 stickies = 85 nós no total, com 0 referências quebradas).
+  - Deploy em produção realizado com sucesso no workflow [`HTbHT6SLugyAn3NO`](https://sophia-n8nsophia.timft8.easypanel.host/workflow/HTbHT6SLugyAn3NO) (status HTTP: 200, ativo: true).
+
+---
+
+*Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*

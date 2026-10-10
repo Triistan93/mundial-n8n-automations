@@ -444,11 +444,30 @@ flowchart TD
 ---
 
 ### 6.3. Status de Produção e Repositórios
-- **Workflow n8n Principal:** `c0F2GUMFm2BI94UG` (`BITRIX_TI_AI_TRIAGE_AGENT`) operando com **89 nós** a cada 15 segundos.
+- **Workflow n8n Principal:** `c0F2GUMFm2BI94UG` (`BITRIX_TI_AI_TRIAGE_AGENT`) operando com **92 nós** (84 funcionais + 8 Bento Sticky Notes) a cada 15 segundos.
 - **Workflow de Diagnóstico:** `PdpgXjbRMygjaL25` (`BITRIX_TI_DIAGNOSTIC_TOOLS`) ativo.
 - **Base Vetorial RAG:** `crMragbg2AOehF0d` (`KB_TI_PGVECTOR_INGESTION`) com 14 POPs ingeridos no PGVector.
 - **Tabelas de Suporte no Postgres:** `ticket_bot_sessions`, `store_outage_events` e `ticket_csat_ratings`.
 - **Repositório GitHub n8n:** `mundial-n8n-automations` sincronizado na branch `main`.
+
+---
+
+### 6.4. Redesign Visual do Canvas de TI: Arquitetura Modular Bento Grid
+
+* **Problema Identificado:** O fluxo da Central de TI (`c0F2GUMFm2BI94UG`) acumulou novas features nas Sprints 1, 2 e 3 (Visão OCR, Clustering P1, CSAT, Diagnóstico, Anti-duplicados), resultando em uma esteira horizontal comprimida de mais de **5.180 pixels de largura** e apenas 1.090px de altura, com notas adesivas legadas descompassadas dos nós reais.
+* **Solução Implantada (Redesign Arquitetural do Canvas):**
+  - **Dimensões Otimizadas:** Largura reduzida de 5.184px para **2.980px** (-42%), com altura ajustada para **2.600px** (proporção ergonômica de ~1.15 : 1, ideal para monitor e navegação com zoom).
+  - **Zoneamento em 8 Zonas Modulares:**
+    1. **Zona 1 (Topo Esquerdo - Azul):** `📥 01. Ingestão & Criação Idempotente de Sessão` (Schedule, Webhook, Polling, Gate C160 e Reserva no Postgres);
+    2. **Zona 2 (Topo Direito - Roxo):** `🚨🛡️ 02. Inteligência Preventiva (P1 & Anti-Duplicados)` (Clustering de queda filial $\ge 2$ em 30min e fechamento de tickets duplicados);
+    3. **Zona 3 (Meio Esquerdo - Teal):** `💬📋 03. Ativação de Chat no Card & Alçada de Compras` (Chat Bitrix, mensagem inicial e roteamento de aprovação);
+    4. **Zona 4 (Meio Direito - Laranja):** `⏱️🛑 04. Monitoramento de Chat & Human Takeover` (Polling de mensagens do usuário, pausa atômica da IA no Takeover e debounce);
+    5. **Zona 5 (Centro Esquerdo - Coral):** `👁️🔍 05. Visão Computacional (GPT-4o Vision OCR)` (Interceptação de prints colados no chat e extração de erros de ERP/RENAVE);
+    6. **Zona 6 (Centro Direito - Índigo):** `🧠🤖 06. Núcleo Cognitivo de Triagem TI` (LangChain Agent, GPT-4o-mini, Tool Diagnóstico TI, Tool Think, Redis Memory e RAG PGVector);
+    7. **Zona 7 (Base Esquerda - Verde):** `🏆📋 07. Validador B01, Atualização CRM & Timeline` (Cálculo B01, Timeline pericial, Alçada Direta de Compras e encerramento de sessão);
+    8. **Zona 8 (Base Direita - Púrpura):** `🔄⭐ 08. Roteador Pós-Resolução (PostRes) & CSAT Pulse` (Tratamento de reabertura de ticket, anti-carona e captura de 1 a 5 estrelas no Postgres).
+  - **8 Sticky Notes Padronizadas:** Títulos com ícones temáticos, Markdown descritivo e paleta de cores oficial do n8n.
+* **Integridade 100% Preservada:** Todos os 84 nós funcionais, conexões, credenciais e lógicas foram mantidos intactos. Validado e ativado em produção via n8n Public API.
 
 ---
 

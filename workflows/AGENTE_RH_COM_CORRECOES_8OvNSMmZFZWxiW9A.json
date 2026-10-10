@@ -1344,29 +1344,6 @@
     },
     {
       "parameters": {
-        "operation": "set",
-        "key": "={{ $('RECEPTIVO').first().json.instance }} {{ $('RECEPTIVO').first().json.remoteJid }} block",
-        "value": "true",
-        "expire": true,
-        "ttl": 86400
-      },
-      "type": "n8n-nodes-base.redis",
-      "typeVersion": 1,
-      "position": [
-        10560,
-        -3888
-      ],
-      "id": "1ab19fac-96f9-438b-9ffc-47e1fb0bde83",
-      "name": "Redis",
-      "credentials": {
-        "redis": {
-          "id": "NlIbdmbaePYxgp6S",
-          "name": "Redis Evolution"
-        }
-      }
-    },
-    {
-      "parameters": {
         "rules": {
           "values": [
             {
@@ -2262,6 +2239,186 @@
       ],
       "id": "e4aeac64-2e26-4932-ad18-374a2f073df3",
       "name": "IF: Processo Encontrado?1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\n\n// 1. Definição do Responsável do RH\n// Modo Teste: 32598 (Eduardo Alaminos)\n// Modo Produção: 4278 (Nina Biermann - RH)\nconst RESPONSAVEL_RH_ID = 32598;\n\n// 2. Extração segura dos dados\nconst extracted = item.extracted_data || {};\nconst candidato = extracted.candidato || {};\n\nlet nomeCandidato = (candidato.nome || \"\").trim();\nif (!nomeCandidato) {\n    try {\n        nomeCandidato = ($('RECEPTIVO').first().json.pushName || \"\").trim();\n    } catch(e) {}\n}\nif (!nomeCandidato) {\n    nomeCandidato = \"Solicitante WhatsApp\";\n}\n\nlet telefone = item.telefone || \"\";\nif (!telefone) {\n    try {\n        telefone = ($('RECEPTIVO').first().json.remoteJid || \"\").replace(/\\D/g, \"\");\n    } catch(e) {}\n}\n\nlet remoteJid = \"\";\nlet instance = \"botrh1\";\ntry {\n    remoteJid = $('RECEPTIVO').first().json.remoteJid || \"\";\n    instance = $('RECEPTIVO').first().json.instance || \"botrh1\";\n} catch(e) {}\n\nconst tipoAtendimento = extracted.tipo_atendimento || \"geral\";\nconst mapaTipos = {\n    \"saude_ocupacional\": \"🏥 Saúde Ocupacional / Clínica / Exames\",\n    \"departamento_pessoal\": \"👥 Departamento Pessoal / Colaborador\",\n    \"b2b_outros\": \"🏢 B2B / Fornecedor / Outros\"\n};\nconst tipoRotulo = mapaTipos[tipoAtendimento] || \"📋 Assuntos Gerais RH\";\n\nconst resumoAssunto = (extracted.resumo_assunto || \"Solicitação de atendimento humano via WhatsApp\").trim();\nconst mensagemDespedida = (item.message || \"Agradecemos o contato. Encaminhamos sua solicitação para a equipe responsável.\").trim();\n\nreturn [{\n    json: {\n        nome_candidato: nomeCandidato,\n        telefone: telefone,\n        remote_jid: remoteJid,\n        instance: instance,\n        tipo_atendimento: tipoAtendimento,\n        tipo_rotulo: tipoRotulo,\n        resumo_assunto: resumoAssunto,\n        assigned_user_id: RESPONSAVEL_RH_ID,\n        mensagem_despedida: mensagemDespedida\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        10560,
+        -3888
+      ],
+      "id": "c09deeb6-143b-4606-a35e-84a913856d87",
+      "name": "Preparar Dados Transferência"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/crm.duplicate.findbycomm.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "entity_type",
+              "value": "=CONTACT"
+            },
+            {
+              "name": "type",
+              "value": "PHONE"
+            },
+            {
+              "name": "values[0]",
+              "value": "={{ $json.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        10784,
+        -3888
+      ],
+      "id": "9a3e8526-117f-4be2-ae7a-8148af41a42c",
+      "name": "Buscar Contato Transferência",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $('Preparar Dados Transferência').first().json;\nlet contactId = null;\n\ntry {\n    const res = $json.result;\n    if (res && res.CONTACT && Array.isArray(res.CONTACT) && res.CONTACT.length > 0) {\n        contactId = res.CONTACT[0];\n    }\n} catch(e) {}\n\nconst dealPayload = {\n    fields: {\n        TITLE: `[RH - ${prev.tipo_rotulo}] ${prev.nome_candidato}`,\n        CATEGORY_ID: 198,\n        STAGE_ID: \"C198:UC_0YLZXN\",\n        ASSIGNED_BY_ID: prev.assigned_user_id,\n        COMMENTS: `<b>Demanda recebida via WhatsApp (Bot RH):</b><br><b>Tipo:</b> ${prev.tipo_rotulo}<br><b>Solicitante:</b> ${prev.nome_candidato}<br><b>Telefone:</b> ${prev.telefone}<br><b>Resumo:</b> ${prev.resumo_assunto}`\n    }\n};\n\nif (contactId) {\n    dealPayload.fields.CONTACT_ID = contactId;\n}\n\nreturn [{\n    json: {\n        ...prev,\n        contact_id: contactId,\n        deal_payload: dealPayload\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        11008,
+        -3888
+      ],
+      "id": "fee1f08f-de51-4e9c-ba06-dd08c41d924a",
+      "name": "Preparar Deal Assuntos RH"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/crm.deal.add.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.deal_payload }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        11232,
+        -3888
+      ],
+      "id": "7f82765c-89dd-4d2e-889a-2f56229247f4",
+      "name": "Criar Deal Assuntos RH"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/crm.timeline.comment.add.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"fields\": {\n    \"ENTITY_ID\": {{ $json.result }},\n    \"ENTITY_TYPE\": \"deal\",\n    \"COMMENT\": \"<b>⚠️ TRANSFERÊNCIA HUMANA / ATENDIMENTO RH:</b><br><b>Tipo:</b> {{ $('Preparar Dados Transferência').first().json.tipo_rotulo }}<br><b>Solicitante:</b> {{ $('Preparar Dados Transferência').first().json.nome_candidato }}<br><b>Telefone:</b> {{ $('Preparar Dados Transferência').first().json.telefone }}<br><b>Resumo:</b> {{ $('Preparar Dados Transferência').first().json.resumo_assunto }}<br><i>O robô foi pausado para permitir o atendimento humano no WhatsApp.</i>\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        11456,
+        -3888
+      ],
+      "id": "b7225efd-a75d-459a-9861-dbf6681b9fe0",
+      "name": "Adicionar Timeline Assuntos RH"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/im.message.add.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"DIALOG_ID\": {{ $('Preparar Dados Transferência').first().json.assigned_user_id }},\n  \"MESSAGE\": \"🔔 [ALERTA RH] Novo Atendimento no WhatsApp aguardando equipe!\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n📌 Tipo: {{ $('Preparar Dados Transferência').first().json.tipo_rotulo }}\\n👤 Solicitante: {{ $('Preparar Dados Transferência').first().json.nome_candidato }}\\n📱 WhatsApp: {{ $('Preparar Dados Transferência').first().json.telefone }}\\n📝 Resumo: {{ $('Preparar Dados Transferência').first().json.resumo_assunto }}\\n🔗 Abrir Card no Bitrix: https://b24-88dbfb.bitrix24.com.br/crm/deal/details/{{ $('Criar Deal Assuntos RH').first().json.result }}/\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        11680,
+        -3888
+      ],
+      "id": "dc73da98-1ad8-4551-9ab1-131e6baf3a88",
+      "name": "Alertar Responsavel RH"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $('Preparar Dados Transferência').first().json.instance }} {{ $('Preparar Dados Transferência').first().json.remote_jid }} block",
+        "value": "true",
+        "expire": true,
+        "ttl": 86400
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        11904,
+        -3888
+      ],
+      "id": "10063e03-a0d5-494a-8258-d4954f126e1c",
+      "name": "Redis: Bloquear Bot 24h",
+      "credentials": {
+        "redis": {
+          "id": "NlIbdmbaePYxgp6S",
+          "name": "Redis Evolution"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sophia-evolution-api.timft8.easypanel.host/message/sendText/botrh1",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Preparar Dados Transferência').first().json.remote_jid }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ '*Mundial Motos RH*: ' + $('Preparar Dados Transferência').first().json.mensagem_despedida }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        12128,
+        -3888
+      ],
+      "id": "ae6524f1-da42-4131-9232-23af05be16a2",
+      "name": "WhatsApp: Enviar Despedida Transferência"
+    },
+    {
+      "parameters": {
+        "content": "## HANDOVER HUMANO (TRILHAS 2, 3 E 4)\nCria card na etapa ASSUNTOS RH (Categoria 198), anota histórico na Timeline, alerta o responsável no Bitrix (32598 teste / 4278 prod), bloqueia o bot e envia mensagem de encerramento ao usuário.",
+        "height": 180,
+        "width": 1780,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        10560,
+        -4120
+      ],
+      "id": "9741d315-25f0-4153-bf57-0eb89b5f9a38",
+      "name": "Sticky Note - Handover RH"
     }
   ],
   "connections": {
@@ -2754,12 +2911,7 @@
         ],
         [
           {
-            "node": "Redis",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Enviar MSG (Continua o Papo)",
+            "node": "Preparar Dados Transferência",
             "type": "main",
             "index": 0
           }
@@ -2782,11 +2934,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Redis": {
-      "main": [
-        []
       ]
     },
     "Obter m dia em base64": {
@@ -3163,6 +3310,83 @@
         [
           {
             "node": "Redis2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Dados Transferência": {
+      "main": [
+        [
+          {
+            "node": "Buscar Contato Transferência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Contato Transferência": {
+      "main": [
+        [
+          {
+            "node": "Preparar Deal Assuntos RH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Deal Assuntos RH": {
+      "main": [
+        [
+          {
+            "node": "Criar Deal Assuntos RH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Deal Assuntos RH": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Timeline Assuntos RH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar Timeline Assuntos RH": {
+      "main": [
+        [
+          {
+            "node": "Alertar Responsavel RH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alertar Responsavel RH": {
+      "main": [
+        [
+          {
+            "node": "Redis: Bloquear Bot 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis: Bloquear Bot 24h": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp: Enviar Despedida Transferência",
             "type": "main",
             "index": 0
           }

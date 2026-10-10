@@ -4,8 +4,8 @@ import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-path = r'C:\mundial-n8n-automations\workflows\AGENTE_RH_COM_CORRECOES_8OvNSMmZFZWxiW9A_SPRINT1.json'
-with open(path, 'r', encoding='utf-8') as f:
+path = r'C:\mundial-n8n-automations\workflows\AGENTE_RH_COM_CORRECOES_8OvNSMmZFZWxiW9A_SPRINT2.json'
+with open(path, 'r', encoding='utf-8-sig') as f:
     wf = json.load(f)
 
 nodes = {n['name']: n for n in wf.get('nodes', [])}
@@ -27,4 +27,4 @@ for source, ref in sorted(broken_refs):
     print(f"  Node '{source}' references nonexistent node: '{ref}'")
 
 if len(broken_refs) == 0:
-    print("\n🎉 PERFECT: ZERO BROKEN NODE REFERENCES!")
+    print("\n🎉 PERFECT: ZERO BROKEN NODE REFERENCES IN SPRINT 2 WORKFLOW!")

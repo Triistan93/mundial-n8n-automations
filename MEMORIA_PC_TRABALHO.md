@@ -230,4 +230,75 @@ Ele serve para restauração completa de contexto, replicação em outros comput
 
 ---
 
+## 🌟 9. As 6 Novas Capacidades de Help Desk com IA (Sprints 1, 2 e 3)
+
+Em Outubro de 2026, foram projetadas e homologadas em produção 6 funcionalidades inspiradas nos líderes globais de ITSM:
+
+### 9.1. Sprint 1: Proteção & Inteligência Emocional (Quick Wins)
+* **Feature 3 (Detector de Frustração & "Cliente em Loja"):**
+  - Identifica quando a falha de TI está travando o atendimento presencial de um cliente em concessionária.
+  - Eleva a prioridade para `OPERATION_HALTED` (`P2_HIGH` / `P1_CRITICAL`) e insere banner na Linha do Tempo e no título: `[🚨 CLIENTE EM LOJA]`.
+* **Feature 4 (Detector Inteligente de Chamados Duplicados):**
+  - Checa se o usuário abriu chamados com o mesmo chassi/problema nas últimas 24h.
+  - Anexa como comentário no card existente e encerra a duplicata em `C160:LOSE`.
+  - Homologado no card `#1403468` (unificado ao `#1398576`).
+
+### 9.2. Sprint 2: Visão Multimodal & Correlação de Incidentes
+* **Feature 1 (Visão Computacional e OCR com GPT-4o Vision):**
+  - Detecção nativa de imagens no chat via `im.dialog.messages.get`.
+  - Download binário seguro via API `im.v2.File.download` e conversão Base64.
+  - Prompt especialista em OCR automotivo e ERP Honda: extrai códigos de erro, MicroWork Cloud, Chassi (17 dígitos) e NF-e (44 dígitos).
+  - Acolhimento amigável imediato citando os detalhes visualizados.
+* **Feature 2 (Detector de Quedas Gerais por Loja - Incident Clustering P1):**
+  - Mapeamento das 13 filiais da Mundial Honda (`UF_CRM_1689593052602`).
+  - Se $\ge 2$ chamados da mesma loja sobre o mesmo tema ocorrerem em 30 min, força **P1 - Crítico**, insere alerta na Linha do Tempo e unifica a comunicação no chat.
+
+### 9.3. Sprint 3: Satisfação Contínua & Auto-Remediação Ativa
+* **Feature 5 (Pesquisa de Satisfação CSAT Pulse no Chat):**
+  - Convite com escala de 1 a 5 estrelas no chat ao finalizar o chamado.
+  - Captura contínua no roteador pós-atendimento (`PostRes`), gravando auditoria na tabela `ticket_csat_ratings` e na Timeline do CRM.
+* **Feature 6 (Gatilhos de Auto-Remediação Ativa - Self-Healing):**
+  - Ferramenta LangChain `Tool_Diagnostico_TI` ligada ao sub-workflow `BITRIX_TI_DIAGNOSTIC_TOOLS`.
+  - Diagnósticos reais de link de filial, servidor MicroWork Cloud, validação de Chassi no Detran e filas do cluster RPA.
+
+---
+
+## 🗄️ 10. Schemas Incrementais do PostgreSQL
+
+```sql
+-- 1. Cluster de Outage por Filial
+CREATE TABLE IF NOT EXISTS store_outage_events (
+    id SERIAL PRIMARY KEY,
+    store_name VARCHAR(100) NOT NULL,
+    category_theme VARCHAR(50) NOT NULL,
+    deal_id BIGINT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_outage_store_time ON store_outage_events (store_name, category_theme, created_at);
+
+-- 2. Pesquisa de Satisfação CSAT
+CREATE TABLE IF NOT EXISTS ticket_csat_ratings (
+    id SERIAL PRIMARY KEY,
+    deal_id BIGINT NOT NULL,
+    requester_user_id BIGINT NOT NULL,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    feedback_text TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_csat_deal_user ON ticket_csat_ratings (deal_id, requester_user_id);
+```
+
+---
+
+## 🚀 11. Workflows Ativos no Cluster n8n
+
+| ID | Nome do Workflow | Status | Finalidade |
+| :--- | :--- | :---: | :--- |
+| `c0F2GUMFm2BI94UG` | `BITRIX_TI_AI_TRIAGE_AGENT` | **Ativo (89 nós)** | Agente central de triagem, RAG, B01, OCR Vision e CSAT |
+| `PdpgXjbRMygjaL25` | `BITRIX_TI_DIAGNOSTIC_TOOLS` | **Ativo (2 nós)** | Webhook de auto-remediação e diagnóstico técnico |
+| `crMragbg2AOehF0d` | `KB_TI_PGVECTOR_INGESTION` | **Ativo** | Pipeline de RAG e embeddings dos 14 POPs no PGVector |
+| `uRjdQlM8edLyKmQO` | `BITRIX_TI_PURCHASE_APPROVAL_HANDLER` | **Ativo** | Webhook de aprovação de compras com auto-redirecionamento |
+
+---
+
 *Arquivo compilado e mantido sob controle de versão oficial — Central de Tecnologia Mundial Honda.*

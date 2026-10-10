@@ -32,17 +32,36 @@ mundial-n8n-automations/
 
 ---
 
-## 🤖 Arquitetura Canônica: `BITRIX_TI_AI_TRIAGE_AGENT`
+## 🤖 Arquitetura Canônica: `BITRIX_TI_AI_TRIAGE_AGENT` (89 Nós)
 
-O workflow principal implementa o modelo **CRM Deal Chat**:
+O workflow principal implementa o modelo **CRM Deal Chat com RAG Vetorial e Auto-Remediação Ativa**:
 
 ```text
 1 Chamado (Deal Categoria 160)
    ├── 1 Sessão no PostgreSQL (ticket_bot_sessions)
    ├── 1 Chat Nativo do Card (Bitrix24 im.chat.add com ENTITY_TYPE=CRM)
    ├── 1 Memória Redis Isolada (bitrix:ti:deal:<deal_id>:memory)
+   ├── 1 Contexto RAG Vetorial (PGVector kb_ti_conhecimento com 14 POPs)
+   ├── 1 Motor Multimodal Vision (GPT-4o OCR de Prints de Erro)
+   ├── 1 Cluster de Diagnóstico Ativo (Tool_Diagnostico_TI -> BITRIX_TI_DIAGNOSTIC_TOOLS)
    └── 1 Contexto de IA (LangChain Agent + OpenAI GPT-4o-mini)
 ```
+
+### 🌟 As 6 Funcionalidades Avançadas de Help Desk (Homologadas em Produção):
+1. **📸 Feature 1: Visão Multimodal & OCR de Prints (GPT-4o Vision):**
+   - Intercepta uploads de imagens e fotos coladas no chat do Bitrix24 (`im.dialog.messages.get`).
+   - Download autenticado via `im.v2.File.download` e extração de códigos de erro, telas do MicroWork Cloud, Chassi (17 dígitos) e Chave de NF-e (44 dígitos).
+2. **🚨 Feature 2: Detector de Quedas Gerais por Loja (Incident Clustering P1):**
+   - Correlaciona chamados da mesma filial em janela deslizante de 30 minutos via tabela `store_outage_events`.
+   - Se $\ge 2$ chamados prévios existirem sobre o mesmo tema, eleva para **P1 - Crítico**, injeta banner de outage e unifica a comunicação no chat.
+3. **😡 Feature 3: Detector de Frustração & "Cliente em Loja":**
+   - Detecta atendimento presencial em balcão ou cliente aguardando na mesa, elevando a urgência para `OPERATION_HALTED` (P2/P1) com banner visual vermelho.
+4. **🔍 Feature 4: Detector Inteligente de Chamados Duplicados (Anti-Spam):**
+   - Localiza chamados abertos nas últimas 24h para o mesmo usuário/chassi, anexa o contexto no card original e encerra a duplicata em `C160:LOSE`.
+5. **⭐ Feature 5: Pesquisa de Satisfação Pós-Atendimento (CSAT Pulse no Chat):**
+   - Coleta notas de 1 a 5 estrelas no chat de tickets concluídos (`COMPLETED`), persistindo na tabela `ticket_csat_ratings` e na Timeline do CRM.
+6. **🤖 Feature 6: Gatilhos de Auto-Remediação Ativa (RPA / Self-Healing):**
+   - Ferramenta LangChain `Tool_Diagnostico_TI` acionando o sub-workflow `BITRIX_TI_DIAGNOSTIC_TOOLS` (`PdpgXjbRMygjaL25`) para testes em tempo real de links de filiais, status do servidor MicroWork Cloud, validação de Chassi no Detran e status das filas de robôs RPA.
 
 ### Principais Invariantes Homologadas:
 1. **Chat Nativo do Card:** A triagem ocorre diretamente na aba de chat dentro do próprio chamado no CRM Bitrix24, sem poluir o chat privado dos usuários.
@@ -53,12 +72,12 @@ O workflow principal implementa o modelo **CRM Deal Chat**:
    - `P2_HIGH (1204)`
    - `P3_MEDIUM (1206)`
    - `P4_LOW (1208)`
-   - *Nota: P0 foi eliminado por conformidade de segurança.*
-5. **Avanço de Cursor Seguro:** O cursor `last_processed_message_id` só avança após confirmação de sucesso de envio no Bitrix24 (`bitrixRes.result`). Em caso de falha de rede/API, o cursor é preservado para retry.
+5. **Avanço de Cursor Seguro:** O cursor `last_processed_message_id` só avança após confirmação de sucesso de envio no Bitrix24 (`bitrixRes.result`).
 6. **Detecção de Human Takeover:** Se um técnico humano postar no chat do card, a IA é pausada automaticamente (`ai_state = 'AI_PAUSED'`).
-7. **Self-Healing Genérico:** Sessões travadas em `CHAT_CREATING` são promovidas genericamente por estado quando o chat já existe.
+7. **Roteador Pós-Resolução (`PostRes`):** Escuta ativa de 7 dias com tratamento de `REOPEN`, `CARONA`, `THANKS` e `CSAT_FEEDBACK`.
 
 ---
+
 
 ## 🛠️ Como Trabalhar de Outras Máquinas
 

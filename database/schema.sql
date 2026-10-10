@@ -88,3 +88,34 @@ CREATE TABLE IF NOT EXISTS ticket_bot_routing_audit (
 
 CREATE INDEX IF NOT EXISTS idx_routing_audit_deal ON ticket_bot_routing_audit(deal_id);
 CREATE INDEX IF NOT EXISTS idx_routing_audit_requester ON ticket_bot_routing_audit(requester_user_id);
+
+-- ====================================================================
+-- TABELA: store_outage_events
+-- Incident Clustering & Alerta de Queda Geral por Loja (Sprint 2 - Feature 2)
+-- ====================================================================
+
+CREATE TABLE IF NOT EXISTS store_outage_events (
+    id SERIAL PRIMARY KEY,
+    store_name VARCHAR(100) NOT NULL,
+    category_theme VARCHAR(50) NOT NULL,
+    deal_id BIGINT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_outage_store_time ON store_outage_events (store_name, category_theme, created_at);
+
+-- ====================================================================
+-- TABELA: ticket_csat_ratings
+-- Pesquisa de Satisfação Pós-Atendimento - CSAT Pulse (Sprint 3 - Feature 5)
+-- ====================================================================
+
+CREATE TABLE IF NOT EXISTS ticket_csat_ratings (
+    id SERIAL PRIMARY KEY,
+    deal_id BIGINT NOT NULL,
+    requester_user_id BIGINT NOT NULL,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    feedback_text TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_csat_deal_user ON ticket_csat_ratings (deal_id, requester_user_id);

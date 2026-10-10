@@ -35,8 +35,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3456,
-        -3936
+        1600,
+        120
       ],
       "id": "3380b36f-c8d3-4e59-8a71-c6501cdf6153",
       "name": "Mensagem de Texto"
@@ -70,8 +70,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3680,
-        -3840
+        2980,
+        260
       ],
       "id": "ade10460-58ad-4380-9544-3ba8b1a1a773",
       "name": "Mensagem"
@@ -178,8 +178,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        2112,
-        -3968
+        1340,
+        260
       ],
       "id": "af31f500-4646-46ef-9bae-d81d613c5f8d",
       "name": "Tipo de mensagem"
@@ -195,8 +195,8 @@
       "type": "n8n-nodes-evolution-api.evolutionApi",
       "typeVersion": 1,
       "position": [
-        2784,
-        -4224
+        1820,
+        260
       ],
       "id": "a8088291-aa68-4dc8-864c-279f215b7ce8",
       "name": "Get Base 64",
@@ -222,8 +222,8 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        3008,
-        -4224
+        2040,
+        260
       ],
       "id": "40337a37-afa1-4461-9997-e854c720a78f",
       "name": "Audio"
@@ -245,8 +245,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3456,
-        -4224
+        2480,
+        260
       ],
       "id": "e68bf01e-6020-484f-9e90-31d98cd2a67b",
       "name": "Mensagem de Audio"
@@ -261,8 +261,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        7840,
-        -3744
+        140,
+        1620
       ],
       "id": "58ba99a6-346a-4c26-b354-95610728eac1",
       "name": "Buscar Chave Block",
@@ -283,8 +283,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        8864,
-        -3696
+        1020,
+        1540
       ],
       "id": "1ec45eda-e6c3-47d9-9242-fad15a4b1c8d",
       "name": "Mensagens temporárias",
@@ -323,8 +323,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        9088,
-        -3696
+        1240,
+        1540
       ],
       "id": "4be911df-cb55-4ae0-a3b4-774b25a8e228",
       "name": "Última Mensagem?",
@@ -338,8 +338,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        9312,
-        -3696
+        1460,
+        1540
       ],
       "id": "d557db8c-24e4-4939-b6ac-5594ca275c92",
       "name": "Deletar Lista Temporária",
@@ -365,8 +365,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryManager",
       "typeVersion": 1.1,
       "position": [
-        8288,
-        -4096
+        360,
+        1720
       ],
       "id": "22c552f9-4d8d-4970-9a08-d20940b6e187",
       "name": "Inserir Mensagem Cliente",
@@ -382,8 +382,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
       "typeVersion": 1.5,
       "position": [
-        8368,
-        -3872
+        1960,
+        1660
       ],
       "id": "ec23c778-bd65-44a5-87d8-8e72b45df721",
       "name": "Redis Chat Memory1",
@@ -404,8 +404,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        8352,
-        -3696
+        580,
+        1540
       ],
       "id": "059583a9-b9fa-46b6-bc6b-e965d3836f57",
       "name": "Mensagem Temporária1",
@@ -455,8 +455,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3232,
-        -4224
+        2260,
+        260
       ],
       "id": "d73398bc-1b85-496e-9c26-236de5400c8e",
       "name": "Converter Audio em Texto",
@@ -538,8 +538,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1888,
-        -3936
+        1020,
+        200
       ],
       "id": "984ba718-0f74-47c2-bdd4-2a7fa108f7cd",
       "name": "RECEPTIVO"
@@ -573,8 +573,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        8064,
-        -3808
+        360,
+        1540
       ],
       "id": "60f450ea-a5dc-453d-b2e1-bcea6429b97b",
       "name": "Bloqueado?"
@@ -586,8 +586,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolThink",
       "typeVersion": 1.1,
       "position": [
-        9904,
-        -3472
+        1960,
+        1540
       ],
       "id": "71fecac2-517b-4437-a7d5-267f72f998b1",
       "name": "Pense",
@@ -600,8 +600,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        8640,
-        -3696
+        800,
+        1540
       ],
       "id": "25bd958b-845d-40a7-92fe-c85807bc0858",
       "name": "Esperar 30 segundos",
@@ -684,8 +684,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1440,
-        -3936
+        580,
+        200
       ],
       "id": "a5e3f70d-ab48-4f70-b24d-13ac3a6cff5d",
       "name": "Entrada"
@@ -697,8 +697,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1216,
-        -3936
+        360,
+        200
       ],
       "id": "9c28e9e3-c916-4186-8e58-8b3fdbf212cc",
       "name": "JID"
@@ -730,8 +730,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1664,
-        -3936
+        800,
+        200
       ],
       "id": "04c94eaf-4037-4ae4-8504-e32bc938da67",
       "name": "[IF] Triagem: Receptivo vs Ativo"
@@ -764,8 +764,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2560,
-        -4144
+        1600,
+        260
       ],
       "id": "53d5b599-0915-40a7-8fe5-63b9e7b20316",
       "name": "If2"
@@ -779,8 +779,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        992,
-        -3936
+        140,
+        200
       ],
       "id": "9477aba2-bded-4119-86a3-f61587967d42",
       "name": "Webhook",
@@ -797,8 +797,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        9760,
-        -3696
+        2180,
+        1540
       ],
       "id": "fe575f2d-d645-4a5e-a541-6023b5e19fc7",
       "name": "AI Agent",
@@ -819,8 +819,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        9776,
-        -3472
+        1960,
+        1420
       ],
       "id": "3ac9591f-3def-4624-b23f-17da413ea1a5",
       "name": "OpenAI Chat Model1",
@@ -862,8 +862,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2336,
-        -3712
+        1600,
+        440
       ],
       "id": "cf4187ac-618d-48d5-aa4e-59bc7fa738b2",
       "name": "If3"
@@ -887,8 +887,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        3232,
-        -3648
+        2480,
+        440
       ],
       "id": "63519c9e-d1e3-4474-922c-252ac0081d28",
       "name": "Gerar Link Público",
@@ -922,8 +922,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3456,
-        -3648
+        2700,
+        440
       ],
       "id": "9af6ed3b-61cd-49e8-a7f6-6ffbc05ca81a",
       "name": "Injetar URL no Contexto"
@@ -957,8 +957,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        9536,
-        -3696
+        1680,
+        1540
       ],
       "id": "59554636-bc76-44b2-81c2-4bd889050f94",
       "name": "MensagemFinal1",
@@ -991,8 +991,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        10784,
-        -3504
+        980,
+        2060
       ],
       "id": "e5f3641c-e3d6-4f3c-942d-249fa5324762",
       "name": "HTTP: Buscar Contato (Tentativa 1)"
@@ -1004,8 +1004,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        11232,
-        -3568
+        1200,
+        2220
       ],
       "id": "4a201284-469f-4ad8-8401-fc6c039570c0",
       "name": "Espera Busca",
@@ -1028,8 +1028,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        11456,
-        -3568
+        1420,
+        2220
       ],
       "id": "4d25881e-7fe2-4bd3-b8f5-9e95b0427d0a",
       "name": "HTTP: Buscar Contato (Tentativa 2)"
@@ -1041,8 +1041,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        11680,
-        -3504
+        1420,
+        2060
       ],
       "id": "cb99b911-5825-449e-9157-9e3c5f0c5df3",
       "name": "Isolar IDs dos Contatos"
@@ -1054,8 +1054,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        11904,
-        -3504
+        1640,
+        2060
       ],
       "id": "72ec2558-fbae-463e-8c6f-99c79ff77a5c",
       "name": "Montar URL de Busca"
@@ -1069,8 +1069,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        12128,
-        -3504
+        1860,
+        2060
       ],
       "id": "1b7f1fee-71ca-4860-8d55-53c249fa0899",
       "name": "3. Buscar Processo no Funil"
@@ -1104,8 +1104,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        11008,
-        -3504
+        1200,
+        2060
       ],
       "id": "c24b4aa3-3a60-49dc-81b1-3d26e6eb9abf",
       "name": "IF: Contato Encontrado?1"
@@ -1163,8 +1163,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        10560,
-        -3504
+        760,
+        2060
       ],
       "id": "8ba52600-fe30-4a45-8cc1-3014fb280428",
       "name": "1. Preparar Dados RH",
@@ -1189,8 +1189,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        3024,
-        -3648
+        2260,
+        440
       ],
       "id": "08d03cd0-7aa7-403e-8dca-f92676a71159",
       "name": "Upload GDrive",
@@ -1208,139 +1208,11 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2784,
-        -3648
+        2040,
+        440
       ],
       "id": "5b8c8421-eb49-43f7-a41a-6db94292adc6",
       "name": "Converter Base64 > Binário"
-    },
-    {
-      "parameters": {
-        "content": "## Webhook de entrada e Triagem de tipo de mensagem\n\n**Double click** para editar os parâmetros, lembre-se de deixar um backup\n salvo por garantia",
-        "height": 432,
-        "width": 1344,
-        "color": 6
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        848,
-        -4656
-      ],
-      "typeVersion": 1,
-      "id": "d09fca6b-ac93-4e36-9da5-6f53e9e9b7bd",
-      "name": "Sticky Note"
-    },
-    {
-      "parameters": {
-        "content": "## Mensagem de audio\n**Aqui usamos o node base64 da evolution para converter os dados do audio em dados binários\n** Em seguida usamos o Whisper (Groq) para fazer a transcrição assíncrona em texto",
-        "height": 400,
-        "width": 1152,
-        "color": 4
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2480,
-        -4384
-      ],
-      "typeVersion": 1,
-      "id": "45111388-64df-49ea-9804-f73aca035c77",
-      "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
-        "content": "## CURRICULO\n**Aqui tratamos o documento enviado pelo candidato, fazendo upload dele no Google Drive e em seguida gerando um Link de acesso para o fluxo\n** o Nó Injetar Contexto é essencial para que o fluxo entenda do que se trata o dado enviado ao fluxo",
-        "height": 480,
-        "width": 1408,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2240,
-        -3968
-      ],
-      "typeVersion": 1,
-      "id": "d586832a-b1ac-4f78-8fa1-14a36e0f4018",
-      "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "content": "## MENSAGEM\n**A partir do nó mensagem começamos a trabalhar os dados recebidos até agora, buscando se o status é FromMe ou sejá fomos nós ou o cliente que enviamos a mensagem?\n\n** Se o status for True uma chave no Redis nossa base de dados bloqeuando a IA no chat por 30 dias.\n\n**Se o status for False a mensagem é inserida no banco de dados como contexto para a IA não repetir perguntas e o fluxo continua.\n",
-        "height": 624,
-        "width": 2352,
-        "color": "#430345"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        3632,
-        -4208
-      ],
-      "typeVersion": 1,
-      "id": "688a4258-dc60-48e4-b1f7-a10c8ec33236",
-      "name": "Sticky Note3"
-    },
-    {
-      "parameters": {
-        "content": "##LLM Agente Vulgo IA\n\n**Antes do agente entrar é verificado se o status da mensagem é Final ou seja se não tem mais contexto pro agente processar.\n\n**Caso não tenha o agente entra, neste fluxo usamos o OpenAi Chat Model, o custo por token é menor e para este tipo de fluxo é excelente.\n\n** O Agente possui ferramentas de Memoria e pensamento é importante descrever no prompt do mesmo a regra de sempre usar as ferramentas nomeando elas no prompt.\n",
-        "height": 640,
-        "width": 496,
-        "color": "#080C72"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        9520,
-        -3968
-      ],
-      "typeVersion": 1,
-      "id": "dbc3042f-117f-4319-aa4a-f07252d0583a",
-      "name": "Sticky Note4"
-    },
-    {
-      "parameters": {
-        "content": "## Formatação de output e roteamento\n\n** Aqui o output do agente é formatado para que possamos rotear as saidas, sejá pro agente continuar no chat ou preparar os dados para inseri-los no CARD do Bitrix na pipeline RECRUTAMENTO E SELEÇÃO\n",
-        "height": 624,
-        "width": 512,
-        "color": "#00332D"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        10128,
-        -4144
-      ],
-      "typeVersion": 1,
-      "id": "4e75e2c4-2766-4677-9ab3-3cd3a8faff89",
-      "name": "Sticky Note5"
-    },
-    {
-      "parameters": {
-        "content": "## BUSCA CONTATO\n\n** Aqui fazemos uma request via HTTP para o Bitrix para verificar se o contato existe\n\n** Caso não exista um novo contato é criado",
-        "height": 496,
-        "width": 1056,
-        "color": "#310202"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        11440,
-        -2768
-      ],
-      "typeVersion": 1,
-      "id": "a75ebfe1-bd38-48c2-8f04-afaf0a08acd6",
-      "name": "Sticky Note6"
-    },
-    {
-      "parameters": {
-        "content": "## ISOLAR ID'S\n** Aqui o fluxo isola os ID'S encontrados e em seguida monta uma URL de Busca de acordo com o ID da pipeline informado no nó \"Montar URL  de Busca\"\n\n** Em seguida busca em nosso funil do Bitrix o negocio.",
-        "height": 368,
-        "width": 656,
-        "color": "#333602"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        10496,
-        -2720
-      ],
-      "typeVersion": 1,
-      "id": "3962f4f6-a03c-4438-85ab-85829013e614",
-      "name": "Sticky Note7"
     },
     {
       "parameters": {
@@ -1403,8 +1275,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        10336,
-        -3712
+        2660,
+        1540
       ],
       "id": "af269926-5b19-437e-8aea-80049b3fbd12",
       "name": "Roteador de Saída"
@@ -1440,8 +1312,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        10560,
-        -3696
+        260,
+        2060
       ],
       "id": "18e579d6-ec97-42e8-baa5-13691233e98a",
       "name": "Enviar MSG (Continua o Papo)",
@@ -1454,8 +1326,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        10112,
-        -3696
+        2420,
+        1540
       ],
       "id": "091649e8-e8d0-4f48-8bfc-db968199af4b",
       "name": "Formatar Output do Agente"
@@ -1470,8 +1342,8 @@
       "type": "n8n-nodes-evolution-api.evolutionApi",
       "typeVersion": 1,
       "position": [
-        2560,
-        -3648
+        1820,
+        440
       ],
       "id": "a38378f5-c11f-4dfb-8cc4-2609f069488e",
       "name": "Obter m dia em base64",
@@ -1507,8 +1379,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        6944,
-        -3856
+        2800,
+        980
       ],
       "id": "ffc74869-e30e-46da-97a2-7a8b486fb359",
       "name": "Bitrix: Buscar Deal (Pos-Criacao Contato)"
@@ -1530,8 +1402,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        6272,
-        -3696
+        2140,
+        800
       ],
       "id": "76d99551-4053-4347-ad95-87fde2c0ef51",
       "name": "Bitrix: Buscar Contato"
@@ -1561,8 +1433,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        6944,
-        -3616
+        2580,
+        740
       ],
       "id": "3051c93c-bc31-4332-b638-966fd0f4352a",
       "name": "Bitrix: Buscar Deal Aberto"
@@ -1604,8 +1476,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        7168,
-        -3616
+        3260,
+        800
       ],
       "id": "57cb981a-7d65-4a92-9c47-699f8fc988aa",
       "name": "IF: Deal Aberto Existe?"
@@ -1622,8 +1494,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        7392,
-        -3552
+        3500,
+        840
       ],
       "id": "3c72ad2d-09d2-48be-ab86-4c03d89d9a0b",
       "name": "Bitrix: Criar Deal (Contato Existente)1"
@@ -1640,8 +1512,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        6720,
-        -3856
+        2580,
+        980
       ],
       "id": "3e481c02-5fd3-4309-867b-c9a24a761368",
       "name": "Bitrix: Criar Contato1"
@@ -1658,8 +1530,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        7392,
-        -3936
+        3260,
+        980
       ],
       "id": "5669097e-5631-48b1-9f1c-d80167c14858",
       "name": "Bitrix: Criar Deal (Contato Novo)1"
@@ -1675,8 +1547,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        7616,
-        -3744
+        3740,
+        800
       ],
       "id": "3708eabf-8288-479c-9806-9587a4781d3e",
       "name": "Redis: Registrar Lock 12h",
@@ -1697,8 +1569,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        7840,
-        -4096
+        140,
+        1480
       ],
       "id": "deaa57a8-c16c-4e65-bb00-b40a0f6e6d8a",
       "name": "Buscar Chave Block1",
@@ -1737,8 +1609,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        7168,
-        -3856
+        3020,
+        980
       ],
       "id": "88cfec7a-12dd-4d42-a8d9-2dc2b1e085b9",
       "name": "If"
@@ -1771,8 +1643,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        6496,
-        -3696
+        2360,
+        800
       ],
       "id": "0ce6cde8-f3b4-443c-a5bb-fddf5c353696",
       "name": "If1"
@@ -1804,8 +1676,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        6048,
-        -3744
+        1900,
+        800
       ],
       "id": "fb1801b9-d4f0-468c-8ca8-1b59c7ad4484",
       "name": "IF: Primeira Execucao?"
@@ -1825,8 +1697,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryManager",
       "typeVersion": 1.1,
       "position": [
-        4352,
-        -3936
+        140,
+        1140
       ],
       "id": "222180f8-23e3-4a88-a97c-a172198e608d",
       "name": "Inserir Mensagem do Atendente1"
@@ -1861,8 +1733,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3904,
-        -3840
+        140,
+        800
       ],
       "id": "1cb9fed6-31e0-490a-bf93-09aadd03488f",
       "name": "Status da MSG é fromMe?1"
@@ -1878,8 +1750,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        4128,
-        -3936
+        140,
+        980
       ],
       "id": "468fb11f-e007-4971-a4ef-e1d869ad7be1",
       "name": "Inseri Chave Block1",
@@ -1897,8 +1769,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4704,
-        -3744
+        800,
+        800
       ],
       "id": "0d222b44-a626-4115-98ec-6793ec2fd659",
       "name": "Preparar Chave do Lock1"
@@ -1913,8 +1785,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        4928,
-        -3744
+        1020,
+        800
       ],
       "id": "aa1bacc4-4842-496b-8250-50c6def7b661",
       "name": "Redis: GET Valor Atual do Lock1",
@@ -1952,8 +1824,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        5152,
-        -3744
+        1240,
+        800
       ],
       "id": "d8d280e9-c35c-4690-a993-714306883c42",
       "name": "IF: Chave Legada?1"
@@ -1969,8 +1841,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        5824,
-        -3744
+        1680,
+        800
       ],
       "id": "297bcef1-631d-4f2c-88de-da745e9decb6",
       "name": "Redis: Definir TTL do Lock",
@@ -1989,8 +1861,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        5600,
-        -3744
+        1460,
+        800
       ],
       "id": "43f3cd19-95a8-4b77-b5b4-88cf6c923038",
       "name": "Redis: INCR Lock Atomico",
@@ -2009,8 +1881,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        5376,
-        -3840
+        1240,
+        980
       ],
       "id": "1aaaf898-8a7c-4411-b0a0-d6a71c1436f1",
       "name": "Redis: DELETE Chave Legada",
@@ -2049,8 +1921,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        4416,
-        -3744
+        580,
+        800
       ],
       "id": "e9e16020-ac2b-4e1e-b488-682c793b0446",
       "name": "IF: Bot Bloqueado?",
@@ -2067,8 +1939,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        4128,
-        -3744
+        360,
+        800
       ],
       "id": "0d4426d6-10b4-49f8-9bc3-de9b94802b84",
       "name": "Buscar Chave Block2",
@@ -2090,8 +1962,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        13248,
-        -3504
+        3000,
+        2060
       ],
       "id": "3cdbcb3e-5967-4ec6-ac6b-0d946c6179d1",
       "name": "Redis2",
@@ -2133,8 +2005,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        13472,
-        -3504
+        3220,
+        2060
       ],
       "id": "7393cb5b-bf5f-49ed-a509-8e6217f3376d",
       "name": "Enviar MSG (Continua o Papo)2",
@@ -2147,8 +2019,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        12576,
-        -3600
+        2320,
+        2000
       ],
       "id": "c3c7c6c4-0046-45bf-9f5f-8bbe34b9bb7c",
       "name": "Preparar Atualização"
@@ -2160,8 +2032,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        12576,
-        -3408
+        2320,
+        2120
       ],
       "id": "f74a49e0-2a51-4481-bae1-8d9882958247",
       "name": "Preparar Criação"
@@ -2178,8 +2050,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        12800,
-        -3600
+        2540,
+        2000
       ],
       "id": "b4596597-4c5b-43a3-b87f-9ef9fad89027",
       "name": "Atualizar Deal Existente"
@@ -2196,8 +2068,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        12800,
-        -3408
+        2540,
+        2120
       ],
       "id": "6ab450cf-350a-4080-ab34-ec3cbd3e06a7",
       "name": "Criar Novo Deal"
@@ -2214,8 +2086,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        13024,
-        -3504
+        2780,
+        2060
       ],
       "id": "b9b2bd16-4d20-4223-a91d-d8989b99c174",
       "name": "Adicionar Timeline (Unificado)"
@@ -2234,8 +2106,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        12352,
-        -3504
+        2080,
+        2060
       ],
       "id": "e4aeac64-2e26-4932-ad18-374a2f073df3",
       "name": "IF: Processo Encontrado?1"
@@ -2247,8 +2119,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        10560,
-        -3888
+        760,
+        2560
       ],
       "id": "c09deeb6-143b-4606-a35e-84a913856d87",
       "name": "Preparar Dados Transferência"
@@ -2279,8 +2151,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        10784,
-        -3888
+        980,
+        2560
       ],
       "id": "9a3e8526-117f-4be2-ae7a-8148af41a42c",
       "name": "Buscar Contato Transferência",
@@ -2293,8 +2165,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        11008,
-        -3888
+        1200,
+        2560
       ],
       "id": "fee1f08f-de51-4e9c-ba06-dd08c41d924a",
       "name": "Preparar Deal Assuntos RH"
@@ -2311,8 +2183,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        11232,
-        -3888
+        1420,
+        2560
       ],
       "id": "7f82765c-89dd-4d2e-889a-2f56229247f4",
       "name": "Criar Deal Assuntos RH"
@@ -2329,8 +2201,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        11456,
-        -3888
+        1640,
+        2560
       ],
       "id": "b7225efd-a75d-459a-9861-dbf6681b9fe0",
       "name": "Adicionar Timeline Assuntos RH"
@@ -2347,8 +2219,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        11680,
-        -3888
+        1860,
+        2560
       ],
       "id": "dc73da98-1ad8-4551-9ab1-131e6baf3a88",
       "name": "Alertar Responsavel RH"
@@ -2364,8 +2236,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        11904,
-        -3888
+        2080,
+        2560
       ],
       "id": "10063e03-a0d5-494a-8258-d4954f126e1c",
       "name": "Redis: Bloquear Bot 30d (Handover Humano)",
@@ -2398,27 +2270,11 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        12128,
-        -3888
+        2300,
+        2560
       ],
       "id": "ae6524f1-da42-4131-9232-23af05be16a2",
       "name": "WhatsApp: Enviar Despedida Transferência"
-    },
-    {
-      "parameters": {
-        "content": "## HANDOVER HUMANO (TRILHAS 2, 3 E 4)\nCria card na etapa ASSUNTOS RH (Categoria 198), anota histórico na Timeline, alerta o responsável no Bitrix (32598 teste / 4278 prod), bloqueia o bot e envia mensagem de encerramento ao usuário.",
-        "height": 180,
-        "width": 1780,
-        "color": 4
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        10560,
-        -4120
-      ],
-      "id": "9741d315-25f0-4153-bf57-0eb89b5f9a38",
-      "name": "Sticky Note - Handover RH"
     },
     {
       "parameters": {
@@ -2427,8 +2283,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        7050,
-        -3800
+        2800,
+        740
       ],
       "id": "abe5454f-f21f-434a-b66e-7f0c4db9b1ca",
       "name": "Checar Estagio e Bloqueio Humano"
@@ -2460,8 +2316,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        7250,
-        -3800
+        3020,
+        740
       ],
       "id": "153f09aa-7732-41bb-8710-d1c3283d1d33",
       "name": "IF: Em Gestao Humana?"
@@ -2477,8 +2333,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        7480,
-        -3950
+        3260,
+        680
       ],
       "id": "45bb3217-4d03-495f-8f8c-701514996913",
       "name": "Redis: Silenciar Gestao Humana 30d",
@@ -2501,11 +2357,187 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        7700,
-        -3950
+        3500,
+        680
       ],
       "id": "f156bbb5-bfc5-4582-bd14-52770442b841",
       "name": "Timeline: Notificar Silencio Humano"
+    },
+    {
+      "parameters": {
+        "width": 1120,
+        "height": 260,
+        "color": 6,
+        "content": "### 📥 1. Ingestão & Saneamento WhatsApp\n\n- **Webhook Evolution API:** Recebimento de eventos e mensagens em tempo real.\n- **Normalização JID:** Trata identificadores de usuários e números.\n- **Triagem Anti-Spam:** Filtra mensagens de status/broadcast e grupos (`@g.us`)."
+      },
+      "id": "sticky_Sticky_Note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "width": 1140,
+        "height": 170,
+        "color": 7,
+        "content": "### 🎙️ 2A. Transcrição de Áudio (Whisper)\n- Converte mensagens de voz da Evolution API em binário.\n- Executa transcrição assíncrona para texto via OpenAI Whisper."
+      },
+      "id": "sticky_Sticky_Note1",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "width": 1360,
+        "height": 170,
+        "color": 3,
+        "content": "### 📄 2B. Processamento de Currículo & Google Drive\n- Converte PDF em binário e faz upload seguro na pasta corporativa do Drive.\n- Gera link público de visualização e injeta a URL no contexto do agente."
+      },
+      "id": "sticky_Sticky_Note2",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        390
+      ]
+    },
+    {
+      "parameters": {
+        "width": 1980,
+        "height": 520,
+        "color": 5,
+        "content": "### 🔒 3. Concorrência & Lock Atômico Redis\n\n- **Detecção fromMe:** Se o atendente humano enviou mensagem, silencia o bot imediatamente.\n- **Lock Atômico:** Impede race conditions e mensagens concorrentes fragmentadas.\n- **TTL Inteligente:** Garante persistência e liberação controlada."
+      },
+      "id": "sticky_Sticky_Note3",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "width": 1820,
+        "height": 520,
+        "color": 2,
+        "content": "### 🏢🛑 4. Detecção de Estágio CRM & Silêncio Humano (30d)\n\n- **Verificação Prévia:** Localiza contatos e deals abertos na Categoria 198.\n- **Blindagem de Gestão Humana:** Se o card estiver em etapas de gestão humana (`ASSUNTOS RH`, `Entrevista`, `Contratado`, etc.), o bot se cala por 30 dias no Redis e registra evento na Linha do Tempo."
+      },
+      "id": "sticky_Sticky_Note6",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "width": 1760,
+        "height": 420,
+        "color": 1,
+        "content": "### ⏱️ 5. Fila de Buffer & Debounce (30 Segundos)\n\n- Agrupa mensagens picadas do candidato no WhatsApp.\n- Aguarda 30 segundos de inatividade para consolidar tudo em um único lote.\n- Economiza 75% dos tokens e elimina respostas fragmentadas em duplicidade."
+      },
+      "id": "sticky_Sticky_Note7",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        1360
+      ]
+    },
+    {
+      "parameters": {
+        "width": 460,
+        "height": 420,
+        "color": 6,
+        "content": "### 🧠🤖 6. Núcleo Cognitivo de IA\n\n- **OpenAI gpt-4.1-mini:** Diálogo e triagem com Regra Inviolável de Nome.\n- **Tool Pense:** Raciocínio chain-of-thought interno.\n- **Redis Chat Memory:** Histórico contextual.\n- **Pós-Atendimento:** Acolhe retornos sem duplicar cartões."
+      },
+      "id": "sticky_Sticky_Note4",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1900,
+        1360
+      ]
+    },
+    {
+      "parameters": {
+        "width": 460,
+        "height": 420,
+        "color": 7,
+        "content": "### 🔀 7. Formatação & Roteamento\n\n- Extrai JSON estruturado do modelo.\n- Direciona para as saídas:\n  - `0`: Chat Contínuo\n  - `1`: Bitrix C198 (Conclusão)\n  - `2`: Handover RH (Nina)"
+      },
+      "id": "sticky_Sticky_Note5",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2380,
+        1360
+      ]
+    },
+    {
+      "parameters": {
+        "width": 420,
+        "height": 260,
+        "color": 1,
+        "content": "### 💬 Trilha 1: Diálogo WhatsApp\n- Disparo de mensagem conversacional direta de volta para a Evolution API."
+      },
+      "id": "sticky_Sticky_Note_-_Trilha_1",
+      "name": "Sticky Note - Trilha 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        160,
+        1960
+      ]
+    },
+    {
+      "parameters": {
+        "width": 2720,
+        "height": 440,
+        "color": 7,
+        "content": "### 🏆 Trilha 2: Conclusão de Candidatura & Sincronização Bitrix24 (C198)\n\n- Mapeia 25 cargos oficiais no campo `UF_CRM_1775845859336`.\n- Atualiza ou cria deal no funil de Recrutamento com Nome Real e link do Drive.\n- Registra histórico pericial na Linha do Tempo e envia mensagem final no WhatsApp."
+      },
+      "id": "sticky_Sticky_Note_-_Trilha_2",
+      "name": "Sticky Note - Trilha 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        700,
+        1920
+      ]
+    },
+    {
+      "parameters": {
+        "width": 1820,
+        "height": 240,
+        "color": 4,
+        "content": "### 🚨 Trilha 3: Handover Inteligente para o RH (Alerta Nina Biermann - ID 4278)\n\n- Desvia Trilhas 2 (Saúde/ASO), 3 (DP/Colaborador) e 4 (B2B/Parcerias comerciais).\n- Cria Deal na etapa ASSUNTOS RH (`C198:UC_0YLZXN`) e anota histórico na Timeline.\n- Dispara notificação instantânea com link direto no chat privado da Nina Biermann (`4278`).\n- Bloqueia o bot por 30 dias para garantir o atendimento humano sem interferências."
+      },
+      "id": "sticky_Sticky_Note_-_Handover_RH",
+      "name": "Sticky Note - Handover RH",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        700,
+        2480
+      ]
     }
   ],
   "connections": {

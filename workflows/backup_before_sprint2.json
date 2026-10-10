@@ -220,7 +220,7 @@
         128
       ],
       "parameters": {
-        "functionCode": "// GATE FAIL-CLOSED ABSOLUTO:\n// Verifica se o Deal pertence EXCLUSIVAMENTE à Categoria 160 e ao usuário 32598 (Eduardo Alaminos)\n// Sprint 2: Adiciona mapeamento determinístico de Loja/Unidade e Detecção de Tema para Incident Clustering\nconst items = $input.all();\nconst allowed = [];\nconst ALLOWED_REQUESTERS = [32598]; // Piloto restrito Eduardo Alaminos\n\nconst STORE_MAP = {\n  '45': 'Araras',\n  '47': 'Itapira',\n  '49': 'Leme',\n  '51': 'Mogi Guaçu',\n  '53': 'Mogi Mirim',\n  '55': 'Santa Bárbara',\n  '57': 'Campinas',\n  '59': 'Hortolândia',\n  '61': 'Sumaré',\n  '105': 'Nova Odessa',\n  '180': 'Pinhal',\n  '182': 'Conchal',\n  '536': 'Santo Antonio de Posse',\n  '534': 'Outros'\n};\n\nfor (const item of items) {\n  const deal = item.json.result || item.json;\n  const categoryId = String(deal.CATEGORY_ID || '');\n  const stageId = String(deal.STAGE_ID || '');\n  const createdBy = Number(deal.CREATED_BY_ID || 0);\n  const assignedBy = Number(deal.ASSIGNED_BY_ID || 0);\n  const title = deal.TITLE || `Chamado #${deal.ID}`;\n  const ufCategory = String(deal.UF_CRM_1763388156 || '');\n\n  const requesterId = ALLOWED_REQUESTERS.includes(createdBy) \n    ? createdBy \n    : (ALLOWED_REQUESTERS.includes(assignedBy) ? assignedBy : 0);\n\n  if (categoryId === '160' && (stageId === 'C160:NEW' || stageId === 'C160:UC_JIOBG8') && requesterId > 0) {\n    const isPurchase = ufCategory === '876' || title.toLowerCase().includes('compra');\n    const rawDesc = deal.UF_CRM_1729774515200;\n    const description = (Array.isArray(rawDesc) ? rawDesc.join(' ') : String(rawDesc || '')).trim();\n\n    // Mapeamento de Loja/Unidade\n    const rawStoreId = String(deal.UF_CRM_1689593052602 || '');\n    let storeName = STORE_MAP[rawStoreId] || '';\n    \n    // Fallback: busca menção de loja no título ou descrição\n    const fullText = (title + ' ' + description).toLowerCase();\n    if (!storeName) {\n      for (const [id, name] of Object.entries(STORE_MAP)) {\n        if (name !== 'Outros' && fullText.includes(name.toLowerCase())) {\n          storeName = name;\n          break;\n        }\n      }\n    }\n    if (!storeName) storeName = 'Mogi Guaçu'; // Default filial piloto\n\n    // Detecção de Tema de Incidente\n    let categoryTheme = 'GENERAL_IT';\n    const connKeywords = ['internet', 'rede', 'caiu', 'conexao', 'conexão', 'link', 'roteador', 'vpn', 'fora do ar', 'offline', 'sem sistema', 'tudo vermelho', 'lentidao geral', 'sem net'];\n    const microKeywords = ['microwork', 'dms', 'banco travou', 'nuvem microwork'];\n    const zapKeywords = ['whatsapp', 'fale facil', 'fale fácil', 'conexao zap', 'numero corporativo', 'número corporativo'];\n    const detranKeywords = ['detran', 'renave', 'atpv', 'intencao de venda', 'intenção de venda'];\n\n    if (connKeywords.some(kw => fullText.includes(kw))) {\n      categoryTheme = 'CONNECTIVITY_NETWORK';\n    } else if (microKeywords.some(kw => fullText.includes(kw))) {\n      categoryTheme = 'MICROWORK_DMS';\n    } else if (zapKeywords.some(kw => fullText.includes(kw))) {\n      categoryTheme = 'WHATSAPP_FALEFACIL';\n    } else if (detranKeywords.some(kw => fullText.includes(kw))) {\n      categoryTheme = 'DETRAN_RENAVE';\n    }\n\n    allowed.push({\n      json: {\n        deal_id: Number(deal.ID),\n        title: title,\n        description: description,\n        requester_user_id: requesterId,\n        requester_name: 'Eduardo Alaminos',\n        is_purchase: isPurchase,\n        store_name: storeName,\n        category_theme: categoryTheme\n      }\n    });\n  }\n}\n\nreturn allowed;\n"
+        "functionCode": "// GATE FAIL-CLOSED ABSOLUTO:\n// Verifica se o Deal pertence EXCLUSIVAMENTE à Categoria 160 e ao usuário 32598 (Eduardo Alaminos)\nconst items = $input.all();\nconst allowed = [];\nconst ALLOWED_REQUESTERS = [32598]; // Piloto restrito Eduardo Alaminos\n\nfor (const item of items) {\n  const deal = item.json.result || item.json;\n  const categoryId = String(deal.CATEGORY_ID || '');\n  const stageId = String(deal.STAGE_ID || '');\n  const createdBy = Number(deal.CREATED_BY_ID || 0);\n  const assignedBy = Number(deal.ASSIGNED_BY_ID || 0);\n  const title = deal.TITLE || `Chamado #${deal.ID}`;\n  const ufCategory = String(deal.UF_CRM_1763388156 || '');\n\n  const requesterId = ALLOWED_REQUESTERS.includes(createdBy) \n    ? createdBy \n    : (ALLOWED_REQUESTERS.includes(assignedBy) ? assignedBy : 0);\n\n  if (categoryId === '160' && (stageId === 'C160:NEW' || stageId === 'C160:UC_JIOBG8') && requesterId > 0) {\n    const isPurchase = ufCategory === '876' || title.toLowerCase().includes('compra');\n    const rawDesc = deal.UF_CRM_1729774515200;\n    const description = (Array.isArray(rawDesc) ? rawDesc.join(' ') : String(rawDesc || '')).trim();\n\n    allowed.push({\n      json: {\n        deal_id: Number(deal.ID),\n        title: title,\n        description: description,\n        requester_user_id: requesterId,\n        requester_name: 'Eduardo Alaminos',\n        is_purchase: isPurchase\n      }\n    });\n  }\n}\n\nreturn allowed;\n"
       }
     },
     {
@@ -234,7 +234,7 @@
       ],
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO ticket_bot_sessions (\n    deal_id, requester_user_id, requester_name, channel, private_dialog_id, \n    dialog_type, status, state, ai_state, redis_memory_key, collected_data_json, \n    created_at, last_interaction_at\n) VALUES (\n    {{ $json.deal_id }}, {{ $json.requester_user_id }}, '{{ $json.requester_name }}', \n    'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', \n    'bitrix:ti:deal:{{ $json.deal_id }}:memory', \n    '{\"store_name\": \"{{ $json.store_name }}\", \"category_theme\": \"{{ $json.category_theme }}\", \"is_store_outage\": {{ $json.is_store_outage ? 'true' : 'false' }}, \"outage_count\": {{ $json.outage_count || 1 }}}'::jsonb,\n    NOW(), NOW()\n) ON CONFLICT (deal_id) DO UPDATE SET \n    last_interaction_at = NOW(),\n    collected_data_json = '{\"store_name\": \"{{ $json.store_name }}\", \"category_theme\": \"{{ $json.category_theme }}\", \"is_store_outage\": {{ $json.is_store_outage ? 'true' : 'false' }}, \"outage_count\": {{ $json.outage_count || 1 }}}'::jsonb\nWHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED'\nRETURNING id, deal_id, requester_user_id, requester_name, '{{ $json.title }}' AS deal_title, \n          {{ $json.is_purchase ? 'TRUE' : 'FALSE' }} AS is_purchase,\n          {{ $json.is_store_outage ? 'TRUE' : 'FALSE' }} AS is_store_outage,\n          '{{ $json.store_name }}' AS store_name,\n          '{{ $json.category_theme }}' AS category_theme,\n          {{ $json.outage_count || 1 }} AS outage_count;",
+        "query": "INSERT INTO ticket_bot_sessions (deal_id, requester_user_id, requester_name, channel, private_dialog_id, dialog_type, status, state, ai_state, redis_memory_key, created_at, last_interaction_at) VALUES ({{ $json.deal_id }}, {{ $json.requester_user_id }}, '{{ $json.requester_name }}', 'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', 'bitrix:ti:deal:{{ $json.deal_id }}:memory', NOW(), NOW()) ON CONFLICT (deal_id) DO UPDATE SET last_interaction_at = NOW() WHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED' RETURNING id, deal_id, requester_user_id, requester_name, '{{ $json.title }}' AS deal_title, {{ $json.is_purchase ? 'TRUE' : 'FALSE' }} AS is_purchase;",
         "additionalFields": {}
       },
       "credentials": {
@@ -278,7 +278,7 @@
         "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.chat.add",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ (() => {\n  const firstName = ($json.requester_name || 'amigo').trim().split(' ')[0];\n  const title = String($json.deal_title || '').trim();\n  const hasCustomTitle = title && !title.startsWith('Chamado #') && !title.startsWith('#');\n  const isOutage = Boolean($json.is_store_outage);\n  const storeName = $json.store_name || 'sua filial';\n  const theme = $json.category_theme === 'CONNECTIVITY_NETWORK' ? 'conexão / internet' : ($json.category_theme || 'sistema');\n\n  let greeting = '';\n  if (isOutage) {\n    greeting = 'Oi, ' + firstName + '! Tudo bem? Sou da equipe virtual de TI aqui da Mundial.\\n\\n🚨 **ALERTA DE FILIAL:** Identifiquei que outros colegas da filial **' + storeName + '** relataram esse mesmo problema de ' + theme + ' nos últimos minutos.\\n\\nA TI já abriu um incidente de **Prioridade Máxima (P1)** para restabelecer a loja toda! Você não precisa se preocupar em abrir novos chamados, nossa equipe técnica já está atuando para todos.';\n  } else if (hasCustomTitle) {\n    greeting = 'Oi, ' + firstName + '! Tudo bem? Sou da equipe virtual de TI aqui da Mundial.\\n\\nVi que você abriu este chamado sobre: \"' + title + '\".\\n\\nMe conta com calma o que está acontecendo por aí? Se quiser mandar uma foto da tela ou do equipamento, fica à vontade! Vamos tentar resolver juntos.';\n  } else {\n    greeting = 'Oi, ' + firstName + '! Tudo bem? Sou da equipe virtual de TI aqui da Mundial.\\n\\nMe conta com calma o que está acontecendo com o seu computador ou sistema? Pode mandar uma foto da tela ou do equipamento se preferir, e vamos tentar resolver juntos!';\n  }\n\n  return JSON.stringify({\n    TYPE: 'CHAT',\n    TITLE: 'Triagem TI - Chamado #' + $json.deal_id + (isOutage ? ' [🚨 QUEDA GERAL ' + storeName + ']' : (hasCustomTitle ? ': ' + title : '')),\n    ENTITY_TYPE: 'CRM',\n    ENTITY_ID: 'DEAL|' + $json.deal_id,\n    USERS: [Number($json.requester_user_id), 61622],\n    MESSAGE: greeting\n  });\n})() }}",
+        "jsonBody": "={{ (() => {\n  const firstName = ($json.requester_name || 'amigo').trim().split(' ')[0];\n  const title = String($json.deal_title || '').trim();\n  const hasCustomTitle = title && !title.startsWith('Chamado #') && !title.startsWith('#');\n\n  let greeting = '';\n  if (hasCustomTitle) {\n    greeting = 'Oi, ' + firstName + '! Tudo bem? Sou da equipe virtual de TI aqui da Mundial.\\n\\nVi que você abriu este chamado sobre: \"' + title + '\".\\n\\nMe conta com calma o que está acontecendo por aí? Se quiser mandar uma foto da tela ou do equipamento, fica à vontade! Vamos tentar resolver juntos.';\n  } else {\n    greeting = 'Oi, ' + firstName + '! Tudo bem? Sou da equipe virtual de TI aqui da Mundial.\\n\\nMe conta com calma o que está acontecendo com o seu computador ou sistema? Pode mandar uma foto da tela ou do equipamento se preferir, e vamos tentar resolver juntos!';\n  }\n\n  return JSON.stringify({\n    TYPE: 'CHAT',\n    TITLE: 'Triagem TI - Chamado #' + $json.deal_id + (hasCustomTitle ? ': ' + title : ''),\n    ENTITY_TYPE: 'CRM',\n    ENTITY_ID: 'DEAL|' + $json.deal_id,\n    USERS: [Number($json.requester_user_id), 61622],\n    MESSAGE: greeting\n  });\n})() }}",
         "options": {}
       }
     },
@@ -374,7 +374,7 @@
         528
       ],
       "parameters": {
-        "functionCode": "// Classificação e filtragem multi-item com suporte a Anti-Carona e Imagens (Sprint 2 Vision)\nconst sessions = $('04_Get_Active_Sessions_Postgres').all();\nconst items = $input.all();\nconst outputItems = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const session = sessions[i]?.json || {};\n  const res = items[i].json.result || {};\n  const messages = res.messages || [];\n  const files = res.files || [];\n\n  const lastProcessedId = Number(session.last_processed_message_id || 0);\n  const requesterId = Number(session.requester_user_id);\n  const BOT_ID = 61622;\n  const isCompleted = session.status === 'COMPLETED';\n\n  // Ordena cronologicamente crescente\n  messages.sort((a, b) => Number(a.id) - Number(b.id));\n\n  const newMessages = [];\n  let humanTakeoverDetected = false;\n  let lastMsgId = lastProcessedId;\n  let attachedImage = null;\n\n  for (const msg of messages) {\n    const msgId = Number(msg.id);\n    if (msgId <= lastProcessedId) continue;\n    lastMsgId = Math.max(lastMsgId, msgId);\n\n    const authorId = Number(msg.author_id);\n    // Ignora mensagens do bot (61622) ou de sistema (0)\n    if (authorId === BOT_ID || authorId === 0) continue;\n\n    // Se autor não for o solicitante nem o bot\n    if (authorId !== requesterId) {\n      if (!isCompleted) {\n        humanTakeoverDetected = true;\n        break;\n      }\n      continue;\n    }\n\n    // Mensagem válida do solicitante\n    const cleanText = String(msg.text || '').trim();\n    if (cleanText) {\n      newMessages.push(cleanText);\n    }\n\n    // Checagem de anexo de imagem na mensagem\n    const fileIds = Array.isArray(msg.params?.FILE_ID) ? msg.params.FILE_ID : [];\n    if (fileIds.length > 0 && Array.isArray(files)) {\n      for (const fid of fileIds) {\n        const found = files.find(f => Number(f.id) === Number(fid) && f.type === 'image');\n        if (found) {\n          attachedImage = {\n            file_id: Number(found.id),\n            name: found.name || 'print_anexo.png',\n            extension: found.extension || 'png'\n          };\n          break;\n        }\n      }\n    }\n  }\n\n  if (humanTakeoverDetected) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        dialog_id: session.dialog_id,\n        human_takeover: true,\n        last_msg_id: lastMsgId\n      }\n    });\n    continue;\n  }\n\n  // Se AI está pausada manualmente em ticket ativo, ignora\n  if (!isCompleted && session.ai_state === 'AI_PAUSED') {\n    continue;\n  }\n\n  // Se há imagem ou mensagens novas\n  if (newMessages.length > 0 || attachedImage) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        chat_id: session.internal_chat_id,\n        dialog_id: session.dialog_id,\n        requester_user_id: requesterId,\n        requester_name: session.requester_name || 'colaborador',\n        message_id: lastMsgId,\n        message_text: newMessages.join('\\n'),\n        redis_memory_key: `bitrix:ti:deal:${session.deal_id}:memory`,\n        ai_state: session.ai_state,\n        session_status: session.status || 'ACTIVE',\n        session_state: session.state || 'INIT',\n        collected_data_json: session.collected_data_json || {},\n        has_image: Boolean(attachedImage),\n        image_file_id: attachedImage ? attachedImage.file_id : null,\n        image_name: attachedImage ? attachedImage.name : null,\n        image_extension: attachedImage ? attachedImage.extension : null\n      }\n    });\n  }\n}\n\nreturn outputItems;\n"
+        "functionCode": "// Classifica??o e filtragem multi-item com suporte a Anti-Carona\nconst sessions = $('04_Get_Active_Sessions_Postgres').all();\nconst items = $input.all();\nconst outputItems = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const session = sessions[i]?.json || {};\n  const res = items[i].json.result || {};\n  const messages = res.messages || [];\n\n  const lastProcessedId = Number(session.last_processed_message_id || 0);\n  const requesterId = Number(session.requester_user_id);\n  const BOT_ID = 61622;\n  const isCompleted = session.status === 'COMPLETED';\n\n  // Ordena cronologicamente crescente\n  messages.sort((a, b) => Number(a.id) - Number(b.id));\n\n  const newMessages = [];\n  let humanTakeoverDetected = false;\n  let lastMsgId = lastProcessedId;\n\n  for (const msg of messages) {\n    const msgId = Number(msg.id);\n    if (msgId <= lastProcessedId) continue;\n    lastMsgId = Math.max(lastMsgId, msgId);\n\n    const authorId = Number(msg.author_id);\n    // Ignora mensagens do bot (61622) ou de sistema (0)\n    if (authorId === BOT_ID || authorId === 0) continue;\n\n    // Se autor n?o for o solicitante nem o bot\n    if (authorId !== requesterId) {\n      if (!isCompleted) {\n        humanTakeoverDetected = true;\n        break;\n      }\n      // Se j? est? completed, ignora mensagens de terceiros\n      continue;\n    }\n\n    // Mensagem v?lida do solicitante\n    const cleanText = String(msg.text || '').trim();\n    if (cleanText) {\n      newMessages.push(cleanText);\n    }\n  }\n\n  if (humanTakeoverDetected) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        dialog_id: session.dialog_id,\n        human_takeover: true,\n        last_msg_id: lastMsgId\n      }\n    });\n    continue;\n  }\n\n  // Se AI est? pausada manualmente em ticket ativo, ignora\n  if (!isCompleted && session.ai_state === 'AI_PAUSED') {\n    continue;\n  }\n\n  if (newMessages.length > 0) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        chat_id: session.internal_chat_id,\n        dialog_id: session.dialog_id,\n        requester_user_id: requesterId,\n        requester_name: session.requester_name || 'colaborador',\n        message_id: lastMsgId,\n        message_text: newMessages.join('\\n'),\n        redis_memory_key: `bitrix:ti:deal:${session.deal_id}:memory`,\n        ai_state: session.ai_state,\n        session_status: session.status || 'ACTIVE',\n        session_state: session.state || 'INIT'\n      }\n    });\n  }\n}\n\nreturn outputItems;"
       }
     },
     {
@@ -620,7 +620,7 @@
         432
       ],
       "parameters": {
-        "functionCode": "// MOTOR DETERMINÍSTICO B01 DE PRIORIDADE & SUPORTE A AUTOATENDIMENTO L1\n// Sprint 1: Detecção de Frustração e Cliente em Loja\n// Sprint 2: Queda Geral por Loja (Incident Clustering P1)\nconst items = $input.all();\nconst results = [];\n\nconst IMPACT_MAP = {\n  'ENTIRE_COMPANY': { id: 1180, label: 'Empresa Inteira (Todas as Lojas)' },\n  'ENTIRE_STORE': { id: 1182, label: 'Loja Inteira' },\n  'ENTIRE_DEPARTMENT': { id: 1184, label: 'Departamento Inteiro' },\n  'MULTIPLE_USERS': { id: 1186, label: 'Múltiplos Usuários' },\n  'SINGLE_USER': { id: 1188, label: 'Usuário Individual' },\n  'NO_IMPACT': { id: 1190, label: 'Sem Impacto Operacional' }\n};\n\nconst URGENCY_MAP = {\n  'OPERATION_HALTED': { id: 1192, label: 'Operação Parada (Crítico)' },\n  'SEVERELY_DEGRADED': { id: 1194, label: 'Severamente Degradada' },\n  'WORKAROUND_AVAILABLE': { id: 1196, label: 'Contorno Disponível' },\n  'PLANNED_REQUEST': { id: 1198, label: 'Solicitação Planejada' },\n  'INQUIRY': { id: 1200, label: 'Dúvida / Informação' }\n};\n\nfor (const item of items) {\n  const data = item.json.structured_data || {};\n  const facts = data.facts || {};\n  const isResolvedL1 = Boolean(item.json.is_resolved_l1 || data.resolvido_l1 || data.action === 'RESOLVED_L1');\n\n  // Recupera dados de sessão do Postgres (clustering de queda de loja)\n  const sessionData = item.json.collected_data_json || {};\n  const isStoreOutage = Boolean(sessionData.is_store_outage || data.is_store_outage);\n  const storeName = sessionData.store_name || data.store_name || '';\n  const outageCount = Number(sessionData.outage_count || data.outage_count || 1);\n\n  // Detecção de Contexto Crítico / Cliente em Loja\n  const contextoCritico = data.contexto_critico || {};\n  const isClienteEmLoja = Boolean(contextoCritico.cliente_em_loja);\n  const isFrustracaoAlta = Boolean(contextoCritico.frustracao_alta);\n  const motivoCritico = String(contextoCritico.motivo || '').trim();\n\n  let rawImpact = (facts.impacto?.value || data.impacto || 'SINGLE_USER').toUpperCase();\n  let rawUrgency = (facts.urgencia?.value || data.urgencia || 'NORMAL').toUpperCase();\n\n  // Força Urgência OPERATION_HALTED se tiver cliente em loja ou queda de loja\n  if (isStoreOutage) {\n    rawImpact = 'ENTIRE_STORE';\n    rawUrgency = 'OPERATION_HALTED';\n  } else if (isClienteEmLoja) {\n    rawUrgency = 'OPERATION_HALTED';\n  }\n\n  const impactObj = IMPACT_MAP[rawImpact] || IMPACT_MAP['SINGLE_USER'];\n  const urgencyObj = URGENCY_MAP[rawUrgency] || URGENCY_MAP['PLANNED_REQUEST'];\n\n  let priorityId = 1206; // P3_MEDIUM Default\n  let priorityCode = 'P3_MEDIUM';\n  let priorityLabel = 'P3 - Médio';\n\n  if (isStoreOutage) {\n    priorityId = 1202;\n    priorityCode = 'P1_CRITICAL';\n    priorityLabel = 'P1 - Crítico (Queda Geral de Loja)';\n  } else if (isResolvedL1) {\n    priorityId = 1208;\n    priorityCode = 'P4_LOW';\n    priorityLabel = 'P4 - Resolvido L1';\n  } else if (rawImpact === 'ENTIRE_COMPANY') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      priorityId = 1202; priorityCode = 'P1_CRITICAL'; priorityLabel = 'P1 - Crítico';\n    } else if (rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'ENTIRE_STORE') {\n    if (rawUrgency === 'OPERATION_HALTED') {\n      priorityId = 1202; priorityCode = 'P1_CRITICAL'; priorityLabel = 'P1 - Crítico';\n    } else if (rawUrgency === 'SEVERELY_DEGRADED' || rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'ENTIRE_DEPARTMENT') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'WORKAROUND_AVAILABLE' || rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'MULTIPLE_USERS') {\n    if (rawUrgency === 'OPERATION_HALTED') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'SEVERELY_DEGRADED' || rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'SINGLE_USER') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      if (isClienteEmLoja) {\n        priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto (Cliente em Loja)';\n      } else {\n        priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n      }\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else {\n    priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n  }\n\n  const shortSubject = data.assunto_curto || 'Atendimento de TI';\n  const tema = data.tema || 'GERAL';\n  const resumo = data.resumo_problema || 'Triagem realizada pelo assistente de IA.';\n  const lowerContext = (tema + ' ' + shortSubject + ' ' + resumo).toLowerCase();\n  const isPurchaseSemantic = (\n    tema === 'COMPRA' ||\n    lowerContext.includes('compra') ||\n    lowerContext.includes('comprar') ||\n    lowerContext.includes('memoria ram') ||\n    lowerContext.includes('memória ram') ||\n    lowerContext.includes('hardware') ||\n    lowerContext.includes('aquisição') ||\n    lowerContext.includes('aquisicao')\n  );\n  const isPurchase = Boolean(item.json.is_purchase || isPurchaseSemantic);\n\n  // Formatação do Título com Selo Crítico\n  let prefixoCritico = '';\n  if (isStoreOutage) {\n    prefixoCritico = `[🚨 QUEDA GERAL ${storeName.toUpperCase()}] `;\n  } else if (isClienteEmLoja) {\n    prefixoCritico = '[🚨 CLIENTE EM LOJA] ';\n  } else if (isFrustracaoAlta) {\n    prefixoCritico = '[⚠️ PRIORITÁRIO] ';\n  }\n\n  const formattedTitle = isResolvedL1 \n    ? `[RESOLVIDO-L1] - ${shortSubject} (Eduardo Alaminos)` \n    : `${prefixoCritico}[TI-${tema}] - ${shortSubject} (Eduardo Alaminos)`;\n  const targetStageId = isResolvedL1 ? 'C160:WON' : (isPurchase ? 'C160:UC_JIOBG8' : 'C160:NEW');\n\n  results.push({\n    json: {\n      deal_id: item.json.deal_id,\n      chat_id: item.json.chat_id,\n      dialog_id: item.json.dialog_id,\n      message_id: item.json.message_id,\n      impact_id: impactObj.id,\n      impact_label: impactObj.label,\n      urgency_id: urgencyObj.id,\n      urgency_label: urgencyObj.label,\n      priority_id: priorityId,\n      priority_code: priorityCode,\n      priority_label: priorityLabel,\n      target_stage_id: targetStageId,\n      is_resolved_l1: isResolvedL1,\n      is_purchase: isPurchase,\n      is_store_outage: isStoreOutage,\n      store_name: storeName,\n      outage_count: outageCount,\n      is_cliente_em_loja: isClienteEmLoja,\n      is_frustracao_alta: isFrustracaoAlta,\n      motivo_critico: motivoCritico,\n      tema: tema,\n      short_subject: shortSubject,\n      formatted_title: formattedTitle,\n      resumo: resumo,\n      next_owner_id: 1148,\n      wait_reason_id: 1162\n    }\n  });\n}\n\nreturn results;\n"
+        "functionCode": "// MOTOR DETERMINÍSTICO B01 DE PRIORIDADE & SUPORTE A AUTOATENDIMENTO L1\nconst items = $input.all();\nconst results = [];\n\nconst IMPACT_MAP = {\n  'ENTIRE_COMPANY': { id: 1180, label: 'Empresa Inteira (Todas as Lojas)' },\n  'ENTIRE_STORE': { id: 1182, label: 'Loja Inteira' },\n  'ENTIRE_DEPARTMENT': { id: 1184, label: 'Departamento Inteiro' },\n  'MULTIPLE_USERS': { id: 1186, label: 'Múltiplos Usuários' },\n  'SINGLE_USER': { id: 1188, label: 'Usuário Individual' },\n  'NO_IMPACT': { id: 1190, label: 'Sem Impacto Operacional' }\n};\n\nconst URGENCY_MAP = {\n  'OPERATION_HALTED': { id: 1192, label: 'Operação Parada (Crítico)' },\n  'SEVERELY_DEGRADED': { id: 1194, label: 'Severamente Degradada' },\n  'WORKAROUND_AVAILABLE': { id: 1196, label: 'Contorno Disponível' },\n  'PLANNED_REQUEST': { id: 1198, label: 'Solicitação Planejada' },\n  'INQUIRY': { id: 1200, label: 'Dúvida / Informação' }\n};\n\nfor (const item of items) {\n  const data = item.json.structured_data || {};\n  const facts = data.facts || {};\n  const isResolvedL1 = Boolean(item.json.is_resolved_l1 || data.resolvido_l1 || data.action === 'RESOLVED_L1');\n\n  // Detecção de Contexto Crítico / Cliente em Loja\n  const contextoCritico = data.contexto_critico || {};\n  const isClienteEmLoja = Boolean(contextoCritico.cliente_em_loja);\n  const isFrustracaoAlta = Boolean(contextoCritico.frustracao_alta);\n  const motivoCritico = String(contextoCritico.motivo || '').trim();\n\n  let rawImpact = (facts.impacto?.value || data.impacto || 'SINGLE_USER').toUpperCase();\n  let rawUrgency = (facts.urgencia?.value || data.urgencia || 'NORMAL').toUpperCase();\n\n  // Força Urgência OPERATION_HALTED se tiver cliente em loja\n  if (isClienteEmLoja) {\n    rawUrgency = 'OPERATION_HALTED';\n  }\n\n  const impactObj = IMPACT_MAP[rawImpact] || IMPACT_MAP['SINGLE_USER'];\n  const urgencyObj = URGENCY_MAP[rawUrgency] || URGENCY_MAP['PLANNED_REQUEST'];\n\n  let priorityId = 1206; // P3_MEDIUM Default\n  let priorityCode = 'P3_MEDIUM';\n  let priorityLabel = 'P3 - Médio';\n\n  if (isResolvedL1) {\n    priorityId = 1208;\n    priorityCode = 'P4_LOW';\n    priorityLabel = 'P4 - Resolvido L1';\n  } else if (rawImpact === 'ENTIRE_COMPANY') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      priorityId = 1202; priorityCode = 'P1_CRITICAL'; priorityLabel = 'P1 - Crítico';\n    } else if (rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'ENTIRE_STORE') {\n    if (rawUrgency === 'OPERATION_HALTED') {\n      priorityId = 1202; priorityCode = 'P1_CRITICAL'; priorityLabel = 'P1 - Crítico';\n    } else if (rawUrgency === 'SEVERELY_DEGRADED' || rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'ENTIRE_DEPARTMENT') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'WORKAROUND_AVAILABLE' || rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'MULTIPLE_USERS') {\n    if (rawUrgency === 'OPERATION_HALTED') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'SEVERELY_DEGRADED' || rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'SINGLE_USER') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      // ELEVAÇÃO COMERCIAL: Se tiver cliente em loja na mesa, sobe para P2_HIGH!\n      if (isClienteEmLoja) {\n        priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto (Cliente em Loja)';\n      } else {\n        priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n      }\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else {\n    priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n  }\n\n  const shortSubject = data.assunto_curto || 'Atendimento de TI';\n  const tema = data.tema || 'GERAL';\n  const resumo = data.resumo_problema || 'Triagem realizada pelo assistente de IA.';\n  const lowerContext = (tema + ' ' + shortSubject + ' ' + resumo).toLowerCase();\n  const isPurchaseSemantic = (\n    tema === 'COMPRA' ||\n    lowerContext.includes('compra') ||\n    lowerContext.includes('comprar') ||\n    lowerContext.includes('memoria ram') ||\n    lowerContext.includes('memória ram') ||\n    lowerContext.includes('hardware') ||\n    lowerContext.includes('aquisição') ||\n    lowerContext.includes('aquisicao')\n  );\n  const isPurchase = Boolean(item.json.is_purchase || isPurchaseSemantic);\n\n  // Formatação do Título com Selo Crítico\n  let prefixoCritico = '';\n  if (isClienteEmLoja) {\n    prefixoCritico = '[🚨 CLIENTE EM LOJA] ';\n  } else if (isFrustracaoAlta) {\n    prefixoCritico = '[⚠️ PRIORITÁRIO] ';\n  }\n\n  const formattedTitle = isResolvedL1 \n    ? `[RESOLVIDO-L1] - ${shortSubject} (Eduardo Alaminos)` \n    : `${prefixoCritico}[TI-${tema}] - ${shortSubject} (Eduardo Alaminos)`;\n  const targetStageId = isResolvedL1 ? 'C160:WON' : (isPurchase ? 'C160:UC_JIOBG8' : 'C160:NEW');\n\n  results.push({\n    json: {\n      deal_id: item.json.deal_id,\n      chat_id: item.json.chat_id,\n      dialog_id: item.json.dialog_id,\n      message_id: item.json.message_id,\n      impact_id: impactObj.id,\n      impact_label: impactObj.label,\n      urgency_id: urgencyObj.id,\n      urgency_label: urgencyObj.label,\n      priority_id: priorityId,\n      priority_code: priorityCode,\n      priority_label: priorityLabel,\n      target_stage_id: targetStageId,\n      is_resolved_l1: isResolvedL1,\n      is_purchase: isPurchase,\n      is_cliente_em_loja: isClienteEmLoja,\n      is_frustracao_alta: isFrustracaoAlta,\n      motivo_critico: motivoCritico,\n      tema: tema,\n      short_subject: shortSubject,\n      formatted_title: formattedTitle,\n      resumo: resumo,\n      next_owner_id: 1148,\n      wait_reason_id: 1162\n    }\n  });\n}\n\nreturn results;\n"
       }
     },
     {
@@ -740,7 +740,7 @@
         "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.timeline.comment.add",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  fields: {\n    ENTITY_ID: $json.deal_id,\n    ENTITY_TYPE: 'deal',\n    COMMENT: ($json.is_store_outage ? ('🚨 **INCIDENTE CRÍTICO P1: POSSÍVEL QUEDA GERAL NA FILIAL (' + ($json.store_name || 'Loja') + ')!**\\n⚠️ **Cluster Detectado:** ' + ($json.outage_count || '2') + ' chamados abertos nos últimos 30 min sobre ' + ($json.tema || 'Conectividade/Sistema') + '.\\n⚡ *Prioridade elevada automaticamente pelo robô para P1 - Crítico (Loja Inteira).*\\n---------------------------------------------\\n') : '') + ($json.is_cliente_em_loja ? ('🚨 **ALERTA COMERCIAL: CLIENTE AGUARDANDO EM LOJA!**\\n⚠️ **Motivo:** ' + ($json.motivo_critico || 'Cliente em atendimento presencial/retirada') + '\\n⚡ *Prioridade elevada automaticamente pela IA para P2/P1 para agilizar o atendimento.*\\n---------------------------------------------\\n') : ($json.is_frustracao_alta ? ('⚠️ **ALERTA DE REINCIDÊNCIA / FRUSTRAÇÃO CRÍTICA DO COLABORADOR**\\nMotivo: ' + ($json.motivo_critico || 'Múltiplas falhas relatadas ou tempo excessivo de paralisação') + '\\n---------------------------------------------\\n') : '')) + ($json.is_resolved_l1 ? ('🎉 **Chamado Solucionado com Sucesso via Autoatendimento (L1)!**\\n---------------------------------------------\\n📌 **Tema:** ' + $json.tema + '\\n🚨 **Prioridade:** ' + $json.priority_label + '\\n\\n📝 **Resumo:**\\n' + $json.resumo + '\\n\\n✅ *O colaborador confirmou que o problema foi solucionado com os testes rápidos orientados pelo assistente. Chamado concluído como Ganho automaticamente.*') : ('🤖 **Triagem IA Concluída com Sucesso!**\\n---------------------------------------------\\n📌 **Tema:** ' + $json.tema + '\\n👥 **Impacto:** ' + $json.impact_label + '\\n⏱️ **Urgência:** ' + $json.urgency_label + '\\n🚨 **Prioridade B01:** ' + $json.priority_label + ' (' + $json.priority_code + ')\\n\\n📝 **Resumo:**\\n' + $json.resumo + '\\n\\n💬 *Histórico detalhado da conversa mantido no Chat do Card.*'))\n  }\n}) }}",
+        "jsonBody": "={{ JSON.stringify({\n  fields: {\n    ENTITY_ID: $json.deal_id,\n    ENTITY_TYPE: 'deal',\n    COMMENT: ($json.is_cliente_em_loja ? ('🚨 **ALERTA COMERCIAL: CLIENTE AGUARDANDO EM LOJA!**\\n⚠️ **Motivo:** ' + ($json.motivo_critico || 'Cliente em atendimento presencial/retirada') + '\\n⚡ *Prioridade elevada automaticamente pela IA para P2/P1 para agilizar o atendimento.*\\n---------------------------------------------\\n') : ($json.is_frustracao_alta ? ('⚠️ **ALERTA DE REINCIDÊNCIA / FRUSTRAÇÃO CRÍTICA DO COLABORADOR**\\nMotivo: ' + ($json.motivo_critico || 'Múltiplas falhas relatadas ou tempo excessivo de paralisação') + '\\n---------------------------------------------\\n') : '')) + ($json.is_resolved_l1 ? ('🎉 **Chamado Solucionado com Sucesso via Autoatendimento (L1)!**\\n---------------------------------------------\\n📌 **Tema:** ' + $json.tema + '\\n🚨 **Prioridade:** ' + $json.priority_label + '\\n\\n📝 **Resumo:**\\n' + $json.resumo + '\\n\\n✅ *O colaborador confirmou que o problema foi solucionado com os testes rápidos orientados pelo assistente. Chamado concluído como Ganho automaticamente.*') : ('🤖 **Triagem IA Concluída com Sucesso!**\\n---------------------------------------------\\n📌 **Tema:** ' + $json.tema + '\\n👥 **Impacto:** ' + $json.impact_label + '\\n⏱️ **Urgência:** ' + $json.urgency_label + '\\n🚨 **Prioridade B01:** ' + $json.priority_label + ' (' + $json.priority_code + ')\\n\\n📝 **Resumo:**\\n' + $json.resumo + '\\n\\n💬 *Histórico detalhado da conversa mantido no Chat do Card.*'))\n  }\n}) }}",
         "options": {}
       }
     },
@@ -1357,163 +1357,6 @@
         "specifyBody": "json",
         "jsonBody": "={{ JSON.stringify({\n  USER_ID: $json.requester_user_id,\n  MESSAGE: 'Olá, ' + $json.requester_name + '! O chamado #' + $json.deal_id + ' foi identificado como duplicado e vinculado ao seu chamado principal #' + $json.original_deal_id + '. O novo card foi encerrado para centralizar seu atendimento com a equipe de TI.'\n}) }}"
       }
-    },
-    {
-      "id": "node_check_store_outage",
-      "name": "01_Check_Store_Outage_Cluster",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 1,
-      "position": [
-        600,
-        128
-      ],
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "WITH recent_events AS (\n    SELECT COUNT(*) AS count_recent\n    FROM store_outage_events\n    WHERE store_name = '{{ $json.store_name }}'\n      AND category_theme = '{{ $json.category_theme }}'\n      AND created_at >= NOW() - INTERVAL '30 MINUTES'\n),\ninserted AS (\n    INSERT INTO store_outage_events (store_name, category_theme, deal_id, created_at)\n    VALUES ('{{ $json.store_name }}', '{{ $json.category_theme }}', {{ $json.deal_id }}, NOW())\n    RETURNING id\n)\nSELECT recent_events.count_recent,\n       '{{ $json.store_name }}' AS store_name,\n       '{{ $json.category_theme }}' AS category_theme,\n       {{ $json.deal_id }} AS deal_id,\n       '{{ $json.title }}' AS title,\n       '{{ $json.description }}' AS description,\n       {{ $json.requester_user_id }} AS requester_user_id,\n       '{{ $json.requester_name }}' AS requester_name,\n       {{ $json.is_purchase ? 'TRUE' : 'FALSE' }} AS is_purchase\nFROM recent_events;"
-      },
-      "credentials": {
-        "postgres": {
-          "id": "J8q2YHlBbp4WxxV2",
-          "name": "Postgres account"
-        }
-      }
-    },
-    {
-      "id": "node_evaluate_store_outage",
-      "name": "01_Evaluate_Store_Outage",
-      "type": "n8n-nodes-base.function",
-      "typeVersion": 1,
-      "position": [
-        720,
-        128
-      ],
-      "parameters": {
-        "functionCode": "// Avalia resultado do clustering de outage por loja\nconst items = $input.all();\nreturn items.map(item => {\n  const d = item.json;\n  const countRecent = Number(d.count_recent || 0);\n  const isOutage = countRecent >= 2; // 3º ou mais chamado na mesma janela de 30 min\n  const outageCount = countRecent + 1;\n\n  return {\n    json: {\n      deal_id: d.deal_id,\n      title: d.title,\n      description: d.description,\n      requester_user_id: d.requester_user_id,\n      requester_name: d.requester_name,\n      is_purchase: d.is_purchase,\n      store_name: d.store_name,\n      category_theme: d.category_theme,\n      is_store_outage: isOutage,\n      outage_count: outageCount\n    }\n  };\n});"
-      }
-    },
-    {
-      "id": "node_if_has_image",
-      "name": "06_If_Has_Image_To_Process",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [
-        620,
-        528
-      ],
-      "parameters": {
-        "conditions": {
-          "boolean": [
-            {
-              "value1": "={{ $json.has_image }}",
-              "value2": true
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "node_vision_get_url",
-      "name": "Vision_01_Get_Download_Url",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        760,
-        420
-      ],
-      "parameters": {
-        "method": "GET",
-        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.v2.File.download",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "dialogId",
-              "value": "={{ $json.dialog_id }}"
-            },
-            {
-              "name": "fileId",
-              "value": "={{ $json.image_file_id }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "id": "node_vision_download_image",
-      "name": "Vision_02_Download_Image",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        900,
-        420
-      ],
-      "parameters": {
-        "method": "GET",
-        "url": "={{ $json.result?.downloadUrl || '' }}",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "file"
-            }
-          }
-        }
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "id": "node_vision_prep_payload",
-      "name": "Vision_03_Prepare_Vision_Payload",
-      "type": "n8n-nodes-base.function",
-      "typeVersion": 1,
-      "position": [
-        1040,
-        420
-      ],
-      "parameters": {
-        "functionCode": "// Prepara payload multimodal para o OpenAI Vision\nconst items = $input.all();\nconst sessionItems = $('06_If_Has_Image_To_Process').all();\n\nreturn items.map((item, idx) => {\n  const session = sessionItems[idx]?.json || {};\n  const binaryData = item.binary?.data;\n  \n  if (!binaryData || !binaryData.data) {\n    // Se download falhou, repassa sem imagem\n    return {\n      json: {\n        ...session,\n        vision_failed: true\n      }\n    };\n  }\n\n  const mimeType = binaryData.mimeType || 'image/png';\n  const base64Str = binaryData.data;\n\n  return {\n    json: {\n      ...session,\n      openai_payload: {\n        model: \"gpt-4o-mini\",\n        messages: [\n          {\n            role: \"system\",\n            content: \"Você é um especialista em OCR e triagem visual de erros para Help Desk de TI da Rede Mundial Honda.\\nAnalise a imagem/print de erro anexado pelo colaborador.\\nExtraia com precisão:\\n1. Sistema/Aplicação (MicroWork Cloud, Portais Honda, RENAVE/Detran, WebPeças, Windows, Outlook, Navegador, Impressora).\\n2. Código do erro ou texto exato do alerta/caixa de diálogo (ex: 'Erro 104', 'Falha de comunicação', etc).\\n3. Chassi (17 dígitos), Chave de NFe (44 dígitos), OS ou Pedido se visíveis.\\n4. Breve diagnóstico em 1 linha.\\n\\nFormate rigorosamente assim:\\n[ANÁLISE DE PRINT ANEXADO]\\n- Sistema: <sistema>\\n- Mensagem/Erro na Tela: <mensagem>\\n- Dados Identificados: <dados>\\n- Diagnóstico Visual: <diagnostico>\"\n          },\n          {\n            role: \"user\",\n            content: [\n              { type: \"text\", text: \"Analise o print anexado pelo colaborador no chat do chamado de TI:\" },\n              {\n                type: \"image_url\",\n                image_url: {\n                  url: `data:${mimeType};base64,${base64Str}`\n                }\n              }\n            ]\n          }\n        ],\n        max_tokens: 300\n      }\n    }\n  };\n});"
-      }
-    },
-    {
-      "id": "node_vision_call_openai",
-      "name": "Vision_04_Call_OpenAI_Vision",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1180,
-        420
-      ],
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "openAiApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($json.openai_payload) }}",
-        "options": {}
-      },
-      "credentials": {
-        "openAiApi": {
-          "id": "zJ462uvngfWgM0PB",
-          "name": "OpenAi account 3"
-        }
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "id": "node_vision_merge_context",
-      "name": "Vision_05_Merge_Vision_Context",
-      "type": "n8n-nodes-base.function",
-      "typeVersion": 1,
-      "position": [
-        1320,
-        420
-      ],
-      "parameters": {
-        "functionCode": "// Mescla a análise de visão computacional no contexto textual do usuário\nconst items = $input.all();\nconst sessionItems = $('Vision_03_Prepare_Vision_Payload').all();\n\nreturn items.map((item, idx) => {\n  const session = sessionItems[idx]?.json || {};\n  const visionContent = item.json.choices?.[0]?.message?.content || '';\n\n  let enrichedMessage = String(session.message_text || '').trim();\n  if (visionContent) {\n    enrichedMessage = (enrichedMessage ? enrichedMessage + '\\n\\n' : '') + visionContent;\n  }\n\n  return {\n    json: {\n      deal_id: session.deal_id,\n      chat_id: session.chat_id,\n      dialog_id: session.dialog_id,\n      requester_user_id: session.requester_user_id,\n      requester_name: session.requester_name,\n      message_id: session.message_id,\n      message_text: enrichedMessage,\n      redis_memory_key: session.redis_memory_key,\n      ai_state: session.ai_state,\n      session_status: session.session_status,\n      session_state: session.session_state,\n      collected_data_json: session.collected_data_json\n    }\n  };\n});"
-      }
     }
   ],
   "connections": {
@@ -2008,7 +1851,7 @@
         ],
         [
           {
-            "node": "06_If_Has_Image_To_Process",
+            "node": "07_Prepare_AI_Deal_Input",
             "type": "main",
             "index": 0
           }
@@ -2173,7 +2016,7 @@
         ],
         [
           {
-            "node": "01_Check_Store_Outage_Cluster",
+            "node": "02_Reserve_Deal_Session_Atomic",
             "type": "main",
             "index": 0
           }
@@ -2198,101 +2041,6 @@
     "Dup_04_Notify_User": {
       "main": [
         []
-      ]
-    },
-    "01_Check_Store_Outage_Cluster": {
-      "main": [
-        [
-          {
-            "node": "01_Evaluate_Store_Outage",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "01_Evaluate_Store_Outage": {
-      "main": [
-        [
-          {
-            "node": "02_Reserve_Deal_Session_Atomic",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "06_If_Has_Image_To_Process": {
-      "main": [
-        [
-          {
-            "node": "Vision_01_Get_Download_Url",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "07_Prepare_AI_Deal_Input",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Vision_01_Get_Download_Url": {
-      "main": [
-        [
-          {
-            "node": "Vision_02_Download_Image",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Vision_02_Download_Image": {
-      "main": [
-        [
-          {
-            "node": "Vision_03_Prepare_Vision_Payload",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Vision_03_Prepare_Vision_Payload": {
-      "main": [
-        [
-          {
-            "node": "Vision_04_Call_OpenAI_Vision",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Vision_04_Call_OpenAI_Vision": {
-      "main": [
-        [
-          {
-            "node": "Vision_05_Merge_Vision_Context",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Vision_05_Merge_Vision_Context": {
-      "main": [
-        [
-          {
-            "node": "07_Prepare_AI_Deal_Input",
-            "type": "main",
-            "index": 0
-          }
-        ]
       ]
     }
   },

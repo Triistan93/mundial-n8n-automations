@@ -2287,6 +2287,244 @@
       "id": "sdr-sprint2-http-notificar",
       "name": "HTTP: Notificar Vendedor no Chat Bitrix",
       "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =========================================================================\n// SPRINT 3: PREPARAÇÃO DE CONTEXTO E TOKEN DE FOLLOW-UP\n// =========================================================================\nconst receptivo = $('RECEPTIVO').first().json;\nconst instance = receptivo.instance || \"outrasmidias\";\nconst remoteJid = receptivo.remoteJid || \"\";\nconst pushName = receptivo.pushName || \"tudo bem?\";\nconst timestamp = Date.now();\n\n// Gera um token único atômico para esta interação\nconst followup_token = `${instance}_${remoteJid}_${timestamp}`;\n\nlet lastBotMessage = \"\";\ntry {\n    lastBotMessage = $('Formatar Output do Agente').first().json.message || \"\";\n} catch (e) {}\n\nreturn [{\n    json: {\n        instance: instance,\n        remoteJid: remoteJid,\n        pushName: pushName,\n        followup_token: followup_token,\n        last_bot_message: lastBotMessage,\n        armed_at: new Date().toISOString()\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3680,
+        700
+      ],
+      "id": "sdr-sprint3-prep-ctx",
+      "name": "Preparar Contexto de Follow-Up (Sprint 3)"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $('RECEPTIVO').first().json.instance }} {{ $('RECEPTIVO').first().json.remoteJid }} followup_token",
+        "value": "={{ $json.followup_token }}",
+        "expire": true,
+        "ttl": 86400
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        3900,
+        700
+      ],
+      "id": "sdr-sprint3-redis-gravar",
+      "name": "Redis: Gravar Token Follow-Up",
+      "credentials": {
+        "redis": {
+          "id": "NlIbdmbaePYxgp6S",
+          "name": "Redis Evolution"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 35,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4120,
+        700
+      ],
+      "id": "sdr-sprint3-wait-inatividade",
+      "name": "Esperar Inatividade do Lead (Sprint 3)"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "={{ $('RECEPTIVO').first().json.instance }} {{ $('RECEPTIVO').first().json.remoteJid }} followup_token",
+        "propertyName": "token_atual",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        4340,
+        700
+      ],
+      "id": "sdr-sprint3-redis-obter-token",
+      "name": "Redis: Obter Token Atual",
+      "credentials": {
+        "redis": {
+          "id": "NlIbdmbaePYxgp6S",
+          "name": "Redis Evolution"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "={{ $('RECEPTIVO').first().json.instance }} {{ $('RECEPTIVO').first().json.remoteJid }} block",
+        "propertyName": "is_blocked",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        4560,
+        700
+      ],
+      "id": "sdr-sprint3-redis-obter-block",
+      "name": "Redis: Obter Status de Bloqueio",
+      "credentials": {
+        "redis": {
+          "id": "NlIbdmbaePYxgp6S",
+          "name": "Redis Evolution"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// =========================================================================\n// SPRINT 3: AVALIAÇÃO DE ELEGIBILIDADE PARA RESGATE DE INATIVIDADE\n// =========================================================================\nconst FLAG_FOLLOWUP_ATIVO = true; // Master switch da Sprint 3\n\nconst prep = $('Preparar Contexto de Follow-Up (Sprint 3)').first().json;\nconst tokenOriginal = prep.followup_token || \"\";\n\nlet tokenAtual = \"\";\ntry {\n    tokenAtual = $('Redis: Obter Token Atual').first().json.token_atual || \"\";\n} catch (e) {}\n\nlet isBlocked = \"\";\ntry {\n    isBlocked = $('Redis: Obter Status de Bloqueio').first().json.is_blocked || \"\";\n} catch (e) {}\n\n// 1. Verificação da Feature Flag\nif (!FLAG_FOLLOWUP_ATIVO) {\n    return [{ json: { deve_resgatar: false, motivo: \"Feature flag de Follow-up desativada\" } }];\n}\n\n// 2. Se o bot estiver bloqueado (atendente humano assumiu ou lead concluído)\nif (isBlocked === \"true\") {\n    return [{ json: { deve_resgatar: false, motivo: \"Lead bloqueado por atendimento humano ou finalizado\" } }];\n}\n\n// 3. Se o token atual for diferente do original (cliente respondeu e gerou nova interação)\nif (tokenAtual !== tokenOriginal) {\n    return [{ json: { deve_resgatar: false, motivo: `Cliente respondeu durante o período (atual: ${tokenAtual} vs original: ${tokenOriginal})` } }];\n}\n\n// CLIENTE PERMANECE SILENCIOSO E ELEGÍVEL PARA RESGATE!\nconst pushName = prep.pushName || \"tudo bem?\";\nconst primeiroNome = pushName.split(\" \")[0].trim();\nconst remoteJid = prep.remoteJid;\n\n// Mensagem empática de resgate da Sophia (Mundial Motos)\nconst mensagemResgate = `*Mundial Motos*: Oi ${primeiroNome}, tudo bem? Vi que estávamos conversando agora a pouco! Você conseguiu dar uma olhadinha na minha mensagem anterior? Se quiser, consigo tirar qualquer dúvida ou simular as opções para você aqui rapidinho! 😊🏍️`;\n\nreturn [{\n    json: {\n        deve_resgatar: true,\n        remoteJid: remoteJid,\n        primeiroNome: primeiroNome,\n        mensagem_resgate: mensagemResgate\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4780,
+        700
+      ],
+      "id": "sdr-sprint3-avaliar-resgate",
+      "name": "Avaliar Disparo do Resgate (Sprint 3)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-resgate-sdr",
+              "leftValue": "={{ $json.deve_resgatar }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5000,
+        700
+      ],
+      "id": "sdr-sprint3-if-resgate",
+      "name": "IF: Executar Resgate de Follow-Up?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sophia-evolution-api.timft8.easypanel.host/message/sendText/outrasmidias",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "7EuD96NSfnpNRvJZdAAGgnbcdX3rAA9aIsbR8prV7Z0wCyTwQVJdRaEMvj0dgD33KfYtWch6556VSX6JxBMWYC3QHo28CWux9iTqpH5umrnYON2r3DRLzmfyZvrbG2sn"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json.remoteJid }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.mensagem_resgate }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5240,
+        600
+      ],
+      "id": "sdr-sprint3-enviar-resgate",
+      "name": "Enviar MSG Resgate (WhatsApp)",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "messages": {
+          "messageValues": [
+            {
+              "type": "ai",
+              "message": "={{ $('Avaliar Disparo do Resgate (Sprint 3)').first().json.mensagem_resgate }}"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryManager",
+      "typeVersion": 1.1,
+      "position": [
+        5460,
+        600
+      ],
+      "id": "sdr-sprint3-inserir-memoria",
+      "name": "Inserir Resgate na Memoria IA"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $('RECEPTIVO').first().json.instance }} {{ $('RECEPTIVO').first().json.remoteJid }} followup_token",
+        "value": "resgate_concluido_step1",
+        "expire": true,
+        "ttl": 86400
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        5680,
+        600
+      ],
+      "id": "sdr-sprint3-marcar-feito",
+      "name": "Redis: Marcar Resgate Finalizado",
+      "credentials": {
+        "redis": {
+          "id": "NlIbdmbaePYxgp6S",
+          "name": "Redis Evolution"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### ⏱️ 09. Follow-Up Inteligente de Resgate (Sprint 3 - Anti-Abandono)\n\n- **Arma Token Atômico:** Registra um token único de interação no Redis (`followup_token`).\n- **Espera Não-Bloqueante:** Aguarda a inatividade do cliente (35s em testes / 2h em produção).\n- **Validação Anti-Spam:**\n  * Se o cliente responder ➔ O token no Redis muda e o resgate é cancelado silenciosamente.\n  * Se um vendedor assumir ➔ `isBlocked` impede qualquer envio.\n- **Disparo Empático:** Envia mensagem carinhosa e personalizada de reengajamento no WhatsApp.\n- **Sincronia de Memória:** Registra a fala no Redis Chat Memory para manter o contexto 100% perfeito caso o cliente responda mais tarde.",
+        "height": 560,
+        "width": 2260,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3620,
+        480
+      ],
+      "id": "sdr-sprint3-sticky-note",
+      "name": "Sticky_09_FollowUp_Resgate"
     }
   ],
   "connections": {
@@ -2411,6 +2649,11 @@
           },
           {
             "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Inserir Resgate na Memoria IA",
             "type": "ai_memory",
             "index": 0
           }
@@ -3252,6 +3495,122 @@
       ]
     },
     "HTTP: Notificar Vendedor no Chat Bitrix": {
+      "main": [
+        []
+      ]
+    },
+    "Enviar MSG (Continua o Papo)": {
+      "main": [
+        [
+          {
+            "node": "Preparar Contexto de Follow-Up (Sprint 3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Contexto de Follow-Up (Sprint 3)": {
+      "main": [
+        [
+          {
+            "node": "Redis: Gravar Token Follow-Up",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis: Gravar Token Follow-Up": {
+      "main": [
+        [
+          {
+            "node": "Esperar Inatividade do Lead (Sprint 3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esperar Inatividade do Lead (Sprint 3)": {
+      "main": [
+        [
+          {
+            "node": "Redis: Obter Token Atual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis: Obter Token Atual": {
+      "main": [
+        [
+          {
+            "node": "Redis: Obter Status de Bloqueio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis: Obter Status de Bloqueio": {
+      "main": [
+        [
+          {
+            "node": "Avaliar Disparo do Resgate (Sprint 3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avaliar Disparo do Resgate (Sprint 3)": {
+      "main": [
+        [
+          {
+            "node": "IF: Executar Resgate de Follow-Up?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Executar Resgate de Follow-Up?": {
+      "main": [
+        [
+          {
+            "node": "Enviar MSG Resgate (WhatsApp)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Enviar MSG Resgate (WhatsApp)": {
+      "main": [
+        [
+          {
+            "node": "Inserir Resgate na Memoria IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inserir Resgate na Memoria IA": {
+      "main": [
+        [
+          {
+            "node": "Redis: Marcar Resgate Finalizado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis: Marcar Resgate Finalizado": {
       "main": [
         []
       ]

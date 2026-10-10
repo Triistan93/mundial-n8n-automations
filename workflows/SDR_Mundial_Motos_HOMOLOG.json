@@ -2218,10 +2218,75 @@
       ],
       "parameters": {
         "width": 1760,
-        "height": 680,
+        "height": 720,
         "color": 3,
-        "content": "### 🚀 08. Transição de Etapa, Handover OpenLines & Despedida WhatsApp\n\n- **Normalizador de Etapa:** Mapeia `status_triagem` para a etapa de destino na Categoria 18:\n  * Vendas/Humana ➔ `C18:UC_CGWMZF` (*ATENDIMENTO VENDEDOR*)\n  * Pós-Vendas ➔ `C18:UC_G95T35` (*Pós Vendas*)\n  * Administrativo ➔ `C18:UC_FKQTE0` (*Seguro/Documento*)\n- **Mover Card de Etapa:** Atualiza o `STAGE_ID` do Deal no CRM.\n- **Transferência OpenLines:** Transfere o chat para a fila/operador humano (`5316`).\n- **Trava de Silêncio 24h:** Bloqueia o bot no Redis para não interferir na conversa do vendedor.\n- **Despedida WhatsApp:** Envia mensagem cordial de encerramento da triagem para o cliente."
+        "content": "### 🚀 08. Transição de Etapa, Handover OpenLines & Despedida WhatsApp (Sprint 2)\n\n- **Normalizador de Etapa:** Mapeia `status_triagem` para a etapa de destino na Categoria 18:\n  * Vendas/Humana ➔ `C18:UC_CGWMZF` (*ATENDIMENTO VENDEDOR*)\n  * Pós-Vendas ➔ `C18:UC_G95T35` (*Pós Vendas*)\n  * Administrativo ➔ `C18:UC_FKQTE0` (*Seguro/Documento*)\n- **Mover Card de Etapa:** Atualiza o `STAGE_ID` do Deal no CRM.\n- **Trava de Silêncio 24h:** Bloqueia o bot no Redis para não interferir na conversa do vendedor.\n- **Despedida WhatsApp:** Envia mensagem cordial de encerramento da triagem para o cliente.\n- **🚨 Alertas no Chat Bitrix (Sprint 2):** Dispara notificação instantânea com alerta sonoro via `im.message.add` para o vendedor responsável no momento exato em que um Lead Quente (🔥) for qualificado."
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// =========================================================================\n// CHAVES DE CONTROLE & CONFIGURAÇÃO DA SPRINT 2 (FEATURE FLAGS)\n// =========================================================================\nconst FLAG_NOTIFICAR_IM = true;               // Master switch da Sprint 2\nconst NOTIFICAR_SOMENTE_QUENTE = true;        // true = Apenas leads 🔥 QUENTES; false = Todos os leads\nconst NOTIFICAR_RESPONSAVEL = true;          // Notifica o vendedor responsável no chat 1:1\nconst CHATS_ADICIONAIS = [];                  // IDs de chats adicionais (ex: supervisão)\n\nlet dadosLead = {};\ntry {\n    dadosLead = $('1. Preparar Dados Lead').first().json;\n} catch (e) {}\n\nlet dealId = \"\";\ntry {\n    const normalizar = $('Normalizar IDs Finais').first().json;\n    if (normalizar && normalizar.dealId) dealId = String(normalizar.dealId);\n} catch (e) {}\n\nif (!dealId) {\n    try {\n        const fb = $('4b. Criar Card de Candidato1 (Fallback)').first().json;\n        if (fb && fb.result) dealId = String(fb.result);\n    } catch (e) {}\n}\n\nif (!dealId) {\n    try {\n        const a = $('Preparar Payload de Atualização1').first().json;\n        if (a && a.deal_id) dealId = String(a.deal_id);\n    } catch (e) {}\n}\n\nconst temperatura = String(dadosLead.Temperatura || \"\").toUpperCase();\nconst badgeTemp = dadosLead.BadgeTemperatura || \"\";\nconst ehQuente = temperatura === \"QUENTE\" || badgeTemp.includes(\"QUENTE\");\n\n// Decisão de disparo baseada nas Feature Flags\nif (!FLAG_NOTIFICAR_IM) {\n    return [{ json: { deve_notificar: false, motivo: \"Feature Flag FLAG_NOTIFICAR_IM desativada\" } }];\n}\n\nif (NOTIFICAR_SOMENTE_QUENTE && !ehQuente) {\n    return [{ json: { deve_notificar: false, motivo: `Lead com temperatura ${temperatura} não atingiu o critério QUENTE` } }];\n}\n\nconst responsavelId = dadosLead.ResponsavelHomologacaoId || 32598; // Eduardo Alaminos em homologação\nconst dealUrl = dealId ? `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${dealId}/` : \"\";\n\nconst destinatarios = [];\nif (NOTIFICAR_RESPONSAVEL && responsavelId) {\n    destinatarios.push(String(responsavelId));\n}\nfor (const chat of CHATS_ADICIONAIS) {\n    if (chat && !destinatarios.includes(String(chat))) {\n        destinatarios.push(String(chat));\n    }\n}\n\nif (!destinatarios.length) {\n    return [{ json: { deve_notificar: false, motivo: \"Nenhum destinatário configurado\" } }];\n}\n\n// Montagem da mensagem rica com BBCode Bitrix24 e Alerta Visual/Sonoro\nconst mensagem = `🚨🔥 [b]ALERTA DE LEAD QUENTE NO WHATSAPP![/b] 🔥🚨\\n` +\n    `[b]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[/b]\\n` +\n    `👤 [b]Lead:[/b] ${dadosLead.Nome || \"Cliente Mundial Motos\"}\\n` +\n    `📱 [b]WhatsApp:[/b] ${dadosLead.Contato || \"Não informado\"}\\n` +\n    `📍 [b]Cidade/Unidade:[/b] ${dadosLead.Cidade || \"Não informado\"}\\n` +\n    `🏍️ [b]Modelo:[/b] ${dadosLead.Modelo || \"Não informado\"}\\n` +\n    `💰 [b]Condição / Entrada:[/b] ${dadosLead.Entrada || \"Não informado\"}\\n` +\n    `📊 [b]Feeling / Score:[/b] ${badgeTemp || \"🔥 LEAD QUENTE\"}\\n` +\n    `💡 [b]Motivo do Score:[/b] ${dadosLead.JustificativaTemperatura || \"Alta intenção de compra\"}\\n` +\n    `🎯 [b]Ação Imediata Recomendada:[/b] [u]${dadosLead.ProximaAcaoRecomendada || \"Ligar imediatamente para o cliente\"}[/u]\\n\\n` +\n    (dealUrl ? `👉 [url=${dealUrl}][b]CLIQUE AQUI PARA ABRIR O CARD NO CRM (Deal #${dealId})[/b][/url]` : `Card #${dealId}`);\n\nreturn destinatarios.map(destId => ({\n    json: {\n        deve_notificar: true,\n        dialog_id: destId,\n        mensagem: mensagem,\n        dealId: dealId,\n        leadNome: dadosLead.Nome,\n        temperatura: temperatura\n    }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3040,
+        2380
+      ],
+      "id": "sdr-sprint2-preparar-notificacao",
+      "name": "Preparar Notificação Chat Bitrix (Sprint 2)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-notificar-im-sdr",
+              "leftValue": "={{ $json.deve_notificar }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3260,
+        2380
+      ],
+      "id": "sdr-sprint2-if-notificar",
+      "name": "IF: Disparar Notificação IM?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/im.message.add.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.dialog_id,\n  MESSAGE: $json.mensagem,\n  SYSTEM: \"N\",\n  URL_PREVIEW: \"N\"\n}) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3480,
+        2380
+      ],
+      "id": "sdr-sprint2-http-notificar",
+      "name": "HTTP: Notificar Vendedor no Chat Bitrix",
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
@@ -2896,6 +2961,11 @@
             "node": "Enviar MSG Final",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Preparar Notificação Chat Bitrix (Sprint 2)",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -3156,6 +3226,34 @@
             "index": 0
           }
         ]
+      ]
+    },
+    "Preparar Notificação Chat Bitrix (Sprint 2)": {
+      "main": [
+        [
+          {
+            "node": "IF: Disparar Notificação IM?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Disparar Notificação IM?": {
+      "main": [
+        [
+          {
+            "node": "HTTP: Notificar Vendedor no Chat Bitrix",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "HTTP: Notificar Vendedor no Chat Bitrix": {
+      "main": [
+        []
       ]
     }
   },

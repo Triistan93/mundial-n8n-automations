@@ -3,12 +3,12 @@
   "name": "BITRIX_TI_AI_TRIAGE_AGENT",
   "description": null,
   "active": true,
-  "activeVersionId": "0d429ebf-39e5-49cd-951c-5551d78dbed5",
+  "activeVersionId": "b7767705-024d-4815-aff6-2d4f1bb237fd",
   "createdAt": "2026-09-21T20:23:38.347Z",
-  "updatedAt": "2026-10-10T03:22:52.180Z",
+  "updatedAt": "2026-10-10T04:43:25.053Z",
   "isArchived": false,
-  "versionId": "0d429ebf-39e5-49cd-951c-5551d78dbed5",
-  "versionCounter": 181,
+  "versionId": "b7767705-024d-4815-aff6-2d4f1bb237fd",
+  "versionCounter": 182,
   "sourceWorkflowId": null,
   "triggerCount": 2,
   "nodes": [
@@ -25,8 +25,8 @@
         "rule": {
           "interval": [
             {
-              "field": "seconds",
-              "secondsInterval": 15
+              "field": "minutes",
+              "minutesInterval": 1
             }
           ]
         }
@@ -248,7 +248,7 @@
       ],
       "parameters": {
         "operation": "executeQuery",
-        "query": "-- SELF-HEALING GEN?RICO POR ESTADO (SEM IDS FIXOS):\nUPDATE ticket_bot_sessions \nSET status = 'ACTIVE' \nWHERE status = 'CHAT_CREATING' AND internal_chat_id IS NOT NULL;\n\n-- Recupera sess?es ativas (em triagem) E sess?es finalizadas recentemente (janela de 7 dias para Anti-Carona)\nSELECT id, deal_id, requester_user_id, requester_name, internal_chat_id, dialog_id, last_processed_message_id, ai_state, redis_memory_key, status, state \nFROM ticket_bot_sessions \nWHERE (status = 'ACTIVE' OR (status = 'COMPLETED' AND last_interaction_at > NOW() - INTERVAL '7 days')) \n  AND internal_chat_id IS NOT NULL;",
+        "query": "-- SELF-HEALING GENERICO POR ESTADO (SEM IDS FIXOS):\nUPDATE ticket_bot_sessions \nSET status = 'ACTIVE' \nWHERE status = 'CHAT_CREATING' AND internal_chat_id IS NOT NULL;\n\n-- Recupera sessoes ativas recentes (ultimas 48h) E sessoes finalizadas recentemente (janela de 24h para Anti-Carona)\nSELECT id, deal_id, requester_user_id, requester_name, internal_chat_id, dialog_id, last_processed_message_id, ai_state, redis_memory_key, status, state \nFROM ticket_bot_sessions \nWHERE (\n    (status = 'ACTIVE' AND last_interaction_at > NOW() - INTERVAL '48 hours') \n    OR \n    (status = 'COMPLETED' AND last_interaction_at > NOW() - INTERVAL '24 hours')\n  ) \n  AND internal_chat_id IS NOT NULL;",
         "additionalFields": {}
       },
       "credentials": {
@@ -1551,12 +1551,6 @@
       }
     },
     {
-      "parameters": {
-        "width": 1540,
-        "height": 380,
-        "color": 6,
-        "content": "### 📥 01. Ingestão & Criação Idempotente de Sessão\n\n- **Polling & Webhook:** Monitoramento a cada 15s de novos deals na Categoria 160 (Central de TI).\n- **Gate C160:** Filtra apenas chamados válidos da categoria piloto.\n- **Reserva Atômica Postgres:** Impede processamento concorrente do mesmo ticket (`ticket_bot_sessions`)."
-      },
       "id": "sticky_Sticky_01_Intake_Idempotency",
       "name": "Sticky_01_Intake_Idempotency",
       "type": "n8n-nodes-base.stickyNote",
@@ -1564,15 +1558,15 @@
       "position": [
         80,
         80
-      ]
-    },
-    {
+      ],
       "parameters": {
         "width": 1540,
         "height": 380,
-        "color": 5,
-        "content": "### 🚨🛡️ 02. Inteligência Preventiva (P1 & Anti-Duplicados)\n\n- **Detector de Queda Filial (P1 Cluster):** Detecta $\\ge 2$ tickets da mesma loja em 30min e eleva para Incidente Crítico P1 com banner.\n- **Detector de Duplicados:** Identifica tickets com mesmo chassi ou problema nas últimas 24h, unifica comentários e fecha em `C160:LOSE`."
-      },
+        "color": 6,
+        "content": "### 📥 01. Ingestão & Criação Idempotente de Sessão\n\n- **Polling & Webhook:** Monitoramento a cada 15s de novos deals na Categoria 160 (Central de TI).\n- **Gate C160:** Filtra apenas chamados válidos da categoria piloto.\n- **Reserva Atômica Postgres:** Impede processamento concorrente do mesmo ticket (`ticket_bot_sessions`)."
+      }
+    },
+    {
       "id": "sticky_Sticky_02_Inteligencia_Preventiva",
       "name": "Sticky_02_Inteligencia_Preventiva",
       "type": "n8n-nodes-base.stickyNote",
@@ -1580,15 +1574,15 @@
       "position": [
         1680,
         80
-      ]
-    },
-    {
+      ],
       "parameters": {
         "width": 1540,
-        "height": 320,
-        "color": 7,
-        "content": "### 💬📋 03. Ativação de Chat no Card & Alçada de Compras\n\n- Cria o chat corporativo Bitrix associado diretamente ao card do chamado.\n- Injeta mensagem receptiva de acolhimento e registra sessão ativa.\n- Se categoria for Compra/Alçada: envia botões interativos de aprovação e move para `Aguardando Autorização`."
-      },
+        "height": 380,
+        "color": 5,
+        "content": "### 🚨🛡️ 02. Inteligência Preventiva (P1 & Anti-Duplicados)\n\n- **Detector de Queda Filial (P1 Cluster):** Detecta $\\ge 2$ tickets da mesma loja em 30min e eleva para Incidente Crítico P1 com banner.\n- **Detector de Duplicados:** Identifica tickets com mesmo chassi ou problema nas últimas 24h, unifica comentários e fecha em `C160:LOSE`."
+      }
+    },
+    {
       "id": "sticky_Sticky_03_Card_Chat_Purchase",
       "name": "Sticky_03_Card_Chat_Purchase",
       "type": "n8n-nodes-base.stickyNote",
@@ -1596,15 +1590,15 @@
       "position": [
         80,
         580
-      ]
+      ],
+      "parameters": {
+        "width": 1540,
+        "height": 320,
+        "color": 7,
+        "content": "### 💬📋 03. Ativação de Chat no Card & Alçada de Compras\n\n- Cria o chat corporativo Bitrix associado diretamente ao card do chamado.\n- Injeta mensagem receptiva de acolhimento e registra sessão ativa.\n- Se categoria for Compra/Alçada: envia botões interativos de aprovação e move para `Aguardando Autorização`."
+      }
     },
     {
-      "parameters": {
-        "width": 1340,
-        "height": 320,
-        "color": 2,
-        "content": "### ⏱️🛑 04. Monitoramento de Chat & Human Takeover\n\n- Realiza polling contínuo de novas mensagens digitadas pelo usuário no chat do card.\n- **Human Takeover:** Se um técnico humano assumir o chat, a IA pausa-se imediatamente para não interferir.\n- **Debounce:** Aguarda 4s de estabilização de mensagens."
-      },
       "id": "sticky_Sticky_04_Polling_Takeover",
       "name": "Sticky_04_Polling_Takeover",
       "type": "n8n-nodes-base.stickyNote",
@@ -1612,15 +1606,15 @@
       "position": [
         1680,
         580
-      ]
-    },
-    {
+      ],
       "parameters": {
         "width": 1340,
-        "height": 280,
-        "color": 3,
-        "content": "### 👁️🔍 05. Visão Computacional (GPT-4o Vision OCR)\n\n- Intercepta imagens e prints colados no chat do Bitrix (`im.v2.File.download`).\n- Realiza OCR inteligente de telas de erro do ERP MicroWork, portais Honda e Detran/RENAVE.\n- Injeta código de erro, chassi ou NF-e no prompt da IA."
-      },
+        "height": 320,
+        "color": 2,
+        "content": "### ⏱️🛑 04. Monitoramento de Chat & Human Takeover\n\n- Realiza polling contínuo de novas mensagens digitadas pelo usuário no chat do card.\n- **Human Takeover:** Se um técnico humano assumir o chat, a IA pausa-se imediatamente para não interferir.\n- **Debounce:** Aguarda 4s de estabilização de mensagens."
+      }
+    },
+    {
       "id": "sticky_Sticky_05_Vision_OCR",
       "name": "Sticky_05_Vision_OCR",
       "type": "n8n-nodes-base.stickyNote",
@@ -1628,15 +1622,15 @@
       "position": [
         80,
         1100
-      ]
+      ],
+      "parameters": {
+        "width": 1340,
+        "height": 280,
+        "color": 3,
+        "content": "### 👁️🔍 05. Visão Computacional (GPT-4o Vision OCR)\n\n- Intercepta imagens e prints colados no chat do Bitrix (`im.v2.File.download`).\n- Realiza OCR inteligente de telas de erro do ERP MicroWork, portais Honda e Detran/RENAVE.\n- Injeta código de erro, chassi ou NF-e no prompt da IA."
+      }
     },
     {
-      "parameters": {
-        "width": 1700,
-        "height": 560,
-        "color": 6,
-        "content": "### 🧠🤖 06. Núcleo Cognitivo de Triagem TI (LangChain)\n\n- **AI Agent + GPT-4o-mini:** Conduz o diálogo respeitando a Regra de Ouro (não inventar passos).\n- **Tool Diagnóstico TI:** Ferramenta autônoma para testar rede de filial, ERP MicroWork e robôs RPA.\n- **Tool Pense & Redis Memory:** Raciocínio chain-of-thought e histórico contextual.\n- **RAG PGVector:** Consulta a 14 POPs oficiais da TI da Mundial Honda."
-      },
       "id": "sticky_Sticky_06_AI_LangChain_Triage",
       "name": "Sticky_06_AI_LangChain_Triage",
       "type": "n8n-nodes-base.stickyNote",
@@ -1644,15 +1638,15 @@
       "position": [
         1500,
         1040
-      ]
+      ],
+      "parameters": {
+        "width": 1700,
+        "height": 560,
+        "color": 6,
+        "content": "### 🧠🤖 06. Núcleo Cognitivo de Triagem TI (LangChain)\n\n- **AI Agent + GPT-4o-mini:** Conduz o diálogo respeitando a Regra de Ouro (não inventar passos).\n- **Tool Diagnóstico TI:** Ferramenta autônoma para testar rede de filial, ERP MicroWork e robôs RPA.\n- **Tool Pense & Redis Memory:** Raciocínio chain-of-thought e histórico contextual.\n- **RAG PGVector:** Consulta a 14 POPs oficiais da TI da Mundial Honda."
+      }
     },
     {
-      "parameters": {
-        "width": 2640,
-        "height": 400,
-        "color": 7,
-        "content": "### 🏆📋 07. Validador B01, Atualização CRM & Timeline\n\n- Valida prioridade B01 (Urgência x Impacto) e calcula SLA de atendimento.\n- Atualiza campos no Bitrix24 e registra histórico pericial na Linha do Tempo.\n- Se alçada de compra: despacha mensagem direta com botões para o aprovador responsável.\n- Envia confirmação calorosa de conclusão e finaliza sessão no Postgres."
-      },
       "id": "sticky_Sticky_07_B01_CRM_Timeline",
       "name": "Sticky_07_B01_CRM_Timeline",
       "type": "n8n-nodes-base.stickyNote",
@@ -1660,15 +1654,15 @@
       "position": [
         80,
         1720
-      ]
+      ],
+      "parameters": {
+        "width": 2640,
+        "height": 400,
+        "color": 7,
+        "content": "### 🏆📋 07. Validador B01, Atualização CRM & Timeline\n\n- Valida prioridade B01 (Urgência x Impacto) e calcula SLA de atendimento.\n- Atualiza campos no Bitrix24 e registra histórico pericial na Linha do Tempo.\n- Se alçada de compra: despacha mensagem direta com botões para o aprovador responsável.\n- Envia confirmação calorosa de conclusão e finaliza sessão no Postgres."
+      }
     },
     {
-      "parameters": {
-        "width": 2960,
-        "height": 480,
-        "color": 5,
-        "content": "### 🔄⭐ 08. Roteador Pós-Resolução (PostRes) & CSAT Pulse\n\n- **Reabertura:** Se o usuário relatar que o problema persiste, reabre o ticket e notifica na Timeline.\n- **Anti-Carona:** Se relatar novo problema não relacionado, orienta a abrir novo chamado.\n- **Pesquisa CSAT:** Captura avaliação de 1 a 5 estrelas, registra na tabela `ticket_csat_ratings` e na Timeline do CRM."
-      },
       "id": "sticky_Sticky_08_PostRes_CSAT",
       "name": "Sticky_08_PostRes_CSAT",
       "type": "n8n-nodes-base.stickyNote",
@@ -1676,7 +1670,13 @@
       "position": [
         80,
         2280
-      ]
+      ],
+      "parameters": {
+        "width": 2960,
+        "height": 480,
+        "color": 5,
+        "content": "### 🔄⭐ 08. Roteador Pós-Resolução (PostRes) & CSAT Pulse\n\n- **Reabertura:** Se o usuário relatar que o problema persiste, reabre o ticket e notifica na Timeline.\n- **Anti-Carona:** Se relatar novo problema não relacionado, orienta a abrir novo chamado.\n- **Pesquisa CSAT:** Captura avaliação de 1 a 5 estrelas, registra na tabela `ticket_csat_ratings` e na Timeline do CRM."
+      }
     }
   ],
   "connections": {
@@ -2567,96 +2567,17 @@
     }
   ],
   "activeVersion": {
-    "versionId": "0d429ebf-39e5-49cd-951c-5551d78dbed5",
+    "versionId": "b7767705-024d-4815-aff6-2d4f1bb237fd",
     "workflowId": "c0F2GUMFm2BI94UG",
     "nodes": [
-      {
-        "id": "sticky_01_intake",
-        "name": "Sticky_01_Intake_Idempotency",
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          -496,
-          -128
-        ],
-        "parameters": {
-          "content": "## 01 — ENTRADA & CRIAÇÃO IDEMPOTENTE DO CHAT NO CARD\nRecebe novos tickets (Webhook ONCRMDEALADD ou Polling a cada 15s).\nReserva a sessão atomicamente no Postgres (deal_id UNIQUE) antes de chamar im.chat.add.\nCria o chat vinculado ao Deal (ENTITY_TYPE='CRM', ENTITY_ID='DEAL|<ID>').",
-          "height": 420,
-          "width": 680,
-          "color": 4
-        }
-      },
-      {
-        "id": "sticky_02_polling",
-        "name": "Sticky_02_Message_Polling_Takeover",
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          2384,
-          -128
-        ],
-        "parameters": {
-          "content": "## 02 — MONITORAMENTO DE MENSAGENS & HUMAN TAKEOVER\nBusca novas mensagens exclusivamente nas sessões ACTIVE com auto-recuperação genérica por estado.\nDetecta Human Takeover: se um técnico humano falar no chat, pausa a IA (ai_state='AI_PAUSED').\nFiltra mensagens do próprio robô (author_id=61622) e do sistema.",
-          "height": 420,
-          "width": 680,
-          "color": 5
-        }
-      },
-      {
-        "id": "sticky_03_debounce",
-        "name": "Sticky_03_Debounce_Redis",
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          1120,
-          -96
-        ],
-        "parameters": {
-          "content": "## 03 — DEBOUNCE ADAPTATIVO (MÓDULO RESERVADO)\nJanela adaptativa de silêncio de 4s.\nPara o E2E atual, o buffer em lista está em bypass e o roteamento é direto ao Agente.",
-          "height": 420,
-          "width": 640,
-          "color": 6
-        }
-      },
-      {
-        "id": "sticky_04_ai",
-        "name": "Sticky_04_AI_LangChain_Agent",
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          3040,
-          320
-        ],
-        "parameters": {
-          "content": "## 04 — AGENTE DE IA (LANGCHAIN + GPT-4o-MINI + MEMÓRIA REDIS)\nMemória isolada por Deal (bitrix:ti:deal:<deal_id>:memory).\nPrompt canônico dos 11 temas de TI, separação rigorosa de escopo e extração de fatos.\nTool Think e saída estruturada (ASK / COMPLETE).",
-          "height": 480,
-          "width": 640
-        }
-      },
-      {
-        "id": "sticky_05_crm",
-        "name": "Sticky_05_B01_CRM_Timeline",
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          3680,
-          112
-        ],
-        "parameters": {
-          "content": "## 05 — VALIDADOR B01, CRM UPDATE & TIMELINE\nValidação determinística de enums (sem intervenção arbitrária da IA).\nMotor B01: P1 (1202), P2 (1204), P3 (1206), P4 (1208) — CONTRATO RESTRITO P1 A P4!\nB02 Title, Read-Back de integridade, marco resumido na Timeline e conclusão da sessão.",
-          "height": 480,
-          "width": 780,
-          "color": 2
-        }
-      },
       {
         "id": "node_schedule_trigger",
         "name": "00_Schedule_Trigger",
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.2,
         "position": [
-          -320,
-          128
+          140,
+          180
         ],
         "parameters": {
           "rule": {
@@ -2676,8 +2597,8 @@
         "type": "n8n-nodes-base.webhook",
         "typeVersion": 2,
         "position": [
-          -96,
-          720
+          140,
+          320
         ],
         "parameters": {
           "httpMethod": "POST",
@@ -2691,8 +2612,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          -96,
-          32
+          360,
+          240
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.list",
@@ -2738,8 +2659,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          128,
-          128
+          580,
+          240
         ],
         "parameters": {
           "functionCode": "// Extrai ID do Deal de webhook ONCRMDEALADD ou lista do polling\nconst items = $input.all();\nconst ids = [];\n\nfor (const item of items) {\n  const json = item.json;\n  const body = json.body || json;\n\n  // Polling: array em json.result\n  if (json.result && Array.isArray(json.result)) {\n    for (const d of json.result) {\n      if (d.ID) ids.push(Number(d.ID));\n    }\n  }\n  // Webhook ONCRMDEALADD (URL encoded ou JSON)\n  else {\n    let dId = null;\n    if (body['data[FIELDS][ID]']) dId = Number(body['data[FIELDS][ID]']);\n    else if (body.data?.FIELDS?.ID) dId = Number(body.data.FIELDS.ID);\n    else if (body.FIELDS?.ID) dId = Number(body.FIELDS.ID);\n    else if (body.id || body.ID) dId = Number(body.id || body.ID);\n    if (dId) ids.push(dId);\n  }\n}\n\n// Deduplica IDs\nconst uniqueIds = [...new Set(ids)];\nreturn uniqueIds.map(id => ({ json: { deal_id: id } }));"
@@ -2751,8 +2672,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          352,
-          128
+          800,
+          240
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.get",
@@ -2774,8 +2695,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          576,
-          128
+          1020,
+          240
         ],
         "parameters": {
           "functionCode": "// GATE FAIL-CLOSED ABSOLUTO:\n// Verifica se o Deal pertence EXCLUSIVAMENTE à Categoria 160 e ao usuário 32598 (Eduardo Alaminos)\n// Sprint 2: Adiciona mapeamento determinístico de Loja/Unidade e Detecção de Tema para Incident Clustering\nconst items = $input.all();\nconst allowed = [];\nconst ALLOWED_REQUESTERS = [32598]; // Piloto restrito Eduardo Alaminos\n\nconst STORE_MAP = {\n  '45': 'Araras',\n  '47': 'Itapira',\n  '49': 'Leme',\n  '51': 'Mogi Guaçu',\n  '53': 'Mogi Mirim',\n  '55': 'Santa Bárbara',\n  '57': 'Campinas',\n  '59': 'Hortolândia',\n  '61': 'Sumaré',\n  '105': 'Nova Odessa',\n  '180': 'Pinhal',\n  '182': 'Conchal',\n  '536': 'Santo Antonio de Posse',\n  '534': 'Outros'\n};\n\nfor (const item of items) {\n  const deal = item.json.result || item.json;\n  const categoryId = String(deal.CATEGORY_ID || '');\n  const stageId = String(deal.STAGE_ID || '');\n  const createdBy = Number(deal.CREATED_BY_ID || 0);\n  const assignedBy = Number(deal.ASSIGNED_BY_ID || 0);\n  const title = deal.TITLE || `Chamado #${deal.ID}`;\n  const ufCategory = String(deal.UF_CRM_1763388156 || '');\n\n  const requesterId = ALLOWED_REQUESTERS.includes(createdBy) \n    ? createdBy \n    : (ALLOWED_REQUESTERS.includes(assignedBy) ? assignedBy : 0);\n\n  if (categoryId === '160' && (stageId === 'C160:NEW' || stageId === 'C160:UC_JIOBG8') && requesterId > 0) {\n    const isPurchase = ufCategory === '876' || title.toLowerCase().includes('compra');\n    const rawDesc = deal.UF_CRM_1729774515200;\n    const description = (Array.isArray(rawDesc) ? rawDesc.join(' ') : String(rawDesc || '')).trim();\n\n    // Mapeamento de Loja/Unidade\n    const rawStoreId = String(deal.UF_CRM_1689593052602 || '');\n    let storeName = STORE_MAP[rawStoreId] || '';\n    \n    // Fallback: busca menção de loja no título ou descrição\n    const fullText = (title + ' ' + description).toLowerCase();\n    if (!storeName) {\n      for (const [id, name] of Object.entries(STORE_MAP)) {\n        if (name !== 'Outros' && fullText.includes(name.toLowerCase())) {\n          storeName = name;\n          break;\n        }\n      }\n    }\n    if (!storeName) storeName = 'Mogi Guaçu'; // Default filial piloto\n\n    // Detecção de Tema de Incidente\n    let categoryTheme = 'GENERAL_IT';\n    const connKeywords = ['internet', 'rede', 'caiu', 'conexao', 'conexão', 'link', 'roteador', 'vpn', 'fora do ar', 'offline', 'sem sistema', 'tudo vermelho', 'lentidao geral', 'sem net'];\n    const microKeywords = ['microwork', 'dms', 'banco travou', 'nuvem microwork'];\n    const zapKeywords = ['whatsapp', 'fale facil', 'fale fácil', 'conexao zap', 'numero corporativo', 'número corporativo'];\n    const detranKeywords = ['detran', 'renave', 'atpv', 'intencao de venda', 'intenção de venda'];\n\n    if (connKeywords.some(kw => fullText.includes(kw))) {\n      categoryTheme = 'CONNECTIVITY_NETWORK';\n    } else if (microKeywords.some(kw => fullText.includes(kw))) {\n      categoryTheme = 'MICROWORK_DMS';\n    } else if (zapKeywords.some(kw => fullText.includes(kw))) {\n      categoryTheme = 'WHATSAPP_FALEFACIL';\n    } else if (detranKeywords.some(kw => fullText.includes(kw))) {\n      categoryTheme = 'DETRAN_RENAVE';\n    }\n\n    allowed.push({\n      json: {\n        deal_id: Number(deal.ID),\n        title: title,\n        description: description,\n        requester_user_id: requesterId,\n        requester_name: 'Eduardo Alaminos',\n        is_purchase: isPurchase,\n        store_name: storeName,\n        category_theme: categoryTheme\n      }\n    });\n  }\n}\n\nreturn allowed;\n"
@@ -2787,8 +2708,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          800,
-          128
+          1240,
+          240
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -2808,8 +2729,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          1296,
-          128
+          1460,
+          240
         ],
         "parameters": {
           "conditions": {
@@ -2828,8 +2749,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          1776,
-          128
+          140,
+          700
         ],
         "parameters": {
           "method": "POST",
@@ -2846,8 +2767,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          2000,
-          128
+          360,
+          700
         ],
         "parameters": {
           "functionCode": "// Preserva deal context via all(), associando item a item\nconst reserveItems = $('02_Reserve_Deal_Session_Atomic').all();\nconst items = $input.all();\nreturn items.map((item, idx) => {\n  const chatId = Number(item.json.result || 0);\n  const r = reserveItems[idx]?.json || {};\n  return {\n    json: {\n      deal_id: r.deal_id,\n      deal_title: r.deal_title || `Chamado #${r.deal_id}`,\n      is_purchase: Boolean(r.is_purchase),\n      chat_id: chatId,\n      dialog_id: `chat${chatId}`\n    }\n  };\n});"
@@ -2859,8 +2780,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          2224,
-          128
+          580,
+          700
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -2880,8 +2801,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          -96,
-          528
+          1740,
+          700
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -2901,8 +2822,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          128,
-          528
+          1960,
+          700
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.dialog.messages.get",
@@ -2928,8 +2849,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          352,
-          528
+          2180,
+          700
         ],
         "parameters": {
           "functionCode": "// Classificação e filtragem multi-item com suporte a Anti-Carona e Imagens (Sprint 2 Vision)\nconst sessions = $('04_Get_Active_Sessions_Postgres').all();\nconst items = $input.all();\nconst outputItems = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const session = sessions[i]?.json || {};\n  const res = items[i].json.result || {};\n  const messages = res.messages || [];\n  const files = res.files || [];\n\n  const lastProcessedId = Number(session.last_processed_message_id || 0);\n  const requesterId = Number(session.requester_user_id);\n  const BOT_ID = 61622;\n  const isCompleted = session.status === 'COMPLETED';\n\n  // Ordena cronologicamente crescente\n  messages.sort((a, b) => Number(a.id) - Number(b.id));\n\n  const newMessages = [];\n  let humanTakeoverDetected = false;\n  let lastMsgId = lastProcessedId;\n  let attachedImage = null;\n\n  for (const msg of messages) {\n    const msgId = Number(msg.id);\n    if (msgId <= lastProcessedId) continue;\n    lastMsgId = Math.max(lastMsgId, msgId);\n\n    const authorId = Number(msg.author_id);\n    // Ignora mensagens do bot (61622) ou de sistema (0)\n    if (authorId === BOT_ID || authorId === 0) continue;\n\n    // Se autor não for o solicitante nem o bot\n    if (authorId !== requesterId) {\n      if (!isCompleted) {\n        humanTakeoverDetected = true;\n        break;\n      }\n      continue;\n    }\n\n    // Mensagem válida do solicitante\n    const cleanText = String(msg.text || '').trim();\n    if (cleanText) {\n      newMessages.push(cleanText);\n    }\n\n    // Checagem de anexo de imagem na mensagem\n    const fileIds = Array.isArray(msg.params?.FILE_ID) ? msg.params.FILE_ID : [];\n    if (fileIds.length > 0 && Array.isArray(files)) {\n      for (const fid of fileIds) {\n        const found = files.find(f => Number(f.id) === Number(fid) && f.type === 'image');\n        if (found) {\n          attachedImage = {\n            file_id: Number(found.id),\n            name: found.name || 'print_anexo.png',\n            extension: found.extension || 'png'\n          };\n          break;\n        }\n      }\n    }\n  }\n\n  if (humanTakeoverDetected) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        dialog_id: session.dialog_id,\n        human_takeover: true,\n        last_msg_id: lastMsgId\n      }\n    });\n    continue;\n  }\n\n  // Se AI está pausada manualmente em ticket ativo, ignora\n  if (!isCompleted && session.ai_state === 'AI_PAUSED') {\n    continue;\n  }\n\n  // Se há imagem ou mensagens novas\n  if (newMessages.length > 0 || attachedImage) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        chat_id: session.internal_chat_id,\n        dialog_id: session.dialog_id,\n        requester_user_id: requesterId,\n        requester_name: session.requester_name || 'colaborador',\n        message_id: lastMsgId,\n        message_text: newMessages.join('\\n'),\n        redis_memory_key: `bitrix:ti:deal:${session.deal_id}:memory`,\n        ai_state: session.ai_state,\n        session_status: session.status || 'ACTIVE',\n        session_state: session.state || 'INIT',\n        collected_data_json: session.collected_data_json || {},\n        has_image: Boolean(attachedImage),\n        image_file_id: attachedImage ? attachedImage.file_id : null,\n        image_name: attachedImage ? attachedImage.name : null,\n        image_extension: attachedImage ? attachedImage.extension : null\n      }\n    });\n  }\n}\n\nreturn outputItems;\n"
@@ -2941,8 +2862,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          576,
-          528
+          2400,
+          700
         ],
         "parameters": {
           "conditions": {
@@ -2961,8 +2882,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          800,
-          720
+          2400,
+          860
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -2983,8 +2904,8 @@
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          -320,
-          960
+          2840,
+          700
         ],
         "parameters": {
           "amount": 4
@@ -2996,8 +2917,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          800,
-          528
+          1560,
+          1220
         ],
         "parameters": {
           "functionCode": "// Prepara input isolado para o Agente LangChain por Deal\nconst items = $input.all();\nreturn items.map(item => ({\n  json: {\n    deal_id: item.json.deal_id,\n    chat_id: item.json.chat_id,\n    dialog_id: item.json.dialog_id,\n    requester_user_id: item.json.requester_user_id,\n    message_id: item.json.message_id,\n    full_user_input: item.json.message_text,\n    redis_memory_key: item.json.redis_memory_key,\n    ai_state: item.json.ai_state\n  }\n}));"
@@ -3009,8 +2930,8 @@
         "type": "@n8n/n8n-nodes-langchain.agent",
         "typeVersion": 3.1,
         "position": [
-          1152,
-          528
+          1860,
+          1220
         ],
         "parameters": {
           "promptType": "define",
@@ -3026,8 +2947,8 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
         "typeVersion": 1.3,
         "position": [
-          1032,
-          760
+          1640,
+          1380
         ],
         "parameters": {
           "model": {
@@ -3054,8 +2975,8 @@
         "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
         "typeVersion": 1.5,
         "position": [
-          1160,
-          760
+          1860,
+          1380
         ],
         "parameters": {
           "sessionIdType": "customKey",
@@ -3076,8 +2997,8 @@
         "type": "@n8n/n8n-nodes-langchain.toolThink",
         "typeVersion": 1.1,
         "position": [
-          1288,
-          760
+          2080,
+          1380
         ],
         "parameters": {
           "description": "Pense cuidadosamente: avalie quem é afetado e se a operação está impedida. Se os testes rápidos falharam, ou se o usuário não possui dados adicionais/precisa do apoio da TI, conclua com COMPLETE imediatamente sem insistir. Use enums apenas no JSON."
@@ -3089,8 +3010,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          1776,
-          528
+          2160,
+          1220
         ],
         "parameters": {
           "functionCode": "// Formatação multi-item via all() com suporte a Autoatendimento L1!\nconst prepItems = $('07_Prepare_AI_Deal_Input').all();\nconst items = $input.all();\nconst results = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const agentItem = items[i].json;\n  const prevData = prepItems[i]?.json || {};\n  \n  const rawOutput = agentItem.output || agentItem.text || '';\n  let cleanMessage = String(rawOutput).trim();\n  let structuredData = null;\n\n  const match = cleanMessage.match(/```(?:json)?\\s*(\\{[\\s\\S]*?\\})\\s*```/i);\n  if (match) {\n    try {\n      structuredData = JSON.parse(match[1]);\n      cleanMessage = cleanMessage.replace(match[0], '').trim();\n    } catch (e) {}\n  }\n\n  const isResolvedL1 = Boolean(structuredData && (structuredData.action === 'RESOLVED_L1' || structuredData.resolvido_l1 === true || structuredData.testes_l1?.resultado === 'SUCESSO'));\n  const isComplete = Boolean(structuredData && (structuredData.action === 'COMPLETE' || isResolvedL1 || structuredData.status_triagem === 'concluido'));\n\n  results.push({\n    json: {\n      deal_id: prevData.deal_id,\n      chat_id: prevData.chat_id,\n      dialog_id: prevData.dialog_id,\n      requester_user_id: prevData.requester_user_id,\n      message_id: prevData.message_id,\n      reply_text: cleanMessage,\n      structured_data: structuredData,\n      is_complete: isComplete,\n      is_resolved_l1: isResolvedL1\n    }\n  });\n}\n\nreturn results;"
@@ -3102,8 +3023,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          2000,
-          528
+          2380,
+          1220
         ],
         "parameters": {
           "conditions": {
@@ -3122,8 +3043,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          2224,
-          624
+          2600,
+          1140
         ],
         "parameters": {
           "method": "POST",
@@ -3140,8 +3061,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          2448,
-          624
+          2820,
+          1140
         ],
         "parameters": {
           "functionCode": "// Cursor SOMENTE após envio com sucesso no Bitrix (via all())\nconst askInputs = $('09_Format_AI_Response').all();\nconst items = $input.all();\nconst results = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const bitrixRes = items[i].json;\n  const askData = askInputs[i]?.json || {};\n  \n  // Valida que o Bitrix retornou o ID da mensagem com sucesso\n  if (bitrixRes.result) {\n    results.push({\n      json: {\n        deal_id: askData.deal_id,\n        message_id: askData.message_id,\n        sent_bitrix_msg_id: bitrixRes.result\n      }\n    });\n  }\n}\n\nreturn results;"
@@ -3153,8 +3074,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          2672,
-          624
+          3040,
+          1140
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -3174,8 +3095,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          2224,
-          432
+          140,
+          1840
         ],
         "parameters": {
           "functionCode": "// MOTOR DETERMINÍSTICO B01 DE PRIORIDADE & SUPORTE A AUTOATENDIMENTO L1\n// Sprint 1: Detecção de Frustração e Cliente em Loja\n// Sprint 2: Queda Geral por Loja (Incident Clustering P1)\nconst items = $input.all();\nconst results = [];\n\nconst IMPACT_MAP = {\n  'ENTIRE_COMPANY': { id: 1180, label: 'Empresa Inteira (Todas as Lojas)' },\n  'ENTIRE_STORE': { id: 1182, label: 'Loja Inteira' },\n  'ENTIRE_DEPARTMENT': { id: 1184, label: 'Departamento Inteiro' },\n  'MULTIPLE_USERS': { id: 1186, label: 'Múltiplos Usuários' },\n  'SINGLE_USER': { id: 1188, label: 'Usuário Individual' },\n  'NO_IMPACT': { id: 1190, label: 'Sem Impacto Operacional' }\n};\n\nconst URGENCY_MAP = {\n  'OPERATION_HALTED': { id: 1192, label: 'Operação Parada (Crítico)' },\n  'SEVERELY_DEGRADED': { id: 1194, label: 'Severamente Degradada' },\n  'WORKAROUND_AVAILABLE': { id: 1196, label: 'Contorno Disponível' },\n  'PLANNED_REQUEST': { id: 1198, label: 'Solicitação Planejada' },\n  'INQUIRY': { id: 1200, label: 'Dúvida / Informação' }\n};\n\nfor (const item of items) {\n  const data = item.json.structured_data || {};\n  const facts = data.facts || {};\n  const isResolvedL1 = Boolean(item.json.is_resolved_l1 || data.resolvido_l1 || data.action === 'RESOLVED_L1');\n\n  // Recupera dados de sessão do Postgres (clustering de queda de loja)\n  const sessionData = item.json.collected_data_json || {};\n  const isStoreOutage = Boolean(sessionData.is_store_outage || data.is_store_outage);\n  const storeName = sessionData.store_name || data.store_name || '';\n  const outageCount = Number(sessionData.outage_count || data.outage_count || 1);\n\n  // Detecção de Contexto Crítico / Cliente em Loja\n  const contextoCritico = data.contexto_critico || {};\n  const isClienteEmLoja = Boolean(contextoCritico.cliente_em_loja);\n  const isFrustracaoAlta = Boolean(contextoCritico.frustracao_alta);\n  const motivoCritico = String(contextoCritico.motivo || '').trim();\n\n  let rawImpact = (facts.impacto?.value || data.impacto || 'SINGLE_USER').toUpperCase();\n  let rawUrgency = (facts.urgencia?.value || data.urgencia || 'NORMAL').toUpperCase();\n\n  // Força Urgência OPERATION_HALTED se tiver cliente em loja ou queda de loja\n  if (isStoreOutage) {\n    rawImpact = 'ENTIRE_STORE';\n    rawUrgency = 'OPERATION_HALTED';\n  } else if (isClienteEmLoja) {\n    rawUrgency = 'OPERATION_HALTED';\n  }\n\n  const impactObj = IMPACT_MAP[rawImpact] || IMPACT_MAP['SINGLE_USER'];\n  const urgencyObj = URGENCY_MAP[rawUrgency] || URGENCY_MAP['PLANNED_REQUEST'];\n\n  let priorityId = 1206; // P3_MEDIUM Default\n  let priorityCode = 'P3_MEDIUM';\n  let priorityLabel = 'P3 - Médio';\n\n  if (isStoreOutage) {\n    priorityId = 1202;\n    priorityCode = 'P1_CRITICAL';\n    priorityLabel = 'P1 - Crítico (Queda Geral de Loja)';\n  } else if (isResolvedL1) {\n    priorityId = 1208;\n    priorityCode = 'P4_LOW';\n    priorityLabel = 'P4 - Resolvido L1';\n  } else if (rawImpact === 'ENTIRE_COMPANY') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      priorityId = 1202; priorityCode = 'P1_CRITICAL'; priorityLabel = 'P1 - Crítico';\n    } else if (rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'ENTIRE_STORE') {\n    if (rawUrgency === 'OPERATION_HALTED') {\n      priorityId = 1202; priorityCode = 'P1_CRITICAL'; priorityLabel = 'P1 - Crítico';\n    } else if (rawUrgency === 'SEVERELY_DEGRADED' || rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'ENTIRE_DEPARTMENT') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'WORKAROUND_AVAILABLE' || rawUrgency === 'PLANNED_REQUEST') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'MULTIPLE_USERS') {\n    if (rawUrgency === 'OPERATION_HALTED') {\n      priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto';\n    } else if (rawUrgency === 'SEVERELY_DEGRADED' || rawUrgency === 'WORKAROUND_AVAILABLE') {\n      priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else if (rawImpact === 'SINGLE_USER') {\n    if (rawUrgency === 'OPERATION_HALTED' || rawUrgency === 'SEVERELY_DEGRADED') {\n      if (isClienteEmLoja) {\n        priorityId = 1204; priorityCode = 'P2_HIGH'; priorityLabel = 'P2 - Alto (Cliente em Loja)';\n      } else {\n        priorityId = 1206; priorityCode = 'P3_MEDIUM'; priorityLabel = 'P3 - Médio';\n      }\n    } else {\n      priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n    }\n  } else {\n    priorityId = 1208; priorityCode = 'P4_LOW'; priorityLabel = 'P4 - Baixo';\n  }\n\n  const shortSubject = data.assunto_curto || 'Atendimento de TI';\n  const tema = data.tema || 'GERAL';\n  const resumo = data.resumo_problema || 'Triagem realizada pelo assistente de IA.';\n  const lowerContext = (tema + ' ' + shortSubject + ' ' + resumo).toLowerCase();\n  const isPurchaseSemantic = (\n    tema === 'COMPRA' ||\n    lowerContext.includes('compra') ||\n    lowerContext.includes('comprar') ||\n    lowerContext.includes('memoria ram') ||\n    lowerContext.includes('memória ram') ||\n    lowerContext.includes('hardware') ||\n    lowerContext.includes('aquisição') ||\n    lowerContext.includes('aquisicao')\n  );\n  const isPurchase = Boolean(item.json.is_purchase || isPurchaseSemantic);\n\n  // Formatação do Título com Selo Crítico\n  let prefixoCritico = '';\n  if (isStoreOutage) {\n    prefixoCritico = `[🚨 QUEDA GERAL ${storeName.toUpperCase()}] `;\n  } else if (isClienteEmLoja) {\n    prefixoCritico = '[🚨 CLIENTE EM LOJA] ';\n  } else if (isFrustracaoAlta) {\n    prefixoCritico = '[⚠️ PRIORITÁRIO] ';\n  }\n\n  const formattedTitle = isResolvedL1 \n    ? `[RESOLVIDO-L1] - ${shortSubject} (Eduardo Alaminos)` \n    : `${prefixoCritico}[TI-${tema}] - ${shortSubject} (Eduardo Alaminos)`;\n  const targetStageId = isResolvedL1 ? 'C160:WON' : (isPurchase ? 'C160:UC_JIOBG8' : 'C160:NEW');\n\n  results.push({\n    json: {\n      deal_id: item.json.deal_id,\n      chat_id: item.json.chat_id,\n      dialog_id: item.json.dialog_id,\n      message_id: item.json.message_id,\n      impact_id: impactObj.id,\n      impact_label: impactObj.label,\n      urgency_id: urgencyObj.id,\n      urgency_label: urgencyObj.label,\n      priority_id: priorityId,\n      priority_code: priorityCode,\n      priority_label: priorityLabel,\n      target_stage_id: targetStageId,\n      is_resolved_l1: isResolvedL1,\n      is_purchase: isPurchase,\n      is_store_outage: isStoreOutage,\n      store_name: storeName,\n      outage_count: outageCount,\n      is_cliente_em_loja: isClienteEmLoja,\n      is_frustracao_alta: isFrustracaoAlta,\n      motivo_critico: motivoCritico,\n      tema: tema,\n      short_subject: shortSubject,\n      formatted_title: formattedTitle,\n      resumo: resumo,\n      next_owner_id: 1148,\n      wait_reason_id: 1162\n    }\n  });\n}\n\nreturn results;\n"
@@ -3187,8 +3108,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          2448,
-          432
+          360,
+          1840
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.get",
@@ -3210,8 +3131,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          2672,
-          432
+          580,
+          1840
         ],
         "parameters": {
           "functionCode": "// Combina dados do B01 com a descrição existente do Deal via all()\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst items = $input.all();\nconst results = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const b01 = b01Items[i]?.json || {};\n  const deal = items[i].json.result || items[i].json || {};\n\n  // Detecção de compra enriquecida com campos do Bitrix\n  const ufCategory = String(deal.UF_CRM_1763388156 || '');\n  const dealTitle = String(deal.TITLE || '').toLowerCase();\n  let dealDesc = '';\n  if (Array.isArray(deal.UF_CRM_1729774515200)) {\n    dealDesc = deal.UF_CRM_1729774515200.join(' ').toLowerCase();\n  } else if (deal.UF_CRM_1729774515200) {\n    dealDesc = String(deal.UF_CRM_1729774515200).toLowerCase();\n  }\n\n  const isPurchaseDeal = (\n    ufCategory === '876' ||\n    dealTitle.includes('compra') ||\n    dealTitle.includes('comprar') ||\n    dealDesc.includes('compra') ||\n    dealDesc.includes('comprar') ||\n    dealDesc.includes('memoria ram') ||\n    dealDesc.includes('memória ram')\n  );\n\n  const finalIsPurchase = Boolean(b01.is_purchase || isPurchaseDeal);\n  const finalTargetStage = b01.is_resolved_l1 ? 'C160:WON' : (finalIsPurchase ? 'C160:UC_JIOBG8' : b01.target_stage_id);\n\n  // Resumo do robô formatado (sem emojis de 4-bytes para evitar incompatibilidade no MySQL do Bitrix)\n  const milestoneSummary = b01.is_resolved_l1\n    ? `[AUTOATENDIMENTO L1 RESOLVIDO]\\n---------------------------------------------\\nTema: ${b01.tema}\\nPrioridade: ${b01.priority_label}\\n\\nResumo:\\n${b01.resumo}\\n\\n(Chamado concluído automaticamente como Ganho)`\n    : `[TRIAGEM IA CONCLUÍDA]\\n---------------------------------------------\\nTema: ${b01.tema}\\nImpacto: ${b01.impact_label}\\nUrgência: ${b01.urgency_label}\\nPrioridade B01: ${b01.priority_label} (${b01.priority_code})\\nEtapa: ${finalIsPurchase ? 'Aguardando autorização (Compra)' : 'Novo Chamado'}\\n\\nResumo:\\n${b01.resumo}\\n\\n(Histórico detalhado da conversa mantido no Chat do Card)`;\n\n  // Recupera descrição existente no campo UF_CRM_1729774515200 (Descrição)\n  let existingDescList = deal.UF_CRM_1729774515200;\n  let existingDescArray = [];\n  if (Array.isArray(existingDescList)) {\n    existingDescArray = existingDescList.map(x => String(x || '').trim()).filter(Boolean);\n  } else if (existingDescList) {\n    existingDescArray = [String(existingDescList).trim()];\n  }\n\n  // Preserva a descrição do usuário e adiciona o resumo do robô como complemento\n  const finalDescArray = [...existingDescArray, milestoneSummary];\n\n  // Recupera campo COMMENTS (Observação)\n  const existingComments = String(deal.COMMENTS || '').trim();\n  const finalComments = existingComments\n    ? `${existingComments}\\n\\n---------------------------------------------\\n${milestoneSummary}`\n    : milestoneSummary;\n\n  results.push({\n    json: {\n      ...b01,\n      is_purchase: finalIsPurchase,\n      target_stage_id: finalTargetStage,\n      final_desc_array: finalDescArray,\n      final_comments: finalComments\n    }\n  });\n}\n\nreturn results;"
@@ -3223,8 +3144,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          2896,
-          432
+          800,
+          1840
         ],
         "parameters": {
           "method": "POST",
@@ -3241,8 +3162,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          3120,
-          432
+          1020,
+          1840
         ],
         "parameters": {
           "functionCode": "// Reassocia contexto do Deal após CRM Update via all()\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst items = $input.all();\nreturn items.map((item, idx) => ({\n  json: b01Items[idx]?.json || item.json\n}));"
@@ -3254,8 +3175,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          3344,
-          432
+          1240,
+          1840
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.get",
@@ -3277,8 +3198,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          3568,
-          432
+          1460,
+          1840
         ],
         "parameters": {
           "functionCode": "// Prepara contexto para Timeline e Confirmação no Chat\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst items = $input.all();\nreturn items.map((item, idx) => ({\n  json: b01Items[idx]?.json || item.json\n}));"
@@ -3290,8 +3211,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          3792,
-          432
+          1680,
+          1840
         ],
         "parameters": {
           "method": "POST",
@@ -3308,8 +3229,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          4016,
-          432
+          1900,
+          1840
         ],
         "parameters": {
           "functionCode": "// Prepara payload para envio no chat final com convite para avaliação CSAT\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst items = $input.all();\n\nreturn items.map((item, idx) => {\n  const b01 = b01Items[idx]?.json || item.json;\n  const updateData = updatePayloadItems[idx]?.json || {};\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n  const dealId = b01.deal_id;\n  const firstName = (b01.formatted_title || '').includes('(')\n    ? (b01.formatted_title.split('(')[1].split(')')[0].split(' ')[0] || 'amigo')\n    : 'amigo';\n\n  let finalMessage = '';\n\n  if (isPurchase) {\n    finalMessage = `Prontinho, ${firstName}! Encaminhei a sua solicitação de compra para a aprovação da liderança e diretoria. Assim que tivermos o retorno, a equipe de TI dará o andamento imediato na compra e configuração para você!`;\n  } else if (isResolvedL1) {\n    finalMessage = `Fico muito feliz que conseguimos resolver o seu chamado #${dealId} por aqui, ${firstName}! 🎉\\n\\n⭐ **Pesquisa Rápida:** Como você avalia o suporte recebido hoje?\\nResponda com uma nota de 1 a 5:\\n⭐ 1 (Péssimo) | ⭐⭐ 2 (Ruim) | ⭐⭐⭐ 3 (Regular) | ⭐⭐⭐⭐ 4 (Bom) | ⭐⭐⭐⭐⭐ 5 (Excelente)`;\n  } else if (isClienteEmLoja) {\n    finalMessage = `Pode deixar, ${firstName}! Como você está com cliente aguardando na loja, já sinalizei o seu chamado #${dealId} com prioridade comercial máxima (🚨 CLIENTE EM LOJA) para a equipe técnica agilizar o seu atendimento imediatamente!`;\n  } else {\n    finalMessage = `Perfeito, ${firstName}! Todas as informações do chamado #${dealId} já foram organizadas e direcionadas para a fila da equipe de TI. O técnico responsável já vai assumir o seu atendimento!`;\n  }\n\n  return {\n    json: {\n      deal_id: dealId,\n      dialog_id: b01.dialog_id,\n      final_message: finalMessage\n    }\n  };\n});\n"
@@ -3321,8 +3242,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          4240,
-          432
+          2120,
+          1840
         ],
         "parameters": {
           "method": "POST",
@@ -3339,8 +3260,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          4464,
-          432
+          2340,
+          1840
         ],
         "parameters": {
           "functionCode": "// Cursor SOMENTE após confirmação enviada com sucesso no Bitrix (via all())\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst items = $input.all();\nconst results = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const bitrixRes = items[i].json;\n  const b01Data = b01Items[i]?.json || {};\n  \n  if (bitrixRes.result) {\n    results.push({\n      json: {\n        deal_id: b01Data.deal_id,\n        message_id: b01Data.message_id\n      }\n    });\n  }\n}\n\nreturn results;"
@@ -3352,8 +3273,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          4688,
-          432
+          2560,
+          1840
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -3373,8 +3294,8 @@
         "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
         "typeVersion": 1.3,
         "position": [
-          1416,
-          760
+          1860,
+          1500
         ],
         "parameters": {
           "mode": "retrieve-as-tool",
@@ -3396,8 +3317,8 @@
         "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
         "typeVersion": 1.2,
         "position": [
-          1496,
-          968
+          2080,
+          1500
         ],
         "parameters": {
           "options": {}
@@ -3415,8 +3336,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          2448,
-          128
+          800,
+          700
         ],
         "parameters": {
           "functionCode": "// Filtra apenas solicitações de compra para envio dos botões\nconst items = $('03_Prepare_Activation').all();\nconst purchases = [];\n\nfor (const item of items) {\n  if (item.json.is_purchase) {\n    purchases.push(item);\n  }\n}\n\nreturn purchases;"
@@ -3428,8 +3349,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          2672,
-          128
+          1020,
+          700
         ],
         "parameters": {
           "method": "POST",
@@ -3446,8 +3367,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          2896,
-          128
+          1240,
+          700
         ],
         "parameters": {
           "method": "POST",
@@ -3464,8 +3385,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          3120,
-          128
+          1460,
+          700
         ],
         "parameters": {
           "method": "POST",
@@ -3482,8 +3403,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          2460,
-          420
+          1900,
+          2020
         ],
         "parameters": {
           "functionCode": "// Filtra apenas compras para envio dos botões no privado do aprovador\nconst items = $('15_Prepare_Final_Chat').all();\nconst purchases = [];\n\nfor (const item of items) {\n  if (item.json.is_purchase && item.json.approver_keyboard) {\n    purchases.push(item);\n  }\n}\n\nreturn purchases;"
@@ -3495,8 +3416,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          2680,
-          420
+          2120,
+          2020
         ],
         "parameters": {
           "method": "POST",
@@ -3512,8 +3433,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          480,
-          560
+          2620,
+          700
         ],
         "parameters": {
           "conditions": {
@@ -3532,8 +3453,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.1,
         "position": [
-          700,
-          360
+          140,
+          2460
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.get",
@@ -3555,8 +3476,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          920,
-          360
+          360,
+          2460
         ],
         "parameters": {
           "functionCode": "const deal = $input.first().json.result || {};\nconst prev = $('06_Route_Session_Status').first().json || {};\n\nconst ufDesc = deal.UF_CRM_1729774515200;\nlet summary = deal.UF_CRM_TI_SHORT_SUBJECT || '';\nif (Array.isArray(ufDesc)) {\n  summary = ufDesc.join('\\n');\n} else if (typeof ufDesc === 'string') {\n  summary = ufDesc;\n}\n\nreturn [{\n  json: {\n    deal_id: Number(deal.ID),\n    dialog_id: prev.dialog_id,\n    chat_id: prev.chat_id,\n    message_id: prev.message_id,\n    requester_user_id: prev.requester_user_id || Number(deal.CREATED_BY_ID) || 32598,\n    requester_name: prev.requester_name || 'colaborador',\n    deal_title: deal.TITLE || `Chamado #${deal.ID}`,\n    deal_summary: summary || deal.TITLE || 'Chamado de TI',\n    user_message: prev.message_text\n  }\n}];\n"
@@ -3568,8 +3489,8 @@
         "type": "@n8n/n8n-nodes-langchain.chainLlm",
         "typeVersion": 1.7,
         "position": [
-          1140,
-          360
+          580,
+          2460
         ],
         "parameters": {
           "promptType": "define",
@@ -3583,8 +3504,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          1360,
-          360
+          800,
+          2460
         ],
         "parameters": {
           "functionCode": "const prev = $('PostRes_02_Prepare_Prompt').first().json || {};\nconst llmText = $input.first().json.text || '';\nlet parsed = {\n  intent: 'CARONA',\n  reply_message: `Oi, ${prev.requester_name}! Como este chamado já foi concluído, peço que você abra um novo chamado no Bitrix24 para esse novo assunto. Assim a equipe de TI atende com a prioridade correta! 🙌`\n};\n\nconst match = llmText.match(/\\{[\\s\\S]*\\}/);\nif (match) {\n  try {\n    parsed = JSON.parse(match[0]);\n  } catch (e) {}\n}\n\nconst intent = parsed.intent || 'CARONA';\nconst reply_message = parsed.reply_message || '';\nconst user_msg = String(prev.user_message || '').trim();\n\n// Verificação determinística adicional de CSAT (ex: usuário digitou só \"5\" ou \"10\")\nlet csatRating = parsed.csat_rating ? Number(parsed.csat_rating) : null;\nif (!csatRating) {\n  if (/^[1-5]$/.test(user_msg)) {\n    csatRating = parseInt(user_msg, 10);\n  } else if (/^10$/.test(user_msg) || user_msg.includes('10/10')) {\n    csatRating = 5;\n  } else if (user_msg.includes('⭐') || user_msg.includes('estrela')) {\n    const starCount = (user_msg.match(/⭐/g) || []).length;\n    csatRating = starCount >= 1 ? Math.min(starCount, 5) : 5;\n  }\n}\nif (csatRating) {\n  csatRating = Math.max(1, Math.min(5, csatRating));\n}\nconst isCsat = intent === 'CSAT_FEEDBACK' || csatRating !== null;\nconst csatComment = parsed.csat_comment || user_msg;\n\nlet timeline_comment = '';\nif (intent === 'REOPEN') {\n  timeline_comment = `🔄 **Chamado Reaberto pelo Solicitante**\\n\\nO colaborador informou que o problema persiste:\\n> \"${user_msg}\"\\n\\n*Retornado para \"Em atendimento\" (C160:PREPARATION) para atuação da equipe técnica.*`;\n} else if (intent === 'CARONA') {\n  timeline_comment = `🛑 **Tentativa de Chamado Carona Bloqueada**\\n\\nO colaborador tentou relatar um novo assunto neste chamado concluído:\\n> \"${user_msg}\"\\n\\n*O robô orientou educadamente a abertura de um novo chamado no Bitrix24.*`;\n}\n\nreturn [{\n  json: {\n    deal_id: prev.deal_id,\n    dialog_id: prev.dialog_id,\n    chat_id: prev.chat_id,\n    message_id: prev.message_id,\n    requester_user_id: prev.requester_user_id,\n    requester_name: prev.requester_name,\n    deal_title: prev.deal_title,\n    user_message: user_msg,\n    intent: isCsat ? 'CSAT_FEEDBACK' : intent,\n    is_csat: isCsat,\n    csat_rating: csatRating || 5,\n    csat_comment: csatComment,\n    reason: parsed.reason || '',\n    reply_message: reply_message,\n    timeline_comment: timeline_comment\n  }\n}];\n"
@@ -3596,8 +3517,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          1580,
-          360
+          1040,
+          2380
         ],
         "parameters": {
           "conditions": {
@@ -3616,8 +3537,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.1,
         "position": [
-          1800,
-          240
+          1260,
+          2380
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.update",
@@ -3634,8 +3555,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.1,
         "position": [
-          2020,
-          240
+          1480,
+          2380
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.timeline.comment.add",
@@ -3652,8 +3573,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.1,
         "position": [
-          2240,
-          240
+          1700,
+          2380
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
@@ -3670,8 +3591,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.3,
         "position": [
-          2460,
-          240
+          1920,
+          2380
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -3691,8 +3612,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          1800,
-          480
+          1040,
+          2540
         ],
         "parameters": {
           "conditions": {
@@ -3711,8 +3632,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.1,
         "position": [
-          2020,
-          420
+          1260,
+          2540
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.timeline.comment.add",
@@ -3729,8 +3650,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.1,
         "position": [
-          2240,
-          420
+          1480,
+          2540
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
@@ -3747,8 +3668,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.3,
         "position": [
-          2460,
-          420
+          1700,
+          2540
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -3768,8 +3689,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.1,
         "position": [
-          2020,
-          580
+          1480,
+          2680
         ],
         "parameters": {
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
@@ -3786,8 +3707,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.3,
         "position": [
-          2240,
-          580
+          1700,
+          2680
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -3807,8 +3728,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          680,
-          -20
+          1740,
+          320
         ],
         "parameters": {
           "url": "=https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.list?filter[CATEGORY_ID]=160&filter[CREATED_BY_ID]={{ $json.requester_user_id }}&filter[!STAGE_ID][]=C160:WON&filter[!STAGE_ID][]=C160:LOSE&filter[!ID]={{ $json.deal_id }}&order[ID]=ASC&select[]=ID&select[]=TITLE&select[]=DATE_CREATE&select[]=UF_CRM_1729774515200",
@@ -3821,8 +3742,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          820,
-          -20
+          1960,
+          320
         ],
         "parameters": {
           "functionCode": "// AVALIADOR DE DUPLICIDADE EM TEMPO REAL\nconst gateItems = $('01_Strict_Gate_Cat160_Pilot').all();\nconst fetchItems = $input.all();\nconst results = [];\n\nfunction cleanText(t) {\n  return String(t || '')\n    .replace(/\\[.*?\\]|\\(.*?\\)/g, ' ')\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')\n    .toLowerCase()\n    .replace(/[^a-z0-9\\s]/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nconst IT_ENTITIES = ['monitor', 'teclado', 'mouse', 'impressora', 'internet', 'rede', 'wifi', 'whatsapp', 'wpp', 'fale facil', 'atpv', 'renave', 'chassi', 'headset', 'fone', 'microwork', 'cloud', 'outlook', 'email'];\n\nfunction extractChassi(t) {\n  const m = String(t || '').match(/\\b(9c2[a-z0-9]{14}|[a-z0-9]{17})\\b/i);\n  return m ? m[1].toUpperCase() : null;\n}\n\nfunction checkDuplicate(newTitle, newDesc, oldTitle, oldDesc) {\n  const newFull = newTitle + ' ' + newDesc;\n  const oldFull = oldTitle + ' ' + oldDesc;\n\n  // 1. Chassi\n  const c1 = extractChassi(newFull);\n  const c2 = extractChassi(oldFull);\n  if (c1 && c2 && c1 === c2) return { isDup: true, reason: 'Mesmo Chassi identificado: ' + c1 };\n\n  // 2. Title inclusion\n  const ct1 = cleanText(newTitle);\n  const ct2 = cleanText(oldTitle);\n  if (ct1.length >= 8 && ct2.length >= 8 && (ct2.includes(ct1) || ct1.includes(ct2))) {\n    return { isDup: true, reason: 'Assunto idêntico ou contido: ' + ct1 };\n  }\n\n  // 3. Shared IT entity\n  for (const ent of IT_ENTITIES) {\n    if (ct1.includes(ent) && ct2.includes(ent)) {\n      return { isDup: true, reason: 'Mesmo equipamento ou sistema já em aberto: ' + ent.toUpperCase() };\n    }\n  }\n\n  return { isDup: false, reason: '' };\n}\n\nfor (let i = 0; i < gateItems.length; i++) {\n  const currentDeal = gateItems[i].json;\n  const rawOpen = fetchItems[i]?.json?.result || [];\n  const openDeals = Array.isArray(rawOpen) ? rawOpen : [rawOpen];\n\n  let duplicateMatch = null;\n\n  for (const oldDeal of openDeals) {\n    if (!oldDeal || !oldDeal.ID) continue;\n\n    // Apenas chamados criados nas últimas 168 horas (7 dias)\n    const createdDate = new Date(oldDeal.DATE_CREATE);\n    const now = new Date();\n    const diffHours = (now - createdDate) / (1000 * 60 * 60);\n    if (diffHours > 168) continue;\n\n    const oldTitle = String(oldDeal.TITLE || '');\n    const rawOldDesc = oldDeal.UF_CRM_1729774515200;\n    const oldDesc = (Array.isArray(rawOldDesc) ? rawOldDesc.join(' ') : String(rawOldDesc || '')).trim();\n\n    const check = checkDuplicate(currentDeal.title, currentDeal.description, oldTitle, oldDesc);\n\n    if (check.isDup) {\n      duplicateMatch = {\n        original_deal_id: Number(oldDeal.ID),\n        original_deal_title: oldTitle,\n        duplicate_reason: check.reason\n      };\n      break;\n    }\n  }\n\n  if (duplicateMatch) {\n    results.push({\n      json: {\n        ...currentDeal,\n        is_duplicate: true,\n        is_duplicate_str: 'TRUE',\n        original_deal_id: duplicateMatch.original_deal_id,\n        original_deal_title: duplicateMatch.original_deal_title,\n        duplicate_reason: duplicateMatch.duplicate_reason\n      }\n    });\n  } else {\n    results.push({\n      json: {\n        ...currentDeal,\n        is_duplicate: false,\n        is_duplicate_str: 'FALSE'\n      }\n    });\n  }\n}\n\nreturn results;\n"
@@ -3834,8 +3755,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          960,
-          -20
+          2180,
+          320
         ],
         "parameters": {
           "conditions": {
@@ -3854,8 +3775,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          1120,
-          -120
+          2400,
+          260
         ],
         "parameters": {
           "method": "POST",
@@ -3871,8 +3792,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          1280,
-          -120
+          2620,
+          260
         ],
         "parameters": {
           "method": "POST",
@@ -3888,8 +3809,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          1440,
-          -120
+          2840,
+          260
         ],
         "parameters": {
           "method": "POST",
@@ -3905,8 +3826,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          1600,
-          -120
+          3060,
+          260
         ],
         "parameters": {
           "method": "POST",
@@ -3922,8 +3843,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          600,
-          128
+          1740,
+          160
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -3942,8 +3863,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          720,
-          128
+          1960,
+          160
         ],
         "parameters": {
           "functionCode": "// Avalia resultado do clustering de outage por loja\nconst items = $input.all();\nreturn items.map(item => {\n  const d = item.json;\n  const countRecent = Number(d.count_recent || 0);\n  const isOutage = countRecent >= 2; // 3º ou mais chamado na mesma janela de 30 min\n  const outageCount = countRecent + 1;\n\n  return {\n    json: {\n      deal_id: d.deal_id,\n      title: d.title,\n      description: d.description,\n      requester_user_id: d.requester_user_id,\n      requester_name: d.requester_name,\n      is_purchase: d.is_purchase,\n      store_name: d.store_name,\n      category_theme: d.category_theme,\n      is_store_outage: isOutage,\n      outage_count: outageCount\n    }\n  };\n});"
@@ -3955,8 +3876,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          620,
-          528
+          140,
+          1220
         ],
         "parameters": {
           "conditions": {
@@ -3976,8 +3897,8 @@
         "typeVersion": 4.2,
         "onError": "continueRegularOutput",
         "position": [
-          760,
-          420
+          360,
+          1220
         ],
         "parameters": {
           "method": "GET",
@@ -4005,8 +3926,8 @@
         "typeVersion": 4.2,
         "onError": "continueRegularOutput",
         "position": [
-          900,
-          420
+          580,
+          1220
         ],
         "parameters": {
           "method": "GET",
@@ -4026,8 +3947,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          1040,
-          420
+          800,
+          1220
         ],
         "parameters": {
           "functionCode": "// Prepara payload multimodal para o OpenAI Vision\nconst items = $input.all();\nconst sessionItems = $('06_If_Has_Image_To_Process').all();\n\nreturn items.map((item, idx) => {\n  const session = sessionItems[idx]?.json || {};\n  const binaryData = item.binary?.data;\n  \n  if (!binaryData || !binaryData.data) {\n    // Se download falhou, repassa sem imagem\n    return {\n      json: {\n        ...session,\n        vision_failed: true\n      }\n    };\n  }\n\n  const mimeType = binaryData.mimeType || 'image/png';\n  const base64Str = binaryData.data;\n\n  return {\n    json: {\n      ...session,\n      openai_payload: {\n        model: \"gpt-4o-mini\",\n        messages: [\n          {\n            role: \"system\",\n            content: \"Você é um especialista em OCR e triagem visual de erros para Help Desk de TI da Rede Mundial Honda.\\nAnalise a imagem/print de erro anexado pelo colaborador.\\nExtraia com precisão:\\n1. Sistema/Aplicação (MicroWork Cloud, Portais Honda, RENAVE/Detran, WebPeças, Windows, Outlook, Navegador, Impressora).\\n2. Código do erro ou texto exato do alerta/caixa de diálogo (ex: 'Erro 104', 'Falha de comunicação', etc).\\n3. Chassi (17 dígitos), Chave de NFe (44 dígitos), OS ou Pedido se visíveis.\\n4. Breve diagnóstico em 1 linha.\\n\\nFormate rigorosamente assim:\\n[ANÁLISE DE PRINT ANEXADO]\\n- Sistema: <sistema>\\n- Mensagem/Erro na Tela: <mensagem>\\n- Dados Identificados: <dados>\\n- Diagnóstico Visual: <diagnostico>\"\n          },\n          {\n            role: \"user\",\n            content: [\n              { type: \"text\", text: \"Analise o print anexado pelo colaborador no chat do chamado de TI:\" },\n              {\n                type: \"image_url\",\n                image_url: {\n                  url: `data:${mimeType};base64,${base64Str}`\n                }\n              }\n            ]\n          }\n        ],\n        max_tokens: 300\n      }\n    }\n  };\n});"
@@ -4040,8 +3961,8 @@
         "typeVersion": 4.2,
         "onError": "continueRegularOutput",
         "position": [
-          1180,
-          420
+          1020,
+          1220
         ],
         "parameters": {
           "method": "POST",
@@ -4066,8 +3987,8 @@
         "type": "n8n-nodes-base.function",
         "typeVersion": 1,
         "position": [
-          1320,
-          420
+          1240,
+          1220
         ],
         "parameters": {
           "functionCode": "// Mescla a análise de visão computacional no contexto textual do usuário\nconst items = $input.all();\nconst sessionItems = $('Vision_03_Prepare_Vision_Payload').all();\n\nreturn items.map((item, idx) => {\n  const session = sessionItems[idx]?.json || {};\n  const visionContent = item.json.choices?.[0]?.message?.content || '';\n\n  let enrichedMessage = String(session.message_text || '').trim();\n  if (visionContent) {\n    enrichedMessage = (enrichedMessage ? enrichedMessage + '\\n\\n' : '') + visionContent;\n  }\n\n  return {\n    json: {\n      deal_id: session.deal_id,\n      chat_id: session.chat_id,\n      dialog_id: session.dialog_id,\n      requester_user_id: session.requester_user_id,\n      requester_name: session.requester_name,\n      message_id: session.message_id,\n      message_text: enrichedMessage,\n      redis_memory_key: session.redis_memory_key,\n      ai_state: session.ai_state,\n      session_status: session.session_status,\n      session_state: session.session_state,\n      collected_data_json: session.collected_data_json\n    }\n  };\n});"
@@ -4079,8 +4000,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 1,
         "position": [
-          950,
-          950
+          2000,
+          2540
         ],
         "parameters": {
           "conditions": {
@@ -4099,8 +4020,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          1150,
-          880
+          2220,
+          2540
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -4119,8 +4040,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          1300,
-          880
+          2440,
+          2540
         ],
         "parameters": {
           "method": "POST",
@@ -4137,8 +4058,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
         "position": [
-          1450,
-          880
+          2660,
+          2540
         ],
         "parameters": {
           "method": "POST",
@@ -4155,8 +4076,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
         "position": [
-          1600,
-          880
+          2880,
+          2540
         ],
         "parameters": {
           "operation": "executeQuery",
@@ -4175,8 +4096,8 @@
         "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
         "typeVersion": 1.1,
         "position": [
-          950,
-          720
+          1640,
+          1500
         ],
         "parameters": {
           "toolDescription": "FERRAMENTA DE AUTO-REMEDIAÇÃO E DIAGNÓSTICO ATIVO EM TEMPO REAL DA MUNDIAL HONDA. Use SEMPRE que o colaborador relatar problemas de rede/conectividade em filial ('rede'), travamento no MicroWork Cloud ('microwork'), erros de Chassi, Detran ou RENAVE/ATPV ('chassi_renave'), ou status de importação de Notas Fiscais pelos robôs da montadora ('robos_rpa'). Esta ferramenta consulta o status real dos servidores em tempo real.",
@@ -4185,6 +4106,134 @@
           "sendBody": true,
           "specifyBody": "json",
           "jsonBody": "={ \"tipo\": \"{{ $fromAI('tipo', 'Tipo de teste a executar: rede, microwork, chassi_renave ou robos_rpa', 'string') }}\", \"parametro\": \"{{ $fromAI('parametro', 'Loja, chassi, numero da nota ou detalhe do erro a ser testado', 'string') }}\" }"
+        }
+      },
+      {
+        "id": "sticky_Sticky_01_Intake_Idempotency",
+        "name": "Sticky_01_Intake_Idempotency",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          80,
+          80
+        ],
+        "parameters": {
+          "width": 1540,
+          "height": 380,
+          "color": 6,
+          "content": "### 📥 01. Ingestão & Criação Idempotente de Sessão\n\n- **Polling & Webhook:** Monitoramento a cada 15s de novos deals na Categoria 160 (Central de TI).\n- **Gate C160:** Filtra apenas chamados válidos da categoria piloto.\n- **Reserva Atômica Postgres:** Impede processamento concorrente do mesmo ticket (`ticket_bot_sessions`)."
+        }
+      },
+      {
+        "id": "sticky_Sticky_02_Inteligencia_Preventiva",
+        "name": "Sticky_02_Inteligencia_Preventiva",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1680,
+          80
+        ],
+        "parameters": {
+          "width": 1540,
+          "height": 380,
+          "color": 5,
+          "content": "### 🚨🛡️ 02. Inteligência Preventiva (P1 & Anti-Duplicados)\n\n- **Detector de Queda Filial (P1 Cluster):** Detecta $\\ge 2$ tickets da mesma loja em 30min e eleva para Incidente Crítico P1 com banner.\n- **Detector de Duplicados:** Identifica tickets com mesmo chassi ou problema nas últimas 24h, unifica comentários e fecha em `C160:LOSE`."
+        }
+      },
+      {
+        "id": "sticky_Sticky_03_Card_Chat_Purchase",
+        "name": "Sticky_03_Card_Chat_Purchase",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          80,
+          580
+        ],
+        "parameters": {
+          "width": 1540,
+          "height": 320,
+          "color": 7,
+          "content": "### 💬📋 03. Ativação de Chat no Card & Alçada de Compras\n\n- Cria o chat corporativo Bitrix associado diretamente ao card do chamado.\n- Injeta mensagem receptiva de acolhimento e registra sessão ativa.\n- Se categoria for Compra/Alçada: envia botões interativos de aprovação e move para `Aguardando Autorização`."
+        }
+      },
+      {
+        "id": "sticky_Sticky_04_Polling_Takeover",
+        "name": "Sticky_04_Polling_Takeover",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1680,
+          580
+        ],
+        "parameters": {
+          "width": 1340,
+          "height": 320,
+          "color": 2,
+          "content": "### ⏱️🛑 04. Monitoramento de Chat & Human Takeover\n\n- Realiza polling contínuo de novas mensagens digitadas pelo usuário no chat do card.\n- **Human Takeover:** Se um técnico humano assumir o chat, a IA pausa-se imediatamente para não interferir.\n- **Debounce:** Aguarda 4s de estabilização de mensagens."
+        }
+      },
+      {
+        "id": "sticky_Sticky_05_Vision_OCR",
+        "name": "Sticky_05_Vision_OCR",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          80,
+          1100
+        ],
+        "parameters": {
+          "width": 1340,
+          "height": 280,
+          "color": 3,
+          "content": "### 👁️🔍 05. Visão Computacional (GPT-4o Vision OCR)\n\n- Intercepta imagens e prints colados no chat do Bitrix (`im.v2.File.download`).\n- Realiza OCR inteligente de telas de erro do ERP MicroWork, portais Honda e Detran/RENAVE.\n- Injeta código de erro, chassi ou NF-e no prompt da IA."
+        }
+      },
+      {
+        "id": "sticky_Sticky_06_AI_LangChain_Triage",
+        "name": "Sticky_06_AI_LangChain_Triage",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1500,
+          1040
+        ],
+        "parameters": {
+          "width": 1700,
+          "height": 560,
+          "color": 6,
+          "content": "### 🧠🤖 06. Núcleo Cognitivo de Triagem TI (LangChain)\n\n- **AI Agent + GPT-4o-mini:** Conduz o diálogo respeitando a Regra de Ouro (não inventar passos).\n- **Tool Diagnóstico TI:** Ferramenta autônoma para testar rede de filial, ERP MicroWork e robôs RPA.\n- **Tool Pense & Redis Memory:** Raciocínio chain-of-thought e histórico contextual.\n- **RAG PGVector:** Consulta a 14 POPs oficiais da TI da Mundial Honda."
+        }
+      },
+      {
+        "id": "sticky_Sticky_07_B01_CRM_Timeline",
+        "name": "Sticky_07_B01_CRM_Timeline",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          80,
+          1720
+        ],
+        "parameters": {
+          "width": 2640,
+          "height": 400,
+          "color": 7,
+          "content": "### 🏆📋 07. Validador B01, Atualização CRM & Timeline\n\n- Valida prioridade B01 (Urgência x Impacto) e calcula SLA de atendimento.\n- Atualiza campos no Bitrix24 e registra histórico pericial na Linha do Tempo.\n- Se alçada de compra: despacha mensagem direta com botões para o aprovador responsável.\n- Envia confirmação calorosa de conclusão e finaliza sessão no Postgres."
+        }
+      },
+      {
+        "id": "sticky_Sticky_08_PostRes_CSAT",
+        "name": "Sticky_08_PostRes_CSAT",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          80,
+          2280
+        ],
+        "parameters": {
+          "width": 2960,
+          "height": 480,
+          "color": 5,
+          "content": "### 🔄⭐ 08. Roteador Pós-Resolução (PostRes) & CSAT Pulse\n\n- **Reabertura:** Se o usuário relatar que o problema persiste, reabre o ticket e notifica na Timeline.\n- **Anti-Carona:** Se relatar novo problema não relacionado, orienta a abrir novo chamado.\n- **Pesquisa CSAT:** Captura avaliação de 1 a 5 estrelas, registra na tabela `ticket_csat_ratings` e na Timeline do CRM."
         }
       }
     ],
@@ -5035,16 +5084,16 @@
     "name": null,
     "description": null,
     "autosaved": false,
-    "createdAt": "2026-10-10T03:22:52.183Z",
-    "updatedAt": "2026-10-10T03:22:52.183Z",
+    "createdAt": "2026-10-10T04:43:25.056Z",
+    "updatedAt": "2026-10-10T04:43:25.056Z",
     "workflowPublishHistory": [
       {
-        "id": 436,
+        "id": 452,
         "workflowId": "c0F2GUMFm2BI94UG",
-        "versionId": "0d429ebf-39e5-49cd-951c-5551d78dbed5",
+        "versionId": "b7767705-024d-4815-aff6-2d4f1bb237fd",
         "event": "activated",
         "userId": "47bc24b3-99ec-468c-9224-e213aafc06ff",
-        "createdAt": "2026-10-10T03:22:52.534Z"
+        "createdAt": "2026-10-10T04:43:25.534Z"
       }
     ]
   }

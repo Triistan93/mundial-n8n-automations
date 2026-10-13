@@ -1134,6 +1134,12 @@
               "name": "Candidato Curriculo",
               "value": "={{ $json.extracted_data.candidato.curriculo }}",
               "type": "string"
+            },
+            {
+              "id": "e45a55d7-8e6d-4952-b8bb-resumo-assunto",
+              "name": "Resumo Assunto",
+              "value": "={{ $json.extracted_data.resumo_assunto }}",
+              "type": "string"
             }
           ]
         },
@@ -1915,7 +1921,7 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        3008,
+        4128,
         2064
       ],
       "parameters": {
@@ -1939,7 +1945,7 @@
       "typeVersion": 4.2,
       "retryOnFail": true,
       "position": [
-        3232,
+        4352,
         2064
       ],
       "parameters": {
@@ -2171,7 +2177,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1872,
+        2768,
         2560
       ],
       "parameters": {
@@ -2179,7 +2185,7 @@
         "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/im.message.add.json",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"DIALOG_ID\": {{ $('Preparar Dados Transferência').first().json.assigned_user_id }},\n  \"MESSAGE\": \"🔔 [ALERTA RH] Novo Atendimento no WhatsApp aguardando equipe!\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n📌 Tipo: {{ $('Preparar Dados Transferência').first().json.tipo_rotulo }}\\n👤 Solicitante: {{ $('Preparar Dados Transferência').first().json.nome_candidato }}\\n📱 WhatsApp: {{ $('Preparar Dados Transferência').first().json.telefone }}\\n📝 Resumo: {{ $('Preparar Dados Transferência').first().json.resumo_assunto }}\\n🔗 Abrir Card no Bitrix: https://b24-88dbfb.bitrix24.com.br/crm/deal/details/{{ $('Criar Deal Assuntos RH').first().json.result }}/\\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\n}",
+        "jsonBody": "={\n  \"DIALOG_ID\": {{ $('Preparar Handover Trilha 2').first().json.assigned_user_id }},\n  \"MESSAGE\": {{ JSON.stringify($('Preparar Handover Trilha 2').first().json.message) }}\n}",
         "options": {}
       }
     },
@@ -2189,7 +2195,7 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        2080,
+        2992,
         2560
       ],
       "parameters": {
@@ -2212,7 +2218,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2304,
+        3216,
         2560
       ],
       "parameters": {
@@ -2674,6 +2680,191 @@
           "id": "NlIbdmbaePYxgp6S",
           "name": "Redis Evolution"
         }
+      }
+    },
+    {
+      "id": "7a8b9c01-1122-4334-a556-677889900aabb",
+      "name": "Bitrix: Buscar Chat OpenLines",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3008,
+        2064
+      ],
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/imopenlines.crm.chat.get.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"CRM_ENTITY_TYPE\": \"contact\",\n  \"CRM_ENTITY\": {{ Number($('Preparar Criação').isExecuted ? ($('Preparar Criação').first().json.bitrix_body_create.fields.CONTACT_ID || $('Isolar IDs dos Contatos').first().json.contactIds?.[0] || 0) : ($('Preparar Atualização').first().json.contact_id || $('Isolar IDs dos Contatos').first().json.contactIds?.[0] || 0)) }},\n  \"ACTIVE_ONLY\": \"N\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "8b9c0d12-2233-4445-b667-78899aabbccdd",
+      "name": "Preparar Handover Nina",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3232,
+        2064
+      ],
+      "parameters": {
+        "jsCode": "const item = items[0];\nconst chatResult = item.json?.result || [];\nlet chatId = null;\n\nif (Array.isArray(chatResult) && chatResult.length > 0) {\n    chatId = chatResult[0].CHAT_ID;\n}\n\nconst isCriacao = $('Preparar Criação').isExecuted;\nconst prep = isCriacao ? $('Preparar Criação').first().json : $('Preparar Atualização').first().json;\nconst dealId = isCriacao ? $('Criar Novo Deal').first().json.result : prep.deal_id;\nconst dados = $('1. Preparar Dados RH').first().json || {};\n\nconst nome = (prep.bitrix_body_create?.fields?.TITLE?.replace('Candidato: ', '') || dados['Candidato Nome'] || dados['Nome Zap'] || 'Candidato').trim();\nlet telefone = dados['Telefone Contato'] || '';\nif (!telefone) {\n    try {\n        telefone = $('RECEPTIVO').first().json.remoteJid.split('@')[0].replace(/\\D/g, '');\n    } catch(e) {}\n}\nconst cidade = dados['Candidato Cidade'] || 'Não informada';\nconst vaga = dados['Candidato Area'] || 'Não informada';\nconst idVaga = prep.vaga_mapeada_id || '';\nconst resumo = dados['Resumo Assunto'] || `Candidatura para ${vaga} em ${cidade}`;\n\nlet linkCurriculo = 'Aguardando envio do arquivo pelo candidato no WhatsApp';\nif (prep.curriculo_pendente && prep.curriculo_pendente.pureBase64) {\n    linkCurriculo = '📎 Anexado diretamente no Card do Bitrix24';\n} else if (dados['Candidato Curriculo'] && dados['Candidato Curriculo'] !== 'Sem link') {\n    linkCurriculo = dados['Candidato Curriculo'];\n}\n\nconst cardUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${dealId}/`;\nconst chatUrl = chatId ? `https://b24-88dbfb.bitrix24.com.br/online/?IM_DIALOG=chat${chatId}` : '';\n\nlet msg = `🔔 [SOPHIA RH] ${isCriacao ? 'Novo Candidato Cadastrado' : 'Candidato Atualizou Dados'}!\\n`;\nmsg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n`;\nmsg += `👤 Candidato: ${nome}\\n`;\nmsg += `📱 WhatsApp: ${telefone}\\n`;\nmsg += `📍 Cidade: ${cidade}\\n`;\nmsg += `💼 Vaga de Interesse: ${vaga} (ID: ${idVaga})\\n`;\nmsg += `📎 Currículo: ${linkCurriculo}\\n\\n`;\nmsg += `📝 Resumo da Triagem:\\n${resumo}\\n\\n`;\nmsg += `🔗 Abrir Card no CRM:\\n${cardUrl}\\n`;\nif (chatUrl) {\n    msg += `\\n💬 Abrir Conversa no Contact Center:\\n${chatUrl}\\n`;\n}\nmsg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n`;\nif (chatId) {\n    msg += `👉 Você já foi inserida na conversa do Contact Center e atribuída no CRM.`;\n} else {\n    msg += `👉 Você foi atribuída como responsável pelo card no CRM.`;\n}\n\nreturn [{\n    json: {\n        chat_id: chatId,\n        has_chat: Boolean(chatId),\n        deal_id: dealId,\n        dialog_id: 4278,\n        message: msg,\n        nome: nome,\n        telefone: telefone\n    }\n}];"
+      }
+    },
+    {
+      "id": "9c0d1e23-3344-5556-c778-899aabbccddee",
+      "name": "IF: Chat OpenLines Encontrado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3456,
+        2064
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-has-chat",
+              "leftValue": "={{ $json.has_chat }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "0d1e2f34-4455-6667-d889-9aabbccddeeff",
+      "name": "Bitrix: Transferir Chat para Nina",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3680,
+        1984
+      ],
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/imopenlines.operator.transfer.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"CHAT_ID\": {{ $json.chat_id }},\n  \"USER_ID\": 4278,\n  \"LEAVE\": \"N\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "1e2f3045-5566-7778-e99a-abbccddeeff00",
+      "name": "Bitrix: Enviar Alerta Chat Nina",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3904,
+        2064
+      ],
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/im.message.add.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"DIALOG_ID\": {{ $('Preparar Handover Nina').first().json.dialog_id }},\n  \"MESSAGE\": {{ JSON.stringify($('Preparar Handover Nina').first().json.message) }}\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "2f304156-6677-8889-faab-bccddeeff0011",
+      "name": "Bitrix: Buscar Chat OpenLines (Trilha 2)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1872,
+        2560
+      ],
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/imopenlines.crm.chat.get.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"CRM_ENTITY_TYPE\": \"contact\",\n  \"CRM_ENTITY\": {{ Number($('Preparar Deal Assuntos RH').first().json.contact_id || 0) }},\n  \"ACTIVE_ONLY\": \"N\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "30415267-7788-999a-abbc-cddeeff001122",
+      "name": "Preparar Handover Trilha 2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2096,
+        2560
+      ],
+      "parameters": {
+        "jsCode": "const item = items[0];\nconst chatResult = item.json?.result || [];\nlet chatId = null;\n\nif (Array.isArray(chatResult) && chatResult.length > 0) {\n    chatId = chatResult[0].CHAT_ID;\n}\n\nconst prev = $('Preparar Dados Transferência').first().json;\nconst dealId = $('Criar Deal Assuntos RH').first().json.result;\n\nconst cardUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${dealId}/`;\nconst chatUrl = chatId ? `https://b24-88dbfb.bitrix24.com.br/online/?IM_DIALOG=chat${chatId}` : '';\n\nlet msg = `🔔 [ALERTA RH] Novo Atendimento no WhatsApp aguardando equipe!\\n`;\nmsg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n`;\nmsg += `📌 Tipo: ${prev.tipo_rotulo}\\n`;\nmsg += `👤 Solicitante: ${prev.nome_candidato}\\n`;\nmsg += `📱 WhatsApp: ${prev.telefone}\\n`;\nmsg += `📝 Resumo: ${prev.resumo_assunto}\\n\\n`;\nmsg += `🔗 Abrir Card no Bitrix:\\n${cardUrl}\\n`;\nif (chatUrl) {\n    msg += `\\n💬 Abrir Conversa no Contact Center:\\n${chatUrl}\\n`;\n}\nmsg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\n`;\nif (chatId) {\n    msg += `👉 Você já foi inserida na conversa do Contact Center e atribuída no CRM.`;\n} else {\n    msg += `👉 Você foi atribuída como responsável pelo card no CRM.`;\n}\n\nreturn [{\n    json: {\n        chat_id: chatId,\n        has_chat: Boolean(chatId),\n        deal_id: dealId,\n        assigned_user_id: prev.assigned_user_id || 4278,\n        message: msg\n    }\n}];"
+      }
+    },
+    {
+      "id": "41526378-8899-aaab-bccd-deeff00112233",
+      "name": "IF: Chat OpenLines Trilha 2?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2320,
+        2560
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-has-chat-t2",
+              "leftValue": "={{ $json.has_chat }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "52637489-99aa-bbbc-cdde-eff0011223344",
+      "name": "Bitrix: Transferir Chat Trilha 2 Nina",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2544,
+        2480
+      ],
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/244936/1jw82ol2jaf0ivve/imopenlines.operator.transfer.json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"CHAT_ID\": {{ $json.chat_id }},\n  \"USER_ID\": 4278,\n  \"LEAVE\": \"N\"\n}",
+        "options": {}
       }
     }
   ],
@@ -3543,7 +3734,7 @@
       "main": [
         [
           {
-            "node": "Redis2",
+            "node": "Bitrix: Buscar Chat OpenLines",
             "type": "main",
             "index": 0
           }
@@ -3598,7 +3789,7 @@
       "main": [
         [
           {
-            "node": "Alertar Responsavel RH",
+            "node": "Bitrix: Buscar Chat OpenLines (Trilha 2)",
             "type": "main",
             "index": 0
           }
@@ -3756,6 +3947,119 @@
         [
           {
             "node": "IF: Processo Encontrado?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bitrix: Buscar Chat OpenLines": {
+      "main": [
+        [
+          {
+            "node": "Preparar Handover Nina",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Handover Nina": {
+      "main": [
+        [
+          {
+            "node": "IF: Chat OpenLines Encontrado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Chat OpenLines Encontrado?": {
+      "main": [
+        [
+          {
+            "node": "Bitrix: Transferir Chat para Nina",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Bitrix: Enviar Alerta Chat Nina",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bitrix: Transferir Chat para Nina": {
+      "main": [
+        [
+          {
+            "node": "Bitrix: Enviar Alerta Chat Nina",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bitrix: Enviar Alerta Chat Nina": {
+      "main": [
+        [
+          {
+            "node": "Redis2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bitrix: Buscar Chat OpenLines (Trilha 2)": {
+      "main": [
+        [
+          {
+            "node": "Preparar Handover Trilha 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Handover Trilha 2": {
+      "main": [
+        [
+          {
+            "node": "IF: Chat OpenLines Trilha 2?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Chat OpenLines Trilha 2?": {
+      "main": [
+        [
+          {
+            "node": "Bitrix: Transferir Chat Trilha 2 Nina",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alertar Responsavel RH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bitrix: Transferir Chat Trilha 2 Nina": {
+      "main": [
+        [
+          {
+            "node": "Alertar Responsavel RH",
             "type": "main",
             "index": 0
           }

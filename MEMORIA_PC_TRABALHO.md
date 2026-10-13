@@ -330,4 +330,13 @@ CREATE INDEX IF NOT EXISTS idx_csat_deal_user ON ticket_csat_ratings (deal_id, r
 
 ---
 
+
+
+### 11.1. Recursos Ativos do Robô de TI (Atualização Outubro/2026)
+- **Leitura Multimodal OCR (Visão Computacional):** Ativa com `gpt-4o-mini`, suportando extração automática de telas de erro, códigos de erro e dados de prints anexados pelos colaboradores.
+- **Notificação Automática de TI:** Equipe técnica (Eduardo Alaminos ID `32598` e Igor Bonini ID `352678`) é notificada instantaneamente no chat do Bitrix24 assim que um chamado conclui a triagem e entra na fila de atendimento técnico.
+- **Governança de Campos de Cartão:** Campos técnicos da TI (`UF_CRM_TI_*`, `Subcategoria` e `Resolução`) isolados na seção 2 do card com edição protegida e flexibilizados para criação sem travamentos.
+
+---
+
 *Arquivo compilado e mantido sob controle de versão oficial — Central de Tecnologia Mundial Honda.*

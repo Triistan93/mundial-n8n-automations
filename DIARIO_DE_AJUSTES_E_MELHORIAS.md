@@ -689,4 +689,63 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.3. Ajuste Fino de Permissões: Desbloqueio do Campo de Resolução e Remoção de Obrigatoriedade
+
+* **Contexto & Problema:**
+  - O campo `Resolução / Fechamento` (`UF_CRM_1689597532` / ID 221) estava inacessível para escrita pelos técnicos de TI ao finalizar os atendimentos.
+  - O campo `Subcategoria` (`UF_CRM_1763388469429` / ID 1678) estava bloqueado para o usuário comum na abertura, mas constava como obrigatório no Bitrix24, impedindo o colaborador de registrar novos chamados sem erro de validação.
+* **Solução Implantada:**
+  1. **Desbloqueio de Escrita de Resolução:** Atributo `EDIT_IN_LIST: 'Y'` restaurado no campo de ID 221 via `crm.deal.userfield.update`. Técnicos de TI agora podem registrar notas técnicas e soluções livremente.
+  2. **Flexibilização de Subcategoria:** Flag `MANDATORY: 'N'` confirmada e mantida em 100% dos campos técnicos (`Subcategoria`, `Prioridade`, `Responsável TI`, etc.), garantindo abertura ágil em menos de 60 segundos pelo solicitante.
+
+
+### 9.4. Ativação Definitiva do OCR / Multimodal Vision para Leitura de Prints de Erro
+
+* **Contexto & Demanda:**
+  - Grande parte dos colaboradores anexa capturas de tela (prints de erros no MicroWork, Portais Honda, RENAVE, etc.) no chat ou card do chamado. O robô precisava "enxergar" esses prints para acelerar a triagem e não fazer perguntas redundantes.
+* **Diagnóstico & Causa Raiz Técnica no n8n:**
+  - O ambiente n8n em produção opera com `N8N_DEFAULT_BINARY_DATA_MODE=filesystem` (`filesystem-v2`).
+  - Por conta disso, a propriedade `item.binary.data.data` continha a string de controle `"filesystem-v2"` em vez dos bytes reais em Base64.
+  - Ao enviar `data:image/png;base64,filesystem-v2` para a API da OpenAI (`gpt-4o-mini`), a requisição falhava silenciosamente devido ao `onError: continueRegularOutput`.
+  - Além disso, quando o colaborador enviava somente a imagem sem digitar texto, o campo de entrada do agente ficava vazio, fazendo o LLM responder *"Parece que não recebi sua resposta"*.
+* **Solução de Engenharia Implantada:**
+  1. **Extração de Buffer Binário Nativo (`Vision_03_Prepare_Vision_Payload`):**
+     - Utilização do método oficial do n8n `await this.helpers.getBinaryDataBuffer(idx, 'data')` para ler o arquivo do disco local e convertê-lo nativamente em Base64 (`buffer.toString('base64')`).
+     - Normalização determinística de MIME type (`image/png`, `image/jpeg`, `image/webp`).
+  2. **Tratamento de Mensagem com Imagem Exclusiva (`05_Filter_And_Classify_Messages`):**
+     - Suporte a múltiplos formatos de `FILE_ID` (array, número ou string) e verificação tanto de `f.type === 'image'` quanto de extensões válidas (`png`, `jpg`, `jpeg`, `webp`, `bmp`).
+     - Fallback automático caso não haja texto digitado: `"O colaborador enviou um print/imagem de erro em anexo."`.
+  3. **Mesclagem Inteligente de Contexto (`Vision_05_Merge_Vision_Context`):**
+     - Substituição elegante do fallback textual pela análise estruturada `[ANÁLISE DE PRINT ANEXADO]`.
+  4. **Enriquecimento do System Prompt do Agente (`08_AI_Agent_Triage_Deal`):**
+     - Instrução explícita para o modelo reconhecer os dados visuais extraídos (código de erro, tela do sistema, chassi, alertas) como fatos comprovados, acolher o colaborador citando o erro visto na imagem e nunca perguntar o que já está evidente no print.
+* **Validação em Produção (E2E):**
+  - Testado com print real enviado por Igor Bonini no chamado `#1406390`.
+  - O modelo extraiu com precisão milimétrica:
+    - *Sistema:* Internet Honda System (IHS)
+    - *Mensagem na Tela:* `(12.1) Usuário Bloqueado`
+    - *Diagnóstico:* O acesso é negado devido ao bloqueio do usuário.
+
+
+### 9.5. Notificação Automática da Equipe de TI quando Chamado Estiver Pronto para Atendimento
+
+* **Contexto & Demanda:**
+  - Assim que o robô conclui a triagem de um chamado que exige atendimento técnico humano, a equipe de TI deve ser imediatamente alertada para assumir o chamado sem atrasos na fila.
+* **Implementação Técnica no Workflow (`c0F2GUMFm2BI94UG`):**
+  1. **Nó 15_Filter_Tickets_Ready_For_IT (`n8n-nodes-base.code` v2):**
+     - Conectado em paralelo a partir de `15_Send_Final_Confirmation_To_Chat`.
+     - Filtra chamados onde `!is_resolved_l1` (não resolvidos pelo autoatendimento) e `!is_purchase` (não são compras aguardando aprovação de diretoria).
+     - Alvos de notificação: Eduardo Alaminos (Gestor TI - `32598`) e Igor Bonini (Suporte TI - `352678`).
+  2. **Nó 15_Notify_IT_Team_Ready (`n8n-nodes-base.httpRequest` v4.2):**
+     - Dispara mensagem instantânea individual via `im.message.add` para os técnicos da TI com formatação rica:
+       - 🎫 **Número e Título do Chamado:** Padronização B01 (`[TI-CATEGORIA] - Assunto (Solicitante)`).
+       - 👤 **Solicitante & Loja:** Identificação de quem abriu e da filial.
+       - ⚡ **Prioridade & Resumo:** Nível de criticidade e diagnóstico inicial da IA.
+       - 🚨 **Alerta Especial:** Destaque em negrito e emoji caso detectado `CLIENTE EM LOJA`.
+       - 👉 **Link Direto:** Botão clicável para abrir o card do chamado no Bitrix24.
+* **Validação em Produção:**
+  - Mensagens de teste enviadas para os IDs `32598` e `352678` com resposta HTTP 200 e entrega imediata no chat interno do Bitrix24.
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*

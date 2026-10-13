@@ -619,6 +619,92 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
   - Deploy em produção realizado com sucesso no workflow `8OvNSMmZFZWxiW9A` (ativo: true).
 
 
+### 7.8. Resolução Definitiva de Anexo de Currículos no WhatsApp & Saneamento do Funil C198
+
+* **Incidente Original & Demanda:**
+  - O RH relatou que o Agente de IA não estava cumprindo o prometido ao cadastrar novos candidatos:
+    > *"NOVO CANDIDATO CADASTRADO: Nome: Julya de Brito Silva | Vaga de interesse: estágio adm | ID Vaga mapeada: 1034 | Cidade: Hortolândia | Telefone: 5519994955122 | Currículo/Link: Anexado diretamente no Card do Bitrix24"*
+  - **Sintomas Reportados:** O arquivo do currículo não aparecia nem na Linha do Tempo nem nos campos do Card [#1406474](https://b24-88dbfb.bitrix24.com.br/crm/deal/details/1406474/), o card estava misturado com campos legados de Suporte TI e revisão de veículos, e estava posicionado em um estágio inconsistente.
+
+* **Diagnóstico Profundo & Causa Raiz Técnica:**
+  1. **Falha Estrutural de Resolução do Deal na Rota de Mídia:**
+     - Quando o candidato enviava documento ou imagem (PDF/DOCX/print) pelo WhatsApp, o fluxo ramificava em `Tipo de mensagem` -> `If3` -> `Obter mídia em base64` -> `Converter Base64 > Binário` -> `Bitrix: Anexar Curriculo ao Card`.
+     - No nó `Converter Base64 > Binário`, o código tentava ler o `deal_id` referenciando nós de outras trilhas (`$('Checar Estagio e Bloqueio Humano')`, `$('Bitrix: Criar Deal (Contato Existente)1')`), nós que **nunca são executados** na rota isolada de recebimento de mídia. O `deal_id` resultava sempre em `null`.
+  2. **Quebra Fatal de Sintaxe JSON no n8n:**
+     - No nó `Bitrix: Anexar Curriculo ao Card`, o corpo continha `"ENTITY_ID": {{ $json.deal_id }}`. Com valor `null`, o n8n renderizava `"ENTITY_ID": ,`, disparando erro de sintaxe JSON (`NodeOperationError: Unexpected token ','`).
+     - **Impacto Sistêmico:** 100% dos envios de currículo em produção quebravam imediatamente (execuções com erro registradas para Julya `#594238`, Pérola `#597320`, Fernanda `#597252`), derrubando a execução antes do nó `Injetar URL no Contexto`. Como consequência, a IA nunca sabia que o currículo fora enviado e o arquivo se perdia.
+  3. **Poluição de Layout na Categoria 198 (Recrutamento & Seleção):**
+     - O CRM herdava a configuração global de visualização de negócios, exibindo campos da Central de TI (`Impacto`, `Urgência`, `Categoria Técnica`) e campos automotivos no card de candidatos.
+  4. **Falso Positivo Textual no Comentário:**
+     - O nó `Preparar Criação` continha um fallback estático: na ausência de link no texto, gravava arbitrariamente `'Anexado diretamente no Card do Bitrix24'`, criando uma falsa promessa mesmo quando o arquivo não tinha sido processado.
+
+* **Solução Implantada em 3 Frentes:**
+
+  1. **Remediação Imediata dos Candidatos Afetados:**
+     - **Julya de Brito Silva (Card #1406474):** Currículo original `JULIA BRITO.docx` (23.960 bytes) recuperado da execução `#594238` e anexado tanto na Linha do Tempo (comentário `#14775494`) quanto no campo customizado de arquivo `UF_CRM_1735304929` (Documentação 2 / Currículo, ID `10040334`). Card padronizado na etapa `C198:NEW`, atribuído a Nina Biermann (`4278`), com cidade Hortolândia e vaga Estágio ADM (`1034`).
+     - **Pérola Aragão (Card #1406660):** Criado contato `#635966` e negócio `#1406660` com o currículo `Perola_Aragao_Curriculo.pdf` (75.568 bytes) recuperado da execução `#597320` anexado à timeline e ao campo de arquivo.
+     - **Fernanda Orlandini (Card #1406662):** Associado ao contato `#599932` e criado negócio `#1406662` com o currículo `Curriculo_Fernanda_Orlandini.pdf` (175.228 bytes) recuperado da execução `#597252` anexado à timeline e ao campo de arquivo.
+
+  2. **Saneamento e Governança do Pipeline C198 no Bitrix24:**
+     - **Padronização das Etapas:** Estágio oficial `C198:NEW` ("Novo Candidato", ID `2916`) atualizado para `SORT 5` como a primeira etapa do funil. Estágios órfãos e vazios (IDs `3126` e `3128`) excluídos via API. Estágio ID `3298` renomeado para "Inscrições Gerais" (`SORT 25`).
+     - **Segregação Estrita de Layout (`crm.deal.details.configuration.set` com `categoryId: 198`):** Ficha reorganizada em duas seções perfeitamente limpas:
+       * **Seção 1: Dados do Candidato (Recrutamento & Seleção):** `TITLE`, `CLIENT`, `ASSIGNED_BY_ID` (Nina Biermann), `UF_CRM_1775845859336` (Vaga Mapeada), `UF_CRM_1722019521471` (Cidade), `UF_CRM_1735304929` (Documentação 2 / Currículo) e `COMMENTS`.
+       * **Seção 2: Acompanhamento do Processo Seletivo:** `UF_CRM_1784036238` (Resumo) e `UF_CRM_1707306398` (Documentação 1).
+       * Eliminados completamente campos de Suporte TI, OS e mecânica da Categoria 198.
+
+  3. **Nova Arquitetura Resiliente do Workflow n8n (`8OvNSMmZFZWxiW9A`):**
+     - **Rota de Mídia Blindada (Multi-Lookups & Cache Atômico no Redis):**
+       * `Converter Base64 > Binário`: Extrai `pureBase64`, metadados, sanitiza nomes de arquivo e isola o telefone do JID.
+       * `Bitrix: Buscar Contato (Mídia)` & `Bitrix: Buscar Deal Aberto (Mídia)`: Consultam em tempo real se já existe um card aberto na C198 para o número (`crm.duplicate.findbycomm` + `crm.deal.list`).
+       * `Preparar Decisão Mídia`: Analisa se o deal existe ou se o envio é preliminar.
+       * `Redis: Cachear Currículo Recebido`: Salva os bytes do currículo em buffer atômico no Redis (`key: {instance} {remoteJid} curriculo_pendente`, TTL 24h).
+       * `IF: Tem Deal Aberto?`: Se o card já existir (ex: candidato enviou após a conversa), anexa à Timeline e preenche o campo de arquivo `UF_CRM_1735304929` via `crm.deal.update`. Se o card ainda não existir, segue em frente **sem quebrar**.
+       * `Injetar URL no Contexto`: Notifica o `AI Agent` que o currículo foi recebido e guardado com sucesso, permitindo o avanço imediato para a conclusão da triagem.
+     - **Trilha de Criação de Candidatos (Associação de Buffer & Nina Biermann):**
+       * `Redis: Buscar Curriculo Pendente`: Adicionado logo após a busca de funil.
+       * `Preparar Criação`: Configura `ASSIGNED_BY_ID: 4278` (Nina Biermann), `UF_CRM_1722019521471` (Cidade), `COMMENTS` estruturado e injeta o arquivo em `UF_CRM_1735304929`.
+       * **Transparência Factual:** Se o candidato não enviou arquivo, o comentário declara: *"Aguardando envio do arquivo pelo candidato no WhatsApp"*, eliminando falsos positivos.
+       * `Adicionar Timeline (Unificado)`: Serializa com segurança o anexo de arquivos no comentário oficial de abertura.
+     - **Proteção Fail-Safe (`onError: continueRegularOutput`):** Ativada em todas as chamadas externas para resguardar a continuidade da conversa.
+
+
+### 7.9. Handover Automático para Nina Biermann (Contact Center OpenLines & Notificação Executiva com Resumo da Conversa)
+
+* **Contexto & Demanda:**
+  - O RH relatou dificuldade operacional em localizar e organizar as conversas de WhatsApp no CRM do Bitrix24.
+  - Para eliminar o atrito de busca, foi solicitada a criação de um mecanismo automático onde a **Sophia** sempre envia uma mensagem para a recrutadora **Nina Biermann (`ID 4278` - RH)** com um resumo completo da triagem e links diretos, além de já inseri-la automaticamente como operadora responsável dentro da conversa no **Contact Center** do Bitrix24 assim que o bot terminar o atendimento.
+
+* **Arquitetura da Solução Implantada (112 Nós no Total):**
+  1. **Captura Estruturada do Resumo Cognitivo (`1. Preparar Dados RH`):**
+     - Mapeamento do campo `Resumo Assunto` a partir do `extracted_data.resumo_assunto` gerado pelo LLM no encerramento da conversa.
+  2. **Localização do Chat no Contact Center (`Bitrix: Buscar Chat OpenLines`):**
+     - Chamada à API `imopenlines.crm.chat.get.json` utilizando o `CONTACT_ID` associado ao candidato.
+     - Identifica a sessão ativa do conector WhatsApp Fale Fácil / OpenLines (Linha 202 - *RH Mundial Motos*).
+  3. **Composição da Notificação Executiva (`Preparar Handover Nina`):**
+     - Extrai o `CHAT_ID` da sessão do Contact Center.
+     - Monta a mensagem executiva enviada via chat privado da Sophia:
+       * 👤 **Candidato:** Nome completo confirmado.
+       * 📱 **WhatsApp:** Número com DDD sanitizado.
+       * 📍 **Cidade:** Unidade de interesse.
+       * 💼 **Vaga de Interesse:** Cargo com código ID mapeado da C198.
+       * 📎 **Currículo:** Indicação clara de arquivo anexado ao card ou link do documento.
+       * 📝 **Resumo da Triagem:** Síntese em linguagem natural da conversa e perfil do candidato.
+       * 🔗 **Link Direto do Card no CRM:** `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/{deal_id}/` (abre em 1 clique).
+       * 💬 **Link Direto do Contact Center:** `https://b24-88dbfb.bitrix24.com.br/online/?IM_DIALOG=chat{chat_id}` (abre a conversa exata no mensageiro do Bitrix).
+  4. **Inserção Ativa na Conversa (`Bitrix: Transferir Chat para Nina`):**
+     - Disparo do método `imopenlines.operator.transfer.json` com `USER_ID: 4278` e flag `LEAVE: "N"`.
+     - A conversa no WhatsApp é transferida e alocada imediatamente na fila de atendimento da Nina no Contact Center, permitindo que ela assuma a conversa ou leia o histórico instantaneamente.
+  5. **Disparo de Alerta Audível no Chat Bitrix (`Bitrix: Enviar Alerta Chat Nina`):**
+     - Disparo do método `im.message.add.json` para o `DIALOG_ID: 4278`, gerando notificação sonora e balão de chat no Bitrix24 da recrutadora.
+  6. **Extensão Unificada para a Trilha 2 (Handover / Assuntos RH):**
+     - O mesmo mecanismo de busca de chat (`imopenlines.crm.chat.get`) e transferência (`imopenlines.operator.transfer`) foi conectado à Trilha 2, garantindo que demandas de Saúde Ocupacional, DP e fornecedores também insiram a Nina na conversa com link direto.
+
+* **Validação & Homologação em Produção:**
+  - Chamadas de transferência testadas com sucesso via API para os chats reais das candidatas (`779596` - Julya e `858708` - Fernanda), ambas retornando `result: True`.
+  - Workflow `8OvNSMmZFZWxiW9A` expandido para **112 nós**, validado com 0 conexões quebradas e 0 erros estruturais.
+  - Deploy efetuado com sucesso via n8n Public API (`PUT /api/v1/workflows/8OvNSMmZFZWxiW9A`) com status HTTP 200 OK e status ativo confirmado.
+  - Repositório `C:\mundial-n8n-automations` atualizado e sincronizado na branch `main`.
+
 ---
 
 ## 8. Evolução SDR Comercial: Agente de IA para Vendas e Qualificação de Leads (Bitrix24 C18 & WhatsApp Evolution API)
@@ -748,29 +834,75 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
-### 9.6. Criação do Módulo / Painel Gerencial de Tickets de TI (Service Desk Inteligente)
+### 9.7. Overhaul de Interatividade & UX do Painel de Tickets (Kanban, Cross-Filter, Drawer 360° e Modern Web Guidance)
+
+* **Contexto & Feedback do Usuário:**
+  - Após os primeiros testes do painel executivo `/tickets`, o usuário apontou que a interface parecia estática e rígida (*"pouco interativo, parece tudo muito travado"*), demandando o uso das melhores práticas e skills para transformar o dashboard em uma experiência fluida, dinâmica e de alto padrão (SaaS).
+* **Diretrizes da Skill `modern-web-guidance` Aplicadas:**
+  - Padrão `animate-to-from-top-layer`: Uso de `<dialog>` nativo com `::backdrop`, `@starting-style` e transições de aceleração cúbica (`cubic-bezier(0.16, 1, 0.3, 1)`) para abertura e fechamento suaves sem trancos no DOM.
+  - Animação compositada sem bloqueio da thread principal, respeitando estados do navegador.
+* **Inovações & Recursos Interativos Implementados:**
+  1. **Seletor de Modo de Visualização (View Switcher):**
+     - Alternância instantânea entre **Fila Kanban Visual** (3 colunas fluidas: *1. Em Triagem IA*, *2. Com Técnicos TI*, *3. Resolvidos / Auto-L1*) e **Tabela Detalhada (Data Grid)**.
+     - Badges dinâmicos com a contagem de chamados em cada etapa do fluxo.
+     - Cards do Kanban com elevação ao hover (`-translate-y-1`), borda iluminada e clique direto para inspeção.
+  2. **Cross-Filtering Interativo Direto nos Gráficos (Chart.js):**
+     - **Gráfico de Sistemas (Donut):** Clicar em qualquer fatia (ex: *MicroWork Cloud*, *Portais Honda*, *Internet & Rede*) filtra imediatamente a lista de chamados para aquele sistema.
+     - **Gráfico de Concessionárias (Barra):** Clicar na barra de uma loja (ex: *Araras*, *Mogi Guaçu*) isola instantaneamente os chamados daquela filial.
+     - **Gráfico de Severidade (Barra):** Clicar nas barras filtra por criticidade B01 (P1 a P4).
+     - **Barra de Chips de Filtros Ativos:** Exibe tags removíveis dinamicamente no topo da listagem (`[Sistema: MicroWork Cloud ✕]`, `[Loja: Araras ✕]`) com botão de limpeza rápida de todos os filtros.
+  3. **Animação Suave de Métricas (Smooth countUp Counters):**
+     - Todos os KPIs do topo (Fila total, Auto-resolução L1, Leitura OCR, CSAT e Lojas Online) utilizam interpolação progressiva com curva *ease-out cubic*, eliminando a sensação estática de números que surgem abruptamente.
+  4. **Inspetor 360° do Chamado (Drawer Lateral Deslizante):**
+     - Painel lateral deslizante de 620px que se abre com fluidez ao clicar em qualquer card do Kanban ou linha da tabela:
+       - **Cabeçalho:** ID do chamado, título limpo, carimbo de data/hora, badge de criticidade e estágio.
+       - **Alerta de Loja Física:** Banner de destaque caso o colaborador tenha sinalizado "Cliente aguardando em showroom/oficina".
+       - **Card Sophia AI (Triage L1):** Resumo executivo do diagnóstico e soluções de L1 testadas antes do transbordo.
+       - **Card OCR Vision (GPT-4o):** Destaque visual da decodificação de prints de tela anexados pelo colaborador.
+       - **Metadados:** Solicitante, filial, sistema afetado e nível de impacto.
+       - **Ações Rápidas:** Botão para abrir o card original no Bitrix24 e botão para copiar o resumo técnico formatado diretamente para a área de transferência.
+  5. **Enriquecimento de Dados no Backend (`core/tickets_service.py`):**
+     - Parsing via expressões regulares do histórico de `COMMENTS` da Categoria 160 para extrair diagnóstico e tema.
+     - Cruzamento automático com a tabela `ticket_bot_sessions` do PostgreSQL corporativo.
+     - Limpeza automática de prefixos técnicos dos títulos para melhorar a legibilidade para os gestores.
+  6. **Sistema de Feedback com Toasts Animados:**
+     - Notificações flutuantes no canto inferior direito para confirmação de cópia de texto e ativação/remoção de filtros.
+* **Validação:**
+  - Testado e aprovado com dados reais de produção em `core/templates/tickets.html` e `core/tickets_service.py`. Commit sincronizado no repositório `Mundial_RPA`.
+
+---
+
+---
+
+### 9.8. Limpeza de Usuários de Teste, Saneamento de Dados e Mapeamento Histórico de Solicitantes (Rollout Gradual)
 
 * **Contexto & Demanda:**
-  - O gestor e a diretoria demandaram um painel visual executivo para acompanhar em tempo real as métricas, volumetria, SLA e satisfação (CSAT) dos chamados atendidos pela Inteligência Artificial (Sophia) e pela equipe de TI.
-  - Para manter a consistência da infraestrutura já existente no Easypanel (`central-rpa` e `myhonda`), foi criado o módulo dedicado de Tickets integrado diretamente ao servidor web central (`core/painel_web.py`), pavimentando o caminho para o **Mundial Hub (Portal Unificado de Operações)**.
-* **Componentes Desenvolvidos:**
-  1. **Serviço de Agregação de Telemetria (`core/tickets_service.py`):**
-     - Conecta-se diretamente ao PostgreSQL corporativo para ler sessões do robô (`ticket_bot_sessions`), avaliações de satisfação (`ticket_csat_ratings`) e incidentes por loja (`store_outage_events`).
-     - Consulta em tempo real a Categoria 160 no Bitrix24 (`crm.deal.list`), mapeando estágios, prioridades B01 e as 14 concessionárias da rede.
-     - Sistema de cache em memória (TTL de 15s) para garantir performance ultra-rápida sem sobrecarregar as APIs.
-  2. **Rotas Web no Painel Central (`core/painel_web.py`):**
-     - Rota `/tickets`: Renderiza o painel executivo responsivo.
-     - Rota `/api/tickets/summary`: Fornece os dados consolidados de KPIs, gráficos e feed de CSAT em JSON.
-  3. **Interface Visual Executiva (`core/templates/tickets.html`):**
-     - Adota o mesmo design system de alto padrão do Mission Control RPA: Tailwind CSS, Dark Obsidian 950, Glassmorphism e Honda Red (`#e4002b`).
-     - **Top KPIs:** Fila total, taxa de auto-resolução L1 (16%), SLA de primeira resposta (< 5s), média CSAT (5.0 ★) e monitor de conectividade das lojas.
-     - **Gráficos Executivos (Chart.js):** Incidentes por sistema (MicroWork, IHS, RENAVE, Rede, Impressoras), ranking de volume por concessionária e distribuição da Matriz de Severidade B01 (P1 a P5).
-     - **Tabela ao Vivo de Chamados:** Filtros rápidos (Com Técnicos, Resolvidos, Todos), busca dinâmica e botão direto com link para abrir o card no Bitrix24.
-     - **Voz do Colaborador (CSAT):** Feed lateral com as notas em estrelas e depoimentos reais dos usuários.
-  4. **Navegação Unificada (Launcher):**
-     - Botão `[ 🎫 Tickets TI ]` adicionado ao header do `index.html`, permitindo alternar instantaneamente entre a operação dos Robôs RPA e a Central de TI.
-* **Validação:**
-  - Rotas `/tickets` e `/api/tickets/summary` testadas com retorno HTTP 200 OK e dados íntegros de produção.
+  - Após os testes bem-sucedidos dos fluxos de triagem, visão OCR e notificação, o usuário solicitou a limpeza e remoção dos usuários de teste temporários, exclusão de todos os tickets de teste abertos no dia de hoje (13/10/2026), e um levantamento de volumetria histórica para mapear quem são os maiores geradores de chamados da Mundial Honda, embasando a estratégia de rollout gradual.
+* **Ações de Limpeza e Saneamento Executadas:**
+  1. **Gatekeeper do Workflow n8n (`01_Strict_Gate_Cat160_Pilot`):**
+     - Removidos os usuários `7` (Élton Caetano) e `352678` (Igor Bonini) de `ALLOWED_REQUESTERS`, revertendo a trava estrita apenas para o gestor `32598` (Eduardo Alaminos). O bot volta a ficar isolado e pronto para a expansão controlada.
+  2. **Exclusão de Negócios de Teste no Bitrix24:**
+     - Chamado de teste `#1406380` excluído permanentemente via API (`crm.deal.delete`).
+     - Chamado `#1406390` verificado e saneado.
+  3. **Purga de Telemetria no PostgreSQL Corporativo:**
+     - Sessões de teste `#7897` e `#7893` removidas de `ticket_bot_sessions`.
+     - Avaliação de teste `#2` removida de `ticket_csat_ratings`.
+* **Análise Global de Volumetria (5.688 Chamados Auditados na Categoria 160):**
+  - Varredura completa com paginação e enriquecimento cadastral via `user.get`:
+    - **Top 1:** *Nataelen Balduino* (ID `12190` - F&I / Documentos Évora): 127 tickets
+    - **Top 2:** *Karina Volsi* (ID `3926` - Supervisão Consórcio): 102 tickets
+    - **Top 3:** *Paula Brenda Gallina* (ID `4272` - Supervisão ADM Araras): 92 tickets
+    - **Top 4:** *Celeste* (ID `4880` - Gerência Campinas): 90 tickets
+    - **Top 5:** *Neia Souza* (ID `2602` - Gerência ADM): 85 tickets
+    - **Top 6:** *Isabela Cassiano* (ID `2638` - Encarregada ADM Geral): 80 tickets
+    - **Top 7:** *Vanisse Helena* (ID `3928` - Financeiro Araras): 77 tickets
+    - **Top 8:** *Lauane* (ID `2604` - Atendimento / Marketing): 74 tickets
+    - **Top 9:** *Anderson Viotto* (ID `2574` - Gerência Itapira): 74 tickets
+    - **Top 10:** *Silvana Pacagnella* (ID `2644` - Gerência Araras): 67 tickets
+* **Proposta Estratégica de Rollout em 3 Ondas:**
+  - **Onda 1 (F&I / Documentistas):** Foco em Nataelen (`12190`), Camily (`18436`) e Juliana Masson (`4736`). Resolvem dúvidas recorrentes de Évora, Detran, ATPV e despachantes.
+  - **Onda 2 (Gestão Concessionárias Piloto - Araras e Campinas):** Foco em Paula Brenda (`4272`), Celeste (`4880`), Silvana (`2644`) e Gabrielle Romeu (`342040`).
+  - **Onda 3 (Comercial, Consórcio & Atendimento Digital):** Foco em Karina Volsi (`3926`), Lauane (`2604`) e Brenda Flois (`20072`).
 
 ---
 

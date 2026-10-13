@@ -748,4 +748,30 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.6. Criação do Módulo / Painel Gerencial de Tickets de TI (Service Desk Inteligente)
+
+* **Contexto & Demanda:**
+  - O gestor e a diretoria demandaram um painel visual executivo para acompanhar em tempo real as métricas, volumetria, SLA e satisfação (CSAT) dos chamados atendidos pela Inteligência Artificial (Sophia) e pela equipe de TI.
+  - Para manter a consistência da infraestrutura já existente no Easypanel (`central-rpa` e `myhonda`), foi criado o módulo dedicado de Tickets integrado diretamente ao servidor web central (`core/painel_web.py`), pavimentando o caminho para o **Mundial Hub (Portal Unificado de Operações)**.
+* **Componentes Desenvolvidos:**
+  1. **Serviço de Agregação de Telemetria (`core/tickets_service.py`):**
+     - Conecta-se diretamente ao PostgreSQL corporativo para ler sessões do robô (`ticket_bot_sessions`), avaliações de satisfação (`ticket_csat_ratings`) e incidentes por loja (`store_outage_events`).
+     - Consulta em tempo real a Categoria 160 no Bitrix24 (`crm.deal.list`), mapeando estágios, prioridades B01 e as 14 concessionárias da rede.
+     - Sistema de cache em memória (TTL de 15s) para garantir performance ultra-rápida sem sobrecarregar as APIs.
+  2. **Rotas Web no Painel Central (`core/painel_web.py`):**
+     - Rota `/tickets`: Renderiza o painel executivo responsivo.
+     - Rota `/api/tickets/summary`: Fornece os dados consolidados de KPIs, gráficos e feed de CSAT em JSON.
+  3. **Interface Visual Executiva (`core/templates/tickets.html`):**
+     - Adota o mesmo design system de alto padrão do Mission Control RPA: Tailwind CSS, Dark Obsidian 950, Glassmorphism e Honda Red (`#e4002b`).
+     - **Top KPIs:** Fila total, taxa de auto-resolução L1 (16%), SLA de primeira resposta (< 5s), média CSAT (5.0 ★) e monitor de conectividade das lojas.
+     - **Gráficos Executivos (Chart.js):** Incidentes por sistema (MicroWork, IHS, RENAVE, Rede, Impressoras), ranking de volume por concessionária e distribuição da Matriz de Severidade B01 (P1 a P5).
+     - **Tabela ao Vivo de Chamados:** Filtros rápidos (Com Técnicos, Resolvidos, Todos), busca dinâmica e botão direto com link para abrir o card no Bitrix24.
+     - **Voz do Colaborador (CSAT):** Feed lateral com as notas em estrelas e depoimentos reais dos usuários.
+  4. **Navegação Unificada (Launcher):**
+     - Botão `[ 🎫 Tickets TI ]` adicionado ao header do `index.html`, permitindo alternar instantaneamente entre a operação dos Robôs RPA e a Central de TI.
+* **Validação:**
+  - Rotas `/tickets` e `/api/tickets/summary` testadas com retorno HTTP 200 OK e dados íntegros de produção.
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*

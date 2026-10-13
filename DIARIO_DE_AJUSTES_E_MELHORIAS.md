@@ -643,6 +643,28 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
   - Validação estática executada com sucesso (77 nós funcionais + 8 stickies = 85 nós no total, com 0 referências quebradas).
   - Deploy em produção realizado com sucesso no workflow [`HTbHT6SLugyAn3NO`](https://sophia-n8nsophia.timft8.easypanel.host/workflow/HTbHT6SLugyAn3NO) (status HTTP: 200, ativo: true).
 
+
+---
+
+## 9. Governança e Blindagem da Ficha de Chamados da Central de TI (Categoria 160)
+
+### 9.1. Segregação Canônica das Seções do Card e Proteção contra Edição Inline
+
+* **Problema Identificado:**
+  - O colaborador comum visualizava no card campos como `Pessoa Responsável` (`ASSIGNED_BY_ID`) e 41 subcategorias na seção de abertura, gerando confusão e abrindo brechas para o usuário tentar atribuir técnicos ou preencher dados errados.
+  - Além disso, campos técnicos como `Prioridade Calculada`, `Responsável TI`, `Próximo Responsável`, `Motivo de Espera` e `Resolução / Fechamento` permitiam edição inline acidental no Kanban e na Lista do Bitrix24.
+* **Solução Implantada via REST API (`apply_card_field_restrictions.py`):**
+  1. **Reorganização Estrita das Seções do Card (`crm.deal.details.configuration.set`):**
+     - **Seção 1 (`Dados do Chamado (Solicitante)`):** Isolada apenas com os 5 campos essenciais de abertura (< 60s):
+       `TITLE`, `UF_CRM_1689593052602` (Loja), `UF_CRM_1763388156` (Categoria Macro), `UF_CRM_1729774515200` (Descrição), `UF_CRM_TI_IMPACT` (Impacto), `UF_CRM_TI_URGENCY` (Urgência), `UF_CRM_1735304929` (Anexo / Print) e `OBSERVER`.
+     - **Seção 2 (`Triagem & Gestão Técnica (TI)`):** Concentra com exclusividade os campos do robô e da equipe de TI:
+       `ASSIGNED_BY_ID` (Técnico Responsável no CRM), `UF_CRM_TI_RESPONSIBLE` (Responsável TI - ID 1796), `UF_CRM_1763388469429` (Subcategoria Exata - ID 1678), `UF_CRM_TI_PRIORITY` (Prioridade B01 - ID 1792), `UF_CRM_TI_SHORT_SUBJECT` (Assunto Curto - ID 1794), `UF_CRM_TI_NEXT_OWNER` (Próximo Responsável - ID 1784), `UF_CRM_TI_WAIT_REASON` (Motivo de Espera - ID 1786), `COMMENTS` (Notas Internas) e `UF_CRM_1689597532` (Resolução / Fechamento - ID 221).
+  2. **Trava de Edição Inline (`crm.deal.userfield.update` com `EDIT_IN_LIST = 'N'`):**
+     - Bloqueio executado com sucesso em 100% dos 7 campos técnicos da TI (`UF_CRM_TI_RESPONSIBLE`, `UF_CRM_TI_SHORT_SUBJECT`, `UF_CRM_TI_NEXT_OWNER`, `UF_CRM_TI_WAIT_REASON`, `UF_CRM_TI_PRIORITY`, `UF_CRM_1689597532`, `UF_CRM_1763388469429`).
+     - Usuários e colaboradores ficam terminantemente impedidos de alterar esses valores por duplo-clique nas visões de lista/Kanban.
+* **Validação em Produção:**
+  - Leitura pós-update confirmou a estrutura em 2 seções perfeitas e atributo `EDIT_IN_LIST = 'N'` ativo em todos os campos técnicos.
+
 ---
 
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*

@@ -102,6 +102,33 @@ Ele serve para restauração completa de contexto, replicação em outros comput
 * **`UF_CRM_1729774515200` (Descrição Original do Usuário):**
   * Campo preservado como array. O robô nunca sobrescreve o texto do usuário; apenas anexa o resumo da triagem.
 
+### 4.4. Estrutura Canônica das Seções do Card & Blindagem de Campos (Outubro/2026)
+
+A ficha da Categoria 160 foi padronizada via API (`crm.deal.details.configuration.set`) em duas seções estritas, isolando os campos do solicitante e bloqueando a edição inline (`EDIT_IN_LIST: 'N'`):
+
+1. **Seção 1: `Dados do Chamado (Solicitante)` (`main`)** — *Preenchido na abertura pelo usuário (< 60s)*:
+   - `TITLE`: Nome do Chamado (padronizado posteriormente pela IA).
+   - `UF_CRM_1689593052602`: Loja / Concessionária (14 lojas).
+   - `UF_CRM_1763388156`: Categoria Macro (18 opções amigáveis).
+   - `UF_CRM_1729774515200`: O que aconteceu? (Descrição em texto livre).
+   - `UF_CRM_TI_IMPACT`: Quem está sendo afetado? (Impacto operacional).
+   - `UF_CRM_TI_URGENCY`: Consegue continuar trabalhando? (Urgência operacional).
+   - `UF_CRM_1735304929`: Anexo / Print de erro (opcional).
+   - `OBSERVER`: Observadores em cópia.
+
+2. **Seção 2: `Triagem & Gestão Técnica (TI)` (`ti_management`)** — *Preenchido pela IA e pela Equipe de TI*:
+   - `ASSIGNED_BY_ID`: Técnico Responsável oficial no CRM.
+   - `UF_CRM_TI_RESPONSIBLE` (ID 1796): Responsável TI (técnico que assumiu ou gestor que aprovou/negou compra).
+   - `UF_CRM_1763388469429` (ID 1678): Subcategoria Exata (41 opções refinadas pela IA).
+   - `UF_CRM_TI_PRIORITY` (ID 1792): Prioridade Calculada B01 (P1 a P4).
+   - `UF_CRM_TI_SHORT_SUBJECT` (ID 1794): Assunto Curto Padronizado gerado pelo LLM.
+   - `UF_CRM_TI_NEXT_OWNER` (ID 1784): Próximo Responsável (TI, Solicitante, Fornecedor, etc.).
+   - `UF_CRM_TI_WAIT_REASON` (ID 1786): Motivo de Espera (9 motivos).
+   - `COMMENTS`: Observações internas da TI.
+   - `UF_CRM_1689597532` (ID 221): Resolução / Fechamento técnico.
+
+* **Blindagem Inline:** Todos os campos técnicos da TI estão marcados com `EDIT_IN_LIST = 'N'`, impedindo edição acidental por duplo-clique no Kanban e na Lista do Bitrix24.
+
 ---
 
 ## 🗄️ 5. Banco de Dados PostgreSQL & RAG Vetorial (PGVector)

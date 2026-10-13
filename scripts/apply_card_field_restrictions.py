@@ -72,7 +72,7 @@ card_payload = {
 res_card = call("crm.deal.details.configuration.set", card_payload)
 print("Resultado configuração do card:", res_card)
 
-print("\n=== PASSO 2: BLOQUEAR EDIÇÃO INLINE (EDIT_IN_LIST = N) NOS CAMPOS TÉCNICOS ===")
+print("\n=== PASSO 2: HABILITAR EDIÇÃO (EDIT_IN_LIST = Y) NOS CAMPOS TÉCNICOS ===")
 
 fields_to_lock = [
     {"id": 1796, "name": "UF_CRM_TI_RESPONSIBLE"},
@@ -88,10 +88,10 @@ for item in fields_to_lock:
     res = call("crm.deal.userfield.update", {
         "id": item["id"],
         "fields": {
-            "EDIT_IN_LIST": "N"
+            "EDIT_IN_LIST": "Y"
         }
     })
-    print(f"Campo {item['name']} (ID {item['id']}) -> EDIT_IN_LIST='N': {res}")
+    print(f"Campo {item['name']} (ID {item['id']}) -> EDIT_IN_LIST='Y': {res}")
 
 print("\n=== PASSO 3: VALIDAR CONFIGURAÇÃO ATUALIZADA DO CARD ===")
 check_card = call("crm.deal.details.configuration.get", {

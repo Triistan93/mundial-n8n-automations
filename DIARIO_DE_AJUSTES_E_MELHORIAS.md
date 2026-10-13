@@ -665,6 +665,28 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 * **Validação em Produção:**
   - Leitura pós-update confirmou a estrutura em 2 seções perfeitas e atributo `EDIT_IN_LIST = 'N'` ativo em todos os campos técnicos.
 
+
+### 9.2. Expansão Controlada do Piloto de TI (Inclusão de Élton Caetano e Igor Bonini)
+
+* **Contexto & Demanda:**
+  - O gestor Eduardo Alaminos autorizou a expansão do piloto do Robô de Triagem de TI (`BITRIX_TI_AI_TRIAGE_AGENT` / `c0F2GUMFm2BI94UG`) para que dois colaboradores estratégicos ajudem a testar o fluxo de abertura, entrevista de IA e resolução de chamados:
+    1. **Élton Caetano (ID Bitrix: `7` / `bi@mundialhonda.com.br`):** Inteligência de Negócios / BI.
+    2. **Igor Bonini (ID Bitrix: `352678` / `auxiliarti@mundialhonda.com.br`):** Suporte Técnico de TI.
+* **Ajustes de Engenharia no Workflow:**
+  1. **Atualização do Gate Fail-Closed (`01_Strict_Gate_Cat160_Pilot`):**
+     - Lista `ALLOWED_REQUESTERS` expandida para `[32598, 7, 352678]`.
+     - Mapeamento determinístico de nomes adicionado (`USER_NAMES`), garantindo que o robô identifique e cumprimente cada usuário pelo primeiro nome ("Oi, Élton!", "Oi, Igor!", "Oi, Eduardo!").
+  2. **Propagação Dinâmica de Identidade nos Nós Satélites:**
+     - Nós `07_Prepare_AI_Deal_Input` e `09_Format_AI_Response` atualizados para propagar `requester_name`.
+     - Nó `11_B01_Priority_And_Payload` ajustado para compor o título dinamicamente com o nome do solicitante real (`[TI-GERAL] - Assunto Curto (Nome Colaborador)`).
+     - Nó `PostRes_02_Prepare_Prompt` atualizado para manter o nome dinâmico na escuta de pós-atendimento anti-carona.
+  3. **Migração Arquitetural de 21 Nós `n8n-nodes-base.function` para `n8n-nodes-base.code` (v2):**
+     - Todos os nós depreciados do tipo `function` foram migrados para nós de código modernos `code` v2 (`jsCode`), garantindo total compatibilidade com a Public API do n8n e conformidade com os padrões modernos da plataforma.
+* **Validação em Produção:**
+  - Deploy via API (`PUT /api/v1/workflows/c0F2GUMFm2BI94UG`) com código HTTP 200.
+  - Ciclo de reinicialização (*deactivate* e *activate*) executado com sucesso.
+  - Execução `#592634` registrada com status `success`.
+
 ---
 
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*

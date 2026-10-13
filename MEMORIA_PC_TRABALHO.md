@@ -57,6 +57,8 @@ Ele serve para restauração completa de contexto, replicação em outros comput
 | Nome | ID Bitrix | Cargo / Função | E-mail | Papel no Sistema |
 | :--- | :---: | :--- | :--- | :--- |
 | **Eduardo Alaminos** | `32598` | Gestor de TI | TI Mundial | Criador dos testes, desenvolvedor e aprovador técnico de TI. |
+| **Élton Caetano** | `7` | Inteligência / BI | `bi@mundialhonda.com.br` | Usuário homologador de testes do piloto do Bot de Tickets. |
+| **Igor Bonini** | `352678` | Suporte TI | `auxiliarti@mundialhonda.com.br` | Usuário homologador de testes do piloto do Bot de Tickets. |
 | **Zélia Silva** | `71` | Diretoria / Controladoria | `controladoria@mundialmotos.com.br` | Aprovadora executiva final de solicitações de compras e equipamentos. |
 | **Dev Bot** | `61622` | Usuário de Serviço / Webhook | `botdesenvolvimento@mundialhonda.com.br` | Identidade que posta no chat do Bitrix, cria salas e atualiza cards. |
 

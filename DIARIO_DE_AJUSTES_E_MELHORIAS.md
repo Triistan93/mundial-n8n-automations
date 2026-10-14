@@ -906,4 +906,27 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.9. Injeção de Procedimentos Oficiais na Base de Conhecimento e Prompt Cognitivo da Sophia AI
+
+* **Contexto & Demanda:**
+  - Após a auditoria dos 596 chamados reais dos maiores solicitantes, a gestão de TI validou formalmente as 4 rotinas canônicas que resolvem os maiores gargalos operacionais da concessionária. Essas diretrizes foram codificadas na base vetorial `kb_ti_conhecimento` e no System Prompt do Agente LangChain (`c0F2GUMFm2BI94UG`).
+* **Regras Canônicas Implementadas:**
+  1. **Emissão de ATPV-e / RENAVE (`KB-013`):**
+     - **Triagem L1:** Identificação mandatória se a operação é *Venda para Cliente Final* (exige ATPV) ou *Transferência entre Lojas Internas* (a TI **não** emite ATPV para transferências internas).
+     - **Coleta:** Chassi de 17 dígitos iniciado por `9C2...` e print da tela do erro no MicroWork.
+     - **Instrução Direta para a TI:** Rotina [Renave - MicroWork CLOUD DMS](https://microworkcloud.com.br/cloud/#/veiculo/estoque/renave), filtrando por Chassi, Período em `PERÍODO`, desmarcando `NOVO` e selecionando a filial.
+  2. **Senhas e Autoatendimento L1 (`KB-005`):**
+     - **Self-Service:** O assistente orienta o uso do recurso nativo *"Esqueci minha senha"* no **Bitrix24**, **MicroWork Cloud** e **Plataforma Fandi**, onde o link de redefinição vai diretamente para o e-mail corporativo do colaborador. Casos de sucesso são finalizados como `RESOLVED_L1`.
+     - **Reset Manual (L2):** Apenas para **IHS Motocicleta**, **Windows/Rede** e **VPN** a TI é acionada manualmente.
+  3. **WhatsApp Corporativo, Bitrix & Telefonia (`KB-015`):**
+     - Coleta obrigatória do número/ramal afetado, print do erro via OCR ou **link de um card/cliente de exemplo no Bitrix24** para acompanhamento dos logs técnicos, além de checagem orientada em *Dispositivos Conectados*.
+  4. **Onboarding & Liberação de Acessos para Novos Colaboradores (`KB-016`):**
+     - Novo checklist mandatório extraído de gestores: Função/Cargo, ativação de telefonia e fila de atendimento, WhatsApp (oficial da loja vs individual) e disponibilidade de hardware no setor.
+* **Componentes Atualizados:**
+  - Base Vetorial `kb_ti_conhecimento` (PostgreSQL / pgvector) reindexada via webhook de ingestão.
+  - System Prompt do nó `08_AI_Agent_Triage_Deal` atualizado no workflow `c0F2GUMFm2BI94UG`.
+  - Documentação [BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md](file:///c:/Mundial_RPA/docs/BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md) atualizada e commitada.
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*

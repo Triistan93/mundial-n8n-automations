@@ -1044,6 +1044,42 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.14. Implementação das Fases 1 e 2 do Plano de Ação: Blindagem de Resiliência e Identidade Dinâmica
+
+* **Fase 1: Blindagem de Resiliência no n8n (`onError: continueRegularOutput`):**
+  - Para erradicar o risco de que qualquer erro ou payload corrompido em um card individual paralise a esteira dos demais chamados, o parâmetro `onError = 'continueRegularOutput'` foi ativado em todos os nós críticos de banco e rede:
+    1. `02_Reserve_Deal_Session_Atomic` (Postgres)
+    2. `01_Check_Store_Outage_Cluster` (Postgres)
+    3. `01_Evaluate_Store_Outage` (Code)
+    4. `03_Create_CRM_Card_Chat` (HTTP)
+    5. `04_Fetch_Chat_Messages_Bitrix` (HTTP)
+    6. `12_Update_Deal_CRM_Bitrix` (HTTP)
+    7. `14_Add_Timeline_Milestone_Comment` (HTTP)
+    8. `15_Send_Final_Confirmation_To_Chat` (HTTP)
+    9. `16_Mark_Session_Completed_Postgres` (Postgres)
+  - *Resultado:* Falhas isoladas em um card não abortam mais o trigger agendado; os demais 19+ tickets continuam seu ciclo normal.
+
+* **Fase 2: Identidade Dinâmica via `bitrix_users_cache` & Detector Gestor vs Beneficiário:**
+  1. **Tabela de Cache de Usuários no PostgreSQL (`bitrix_users_cache`):**
+     - Criada e sincronizada com **326 colaboradores ativos** da concessionária via API `user.get` do Bitrix24 (`user_id`, `name`, `last_name`, `full_name`, `work_position`, `email`).
+  2. **Resolução Dinâmica em `02_Reserve_Deal_Session_Atomic`:**
+     - A reserva do chamado agora consulta diretamente o cache:
+       `COALESCE((SELECT SPLIT_PART(TRIM(name), ' ', 1) FROM bitrix_users_cache WHERE user_id = requester_user_id), requester_name)`
+     - O primeiro nome e o cargo do colaborador são recuperados em microssegundos sem dependência de dicionário estático no código.
+  3. **Detector Cognitivo de Solicitação em Nome de Terceiros (`07_Prepare_AI_Deal_Input`):**
+     - O nó agora avalia se o card foi aberto por um gestor para outra pessoa (ex: *"liberar CRM - Mecânico Ailton"* ou *"novo colaborador Kaendra"*).
+     - Quando detectado, o prompt do agente separa expressamente:
+       - `[SOLICITANTE NO CHAT / GESTOR]: Hadner (Gerente de Loja)`
+       - `[BENEFICIÁRIO DO ACESSO]: Mecânico Ailton`
+       - Diretiva de nunca confundir as personas e sempre saudar o gestor.
+
+* **Validação Operacional:**
+  - Esteira executando a cada minuto em regime de produção com status **SUCCESS** (Execução `#655292`).
+  - Resolução dinâmica validada com 100% de precisão para gerentes, analistas e vendedores.
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*
+
 
 

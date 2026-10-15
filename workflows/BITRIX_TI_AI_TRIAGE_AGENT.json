@@ -3,12 +3,12 @@
   "name": "BITRIX_TI_AI_TRIAGE_AGENT",
   "description": null,
   "active": true,
-  "activeVersionId": "7260b845-a646-4055-93d7-48f756a53607",
+  "activeVersionId": "dd0ba545-9384-4aa2-bdea-e2736516b02c",
   "createdAt": "2026-09-21T20:23:38.347Z",
-  "updatedAt": "2026-10-15T16:58:48.824Z",
+  "updatedAt": "2026-10-15T17:49:21.261Z",
   "isArchived": false,
-  "versionId": "7260b845-a646-4055-93d7-48f756a53607",
-  "versionCounter": 201,
+  "versionId": "dd0ba545-9384-4aa2-bdea-e2736516b02c",
+  "versionCounter": 202,
   "sourceWorkflowId": null,
   "triggerCount": 2,
   "nodes": [
@@ -149,13 +149,14 @@
       "name": "02_Reserve_Deal_Session_Atomic",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
+      "onError": "continueRegularOutput",
       "position": [
         1248,
         240
       ],
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO ticket_bot_sessions (\n    deal_id, requester_user_id, requester_name, channel, private_dialog_id, \n    dialog_type, status, state, ai_state, redis_memory_key, collected_data_json, \n    created_at, last_interaction_at\n) VALUES (\n    {{ $json.deal_id }}, {{ $json.requester_user_id }}, '{{ ($json.requester_name || \"\").replace(/'/g, \"''\") }}', \n    'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', \n    'bitrix:ti:deal:{{ $json.deal_id }}:memory', \n    json_build_object('store_name', '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}', 'category_theme', '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}', 'is_store_outage', {{ $json.is_store_outage ? 'true' : 'false' }}, 'outage_count', {{ $json.outage_count || 1 }}, 'deal_title', '{{ ($json.title || \"\").replace(/'/g, \"''\") }}'),\n    NOW(), NOW()\n) ON CONFLICT (deal_id) DO UPDATE SET \n    last_interaction_at = NOW(),\n    collected_data_json = json_build_object('store_name', '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}', 'category_theme', '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}', 'is_store_outage', {{ $json.is_store_outage ? 'true' : 'false' }}, 'outage_count', {{ $json.outage_count || 1 }}, 'deal_title', '{{ ($json.title || \"\").replace(/'/g, \"''\") }}')\nWHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED'\nRETURNING id, deal_id, requester_user_id, requester_name, '{{ ($json.title || \"\").replace(/'/g, \"''\") }}' AS deal_title, \n          {{ $json.is_purchase ? 'TRUE' : 'FALSE' }} AS is_purchase,\n          {{ $json.is_store_outage ? 'TRUE' : 'FALSE' }} AS is_store_outage,\n          '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}' AS store_name,\n          '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}' AS category_theme,\n          {{ $json.outage_count || 1 }} AS outage_count;",
+        "query": "INSERT INTO ticket_bot_sessions (\n    deal_id, requester_user_id, requester_name, channel, private_dialog_id, \n    dialog_type, status, state, ai_state, redis_memory_key, collected_data_json, \n    created_at, last_interaction_at\n) VALUES (\n    {{ $json.deal_id }}, {{ $json.requester_user_id }}, \n    COALESCE((SELECT SPLIT_PART(TRIM(name), ' ', 1) FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '{{ ($json.requester_name || \"\").replace(/'/g, \"''\") }}'), \n    'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', \n    'bitrix:ti:deal:{{ $json.deal_id }}:memory', \n    json_build_object(\n        'store_name', '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}', \n        'category_theme', '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}', \n        'is_store_outage', {{ $json.is_store_outage ? 'true' : 'false' }}, \n        'outage_count', {{ $json.outage_count || 1 }}, \n        'deal_title', '{{ ($json.title || \"\").replace(/'/g, \"''\") }}',\n        'requester_position', COALESCE((SELECT work_position FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '')\n    ),\n    NOW(), NOW()\n) ON CONFLICT (deal_id) DO UPDATE SET \n    last_interaction_at = NOW(),\n    collected_data_json = json_build_object(\n        'store_name', '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}', \n        'category_theme', '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}', \n        'is_store_outage', {{ $json.is_store_outage ? 'true' : 'false' }}, \n        'outage_count', {{ $json.outage_count || 1 }}, \n        'deal_title', '{{ ($json.title || \"\").replace(/'/g, \"''\") }}',\n        'requester_position', COALESCE((SELECT work_position FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '')\n    )\nWHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED'\nRETURNING id, deal_id, requester_user_id, \n          COALESCE((SELECT SPLIT_PART(TRIM(name), ' ', 1) FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '{{ ($json.requester_name || \"\").replace(/'/g, \"''\") }}') AS requester_name, \n          '{{ ($json.title || \"\").replace(/'/g, \"''\") }}' AS deal_title, \n          {{ $json.is_purchase ? 'TRUE' : 'FALSE' }} AS is_purchase,\n          {{ $json.is_store_outage ? 'TRUE' : 'FALSE' }} AS is_store_outage,\n          '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}' AS store_name,\n          '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}' AS category_theme,\n          {{ $json.outage_count || 1 }} AS outage_count,\n          COALESCE((SELECT work_position FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '') AS requester_position;",
         "additionalFields": {}
       },
       "credentials": {
@@ -190,6 +191,7 @@
       "name": "03_Create_CRM_Card_Chat",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
+      "onError": "continueRegularOutput",
       "position": [
         144,
         704
@@ -263,6 +265,7 @@
       "name": "04_Fetch_Chat_Messages_Bitrix",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
+      "onError": "continueRegularOutput",
       "position": [
         1968,
         704
@@ -363,7 +366,7 @@
         1232
       ],
       "parameters": {
-        "jsCode": "// Prepara input isolado para o Agente LangChain por Deal com contexto do card\nconst items = $input.all();\nreturn items.map(item => {\n  const collected = item.json.collected_data_json || {};\n  const title = String(collected.deal_title || '').trim();\n  const userInput = String(item.json.message_text || '').trim();\n  const requesterName = String(item.json.requester_name || 'Colaborador').trim();\n\n  let contextHeader = `[SOLICITANTE DO CARD / USUÁRIO NO CHAT]: ${requesterName} (Dirija-se sempre a ele(a) por este nome)\\n`;\n  if (title && !title.startsWith('Chamado #') && !title.startsWith('#')) {\n    contextHeader += `[TÍTULO DO CHAMADO]: \"${title}\"\\n`;\n  }\n  \n  const contextualInput = `${contextHeader}\\n[MENSAGEM DO COLABORADOR NO CHAT]:\\n${userInput}`;\n\n  return {\n    json: {\n      deal_id: item.json.deal_id,\n      chat_id: item.json.chat_id,\n      dialog_id: item.json.dialog_id,\n      requester_user_id: item.json.requester_user_id,\n      requester_name: requesterName,\n      message_id: item.json.message_id,\n      full_user_input: contextualInput,\n      redis_memory_key: item.json.redis_memory_key,\n      ai_state: item.json.ai_state,\n      collected_data_json: collected\n    }\n  };\n});"
+        "jsCode": "// Prepara input isolado para o Agente LangChain por Deal com contexto do card e separação Gestor vs Beneficiário\nconst items = $input.all();\nreturn items.map(item => {\n  const collected = item.json.collected_data_json || {};\n  const title = String(collected.deal_title || '').trim();\n  const userInput = String(item.json.message_text || '').trim();\n  const requesterName = String(item.json.requester_name || 'Colaborador').trim();\n  const requesterPosition = String(collected.requester_position || '').trim();\n\n  // Detecção de solicitação em nome de terceiro (Gestor abrindo para colaborador)\n  let thirdPartyNote = '';\n  const thirdPartyMatch = title.match(/(?:para|do|da|mecanico|mecânico|vendedor|estoquista|novo colaborador|novo consultor)\\s+([A-ZÀ-ÿ][a-zà-ÿ]+(?:\\s+[A-ZÀ-ÿ][a-zà-ÿ]+)?)/i);\n  \n  if (thirdPartyMatch && thirdPartyMatch[1] && !thirdPartyMatch[1].toLowerCase().includes(requesterName.toLowerCase())) {\n    const beneficiary = thirdPartyMatch[1].trim();\n    thirdPartyNote = `[ATENÇÃO - CHAMADO ABERTO EM NOME DE OUTRA PESSOA]:\\n` +\n      `- O usuário conversando com você no chat é o(a) solicitante: ${requesterName}${requesterPosition ? ' (' + requesterPosition + ')' : ''}.\\n` +\n      `- O colaborador citado que precisa da liberação/suporte é: \"${beneficiary}\".\\n` +\n      `- DIRETIVA: Dirija-se sempre a ${requesterName} pelo nome dele(a). NUNCA o confunda com ${beneficiary}. Trate a demanda como uma solicitação feita por ${requesterName} em favor de ${beneficiary}.\\n\\n`;\n  }\n\n  let contextHeader = `[SOLICITANTE DO CARD / USUÁRIO NO CHAT]: ${requesterName}${requesterPosition ? ' (' + requesterPosition + ')' : ''}\\n`;\n  if (title && !title.startsWith('Chamado #') && !title.startsWith('#')) {\n    contextHeader += `[TÍTULO DO CHAMADO]: \"${title}\"\\n`;\n  }\n  \n  const contextualInput = `${contextHeader}${thirdPartyNote}[MENSAGEM DO COLABORADOR NO CHAT]:\\n${userInput}`;\n\n  return {\n    json: {\n      deal_id: item.json.deal_id,\n      chat_id: item.json.chat_id,\n      dialog_id: item.json.dialog_id,\n      requester_user_id: item.json.requester_user_id,\n      requester_name: requesterName,\n      requester_position: requesterPosition,\n      message_id: item.json.message_id,\n      full_user_input: contextualInput,\n      redis_memory_key: item.json.redis_memory_key,\n      ai_state: item.json.ai_state,\n      collected_data_json: collected\n    }\n  };\n});"
       }
     },
     {
@@ -585,6 +588,7 @@
       "name": "12_Update_Deal_CRM_Bitrix",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
+      "onError": "continueRegularOutput",
       "position": [
         800,
         1840
@@ -652,6 +656,7 @@
       "name": "14_Add_Timeline_Milestone_Comment",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
+      "onError": "continueRegularOutput",
       "position": [
         1680,
         1840
@@ -683,6 +688,7 @@
       "name": "15_Send_Final_Confirmation_To_Chat",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
+      "onError": "continueRegularOutput",
       "position": [
         2128,
         1840
@@ -714,6 +720,7 @@
       "name": "16_Mark_Session_Completed_Postgres",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
+      "onError": "continueRegularOutput",
       "position": [
         2560,
         1840
@@ -1289,6 +1296,7 @@
       "name": "01_Check_Store_Outage_Cluster",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
+      "onError": "continueRegularOutput",
       "position": [
         1744,
         160
@@ -1310,6 +1318,7 @@
       "name": "01_Evaluate_Store_Outage",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
+      "onError": "continueRegularOutput",
       "position": [
         1968,
         160
@@ -2596,7 +2605,7 @@
     }
   ],
   "activeVersion": {
-    "versionId": "7260b845-a646-4055-93d7-48f756a53607",
+    "versionId": "dd0ba545-9384-4aa2-bdea-e2736516b02c",
     "workflowId": "c0F2GUMFm2BI94UG",
     "nodes": [
       {
@@ -2736,13 +2745,14 @@
         "name": "02_Reserve_Deal_Session_Atomic",
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
+        "onError": "continueRegularOutput",
         "position": [
           1248,
           240
         ],
         "parameters": {
           "operation": "executeQuery",
-          "query": "INSERT INTO ticket_bot_sessions (\n    deal_id, requester_user_id, requester_name, channel, private_dialog_id, \n    dialog_type, status, state, ai_state, redis_memory_key, collected_data_json, \n    created_at, last_interaction_at\n) VALUES (\n    {{ $json.deal_id }}, {{ $json.requester_user_id }}, '{{ ($json.requester_name || \"\").replace(/'/g, \"''\") }}', \n    'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', \n    'bitrix:ti:deal:{{ $json.deal_id }}:memory', \n    json_build_object('store_name', '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}', 'category_theme', '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}', 'is_store_outage', {{ $json.is_store_outage ? 'true' : 'false' }}, 'outage_count', {{ $json.outage_count || 1 }}, 'deal_title', '{{ ($json.title || \"\").replace(/'/g, \"''\") }}'),\n    NOW(), NOW()\n) ON CONFLICT (deal_id) DO UPDATE SET \n    last_interaction_at = NOW(),\n    collected_data_json = json_build_object('store_name', '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}', 'category_theme', '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}', 'is_store_outage', {{ $json.is_store_outage ? 'true' : 'false' }}, 'outage_count', {{ $json.outage_count || 1 }}, 'deal_title', '{{ ($json.title || \"\").replace(/'/g, \"''\") }}')\nWHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED'\nRETURNING id, deal_id, requester_user_id, requester_name, '{{ ($json.title || \"\").replace(/'/g, \"''\") }}' AS deal_title, \n          {{ $json.is_purchase ? 'TRUE' : 'FALSE' }} AS is_purchase,\n          {{ $json.is_store_outage ? 'TRUE' : 'FALSE' }} AS is_store_outage,\n          '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}' AS store_name,\n          '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}' AS category_theme,\n          {{ $json.outage_count || 1 }} AS outage_count;",
+          "query": "INSERT INTO ticket_bot_sessions (\n    deal_id, requester_user_id, requester_name, channel, private_dialog_id, \n    dialog_type, status, state, ai_state, redis_memory_key, collected_data_json, \n    created_at, last_interaction_at\n) VALUES (\n    {{ $json.deal_id }}, {{ $json.requester_user_id }}, \n    COALESCE((SELECT SPLIT_PART(TRIM(name), ' ', 1) FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '{{ ($json.requester_name || \"\").replace(/'/g, \"''\") }}'), \n    'BITRIX_CRM_CHAT', '', 'chat', 'CHAT_CREATING', 'INIT', 'AI_ACTIVE', \n    'bitrix:ti:deal:{{ $json.deal_id }}:memory', \n    json_build_object(\n        'store_name', '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}', \n        'category_theme', '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}', \n        'is_store_outage', {{ $json.is_store_outage ? 'true' : 'false' }}, \n        'outage_count', {{ $json.outage_count || 1 }}, \n        'deal_title', '{{ ($json.title || \"\").replace(/'/g, \"''\") }}',\n        'requester_position', COALESCE((SELECT work_position FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '')\n    ),\n    NOW(), NOW()\n) ON CONFLICT (deal_id) DO UPDATE SET \n    last_interaction_at = NOW(),\n    collected_data_json = json_build_object(\n        'store_name', '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}', \n        'category_theme', '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}', \n        'is_store_outage', {{ $json.is_store_outage ? 'true' : 'false' }}, \n        'outage_count', {{ $json.outage_count || 1 }}, \n        'deal_title', '{{ ($json.title || \"\").replace(/'/g, \"''\") }}',\n        'requester_position', COALESCE((SELECT work_position FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '')\n    )\nWHERE ticket_bot_sessions.internal_chat_id IS NULL AND ticket_bot_sessions.status != 'COMPLETED'\nRETURNING id, deal_id, requester_user_id, \n          COALESCE((SELECT SPLIT_PART(TRIM(name), ' ', 1) FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '{{ ($json.requester_name || \"\").replace(/'/g, \"''\") }}') AS requester_name, \n          '{{ ($json.title || \"\").replace(/'/g, \"''\") }}' AS deal_title, \n          {{ $json.is_purchase ? 'TRUE' : 'FALSE' }} AS is_purchase,\n          {{ $json.is_store_outage ? 'TRUE' : 'FALSE' }} AS is_store_outage,\n          '{{ ($json.store_name || \"\").replace(/'/g, \"''\") }}' AS store_name,\n          '{{ ($json.category_theme || \"\").replace(/'/g, \"''\") }}' AS category_theme,\n          {{ $json.outage_count || 1 }} AS outage_count,\n          COALESCE((SELECT work_position FROM bitrix_users_cache WHERE user_id = {{ $json.requester_user_id }}), '') AS requester_position;",
           "additionalFields": {}
         },
         "credentials": {
@@ -2777,6 +2787,7 @@
         "name": "03_Create_CRM_Card_Chat",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
+        "onError": "continueRegularOutput",
         "position": [
           144,
           704
@@ -2850,6 +2861,7 @@
         "name": "04_Fetch_Chat_Messages_Bitrix",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
+        "onError": "continueRegularOutput",
         "position": [
           1968,
           704
@@ -2950,7 +2962,7 @@
           1232
         ],
         "parameters": {
-          "jsCode": "// Prepara input isolado para o Agente LangChain por Deal com contexto do card\nconst items = $input.all();\nreturn items.map(item => {\n  const collected = item.json.collected_data_json || {};\n  const title = String(collected.deal_title || '').trim();\n  const userInput = String(item.json.message_text || '').trim();\n  const requesterName = String(item.json.requester_name || 'Colaborador').trim();\n\n  let contextHeader = `[SOLICITANTE DO CARD / USUÁRIO NO CHAT]: ${requesterName} (Dirija-se sempre a ele(a) por este nome)\\n`;\n  if (title && !title.startsWith('Chamado #') && !title.startsWith('#')) {\n    contextHeader += `[TÍTULO DO CHAMADO]: \"${title}\"\\n`;\n  }\n  \n  const contextualInput = `${contextHeader}\\n[MENSAGEM DO COLABORADOR NO CHAT]:\\n${userInput}`;\n\n  return {\n    json: {\n      deal_id: item.json.deal_id,\n      chat_id: item.json.chat_id,\n      dialog_id: item.json.dialog_id,\n      requester_user_id: item.json.requester_user_id,\n      requester_name: requesterName,\n      message_id: item.json.message_id,\n      full_user_input: contextualInput,\n      redis_memory_key: item.json.redis_memory_key,\n      ai_state: item.json.ai_state,\n      collected_data_json: collected\n    }\n  };\n});"
+          "jsCode": "// Prepara input isolado para o Agente LangChain por Deal com contexto do card e separação Gestor vs Beneficiário\nconst items = $input.all();\nreturn items.map(item => {\n  const collected = item.json.collected_data_json || {};\n  const title = String(collected.deal_title || '').trim();\n  const userInput = String(item.json.message_text || '').trim();\n  const requesterName = String(item.json.requester_name || 'Colaborador').trim();\n  const requesterPosition = String(collected.requester_position || '').trim();\n\n  // Detecção de solicitação em nome de terceiro (Gestor abrindo para colaborador)\n  let thirdPartyNote = '';\n  const thirdPartyMatch = title.match(/(?:para|do|da|mecanico|mecânico|vendedor|estoquista|novo colaborador|novo consultor)\\s+([A-ZÀ-ÿ][a-zà-ÿ]+(?:\\s+[A-ZÀ-ÿ][a-zà-ÿ]+)?)/i);\n  \n  if (thirdPartyMatch && thirdPartyMatch[1] && !thirdPartyMatch[1].toLowerCase().includes(requesterName.toLowerCase())) {\n    const beneficiary = thirdPartyMatch[1].trim();\n    thirdPartyNote = `[ATENÇÃO - CHAMADO ABERTO EM NOME DE OUTRA PESSOA]:\\n` +\n      `- O usuário conversando com você no chat é o(a) solicitante: ${requesterName}${requesterPosition ? ' (' + requesterPosition + ')' : ''}.\\n` +\n      `- O colaborador citado que precisa da liberação/suporte é: \"${beneficiary}\".\\n` +\n      `- DIRETIVA: Dirija-se sempre a ${requesterName} pelo nome dele(a). NUNCA o confunda com ${beneficiary}. Trate a demanda como uma solicitação feita por ${requesterName} em favor de ${beneficiary}.\\n\\n`;\n  }\n\n  let contextHeader = `[SOLICITANTE DO CARD / USUÁRIO NO CHAT]: ${requesterName}${requesterPosition ? ' (' + requesterPosition + ')' : ''}\\n`;\n  if (title && !title.startsWith('Chamado #') && !title.startsWith('#')) {\n    contextHeader += `[TÍTULO DO CHAMADO]: \"${title}\"\\n`;\n  }\n  \n  const contextualInput = `${contextHeader}${thirdPartyNote}[MENSAGEM DO COLABORADOR NO CHAT]:\\n${userInput}`;\n\n  return {\n    json: {\n      deal_id: item.json.deal_id,\n      chat_id: item.json.chat_id,\n      dialog_id: item.json.dialog_id,\n      requester_user_id: item.json.requester_user_id,\n      requester_name: requesterName,\n      requester_position: requesterPosition,\n      message_id: item.json.message_id,\n      full_user_input: contextualInput,\n      redis_memory_key: item.json.redis_memory_key,\n      ai_state: item.json.ai_state,\n      collected_data_json: collected\n    }\n  };\n});"
         }
       },
       {
@@ -3172,6 +3184,7 @@
         "name": "12_Update_Deal_CRM_Bitrix",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
+        "onError": "continueRegularOutput",
         "position": [
           800,
           1840
@@ -3239,6 +3252,7 @@
         "name": "14_Add_Timeline_Milestone_Comment",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
+        "onError": "continueRegularOutput",
         "position": [
           1680,
           1840
@@ -3270,6 +3284,7 @@
         "name": "15_Send_Final_Confirmation_To_Chat",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 3,
+        "onError": "continueRegularOutput",
         "position": [
           2128,
           1840
@@ -3301,6 +3316,7 @@
         "name": "16_Mark_Session_Completed_Postgres",
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
+        "onError": "continueRegularOutput",
         "position": [
           2560,
           1840
@@ -3876,6 +3892,7 @@
         "name": "01_Check_Store_Outage_Cluster",
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 1,
+        "onError": "continueRegularOutput",
         "position": [
           1744,
           160
@@ -3897,6 +3914,7 @@
         "name": "01_Evaluate_Store_Outage",
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
+        "onError": "continueRegularOutput",
         "position": [
           1968,
           160
@@ -5138,16 +5156,16 @@
     "name": null,
     "description": null,
     "autosaved": false,
-    "createdAt": "2026-10-15T16:58:48.827Z",
-    "updatedAt": "2026-10-15T16:58:48.827Z",
+    "createdAt": "2026-10-15T17:49:21.264Z",
+    "updatedAt": "2026-10-15T17:49:21.264Z",
     "workflowPublishHistory": [
       {
-        "id": 596,
+        "id": 598,
         "workflowId": "c0F2GUMFm2BI94UG",
-        "versionId": "7260b845-a646-4055-93d7-48f756a53607",
+        "versionId": "dd0ba545-9384-4aa2-bdea-e2736516b02c",
         "event": "activated",
         "userId": "47bc24b3-99ec-468c-9224-e213aafc06ff",
-        "createdAt": "2026-10-15T16:58:48.923Z"
+        "createdAt": "2026-10-15T17:49:21.383Z"
       }
     ]
   }

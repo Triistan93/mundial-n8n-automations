@@ -958,4 +958,28 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.11. Playbook de Robôs de Automação RPA (`KB-019`) & Blindagem de Alertas Falsos de Outage
+
+* **Contexto & Auditoria de Casos Reais:**
+  1. **Chamado #1411194 (Flavio Queiroz - Telefonia Mogi Mirim):**
+     - O chamado relatava *"telefone nao esta tocando no meu bitrix"*. Porém, a clusterização de queda de loja disparou falso positivo de P1 Outage com o termo `GENERAL_IT` por somar tickets da mesma loja em 30 min.
+     - *Correção:* A clusterização de incidentes (`01_Evaluate_Store_Outage`) foi restrita **exclusivamente a `CONNECTIVITY_NETWORK` (internet/rede da concessionária fora do ar)**. Chamados de telefonia, computadores ou sistemas individuais jamais acionarão queda de loja. Mapeamento de keywords de `TELEFONIA` adicionado e chamado do Flavio remediado com o checklist oficial de headset e app desktop.
+  2. **Chamado #1410810 (Danielly - Acessórios Sumaré - `CARD ROBO (ENTRADA HONDA)`):**
+     - A colaboradora relatou card de robô em loop de processamento na entrada de nota. A IA orientou erroneamente fechar a guia do navegador.
+     - *Diretiva da TI:* Robôs RPA rodam no servidor. O usuário não tem ação em navegador para destravá-los.
+
+* **Diretriz Operacional Codificada para Robôs RPA (`KB-019`):**
+  - Quando o chamado envolver **Robôs RPA / Automações** (*Entrada Honda, Entrada Grupo, Vigia, Faturamento Direto, robô travado em processamento*):
+    1. A Sophia **NUNCA** orienta fechar navegador ou reiniciar PC;
+    2. A Sophia solicita o **Link do card de negócio no Bitrix24** onde o robô atua;
+    3. Confirma se o colaborador **já conferiu se todos os dados do card estão preenchidos corretamente** (número da nota, chassi, fornecedor, valores);
+    4. Conclui imediatamente a triagem (`action: COMPLETE`) com alta prioridade e escala para a TI atuar no servidor.
+
+* **Componentes Atualizados:**
+  - Workflow `c0F2GUMFm2BI94UG`: nós `01_Strict_Gate_Cat160_Pilot` (tema `ROBO_RPA`), `03_Create_CRM_Card_Chat` (saudação dedicada) e `08_AI_Agent_Triage_Deal` (Seção 13).
+  - Base Vetorial `kb_ti_conhecimento`: Artigo `KB-019` indexado no PostgreSQL via webhook de ingestão (18 KBs ativas).
+  - Documentação [BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md](file:///c:/mundial-n8n-automations/docs/BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md) atualizada.
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*

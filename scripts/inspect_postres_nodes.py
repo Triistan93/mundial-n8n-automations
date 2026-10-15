@@ -4,18 +4,11 @@ import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-with open('workflows/BITRIX_TI_AI_TRIAGE_AGENT.json', 'r', encoding='utf-8') as f:
-    wf = json.load(f)
+wf = json.load(open(r'c:\mundial-n8n-automations\workflows\BITRIX_TI_AI_TRIAGE_AGENT.json', encoding='utf-8'))
+nodes = {n['name']: n for n in wf['nodes']}
 
-nodes = wf.get('nodes', [])
-for n in nodes:
-    if 'PostRes' in n['name']:
-        print(f"=== {n['name']} ({n['type']}) ===")
-        params = n.get('parameters', {})
-        if 'functionCode' in params:
-            print(params['functionCode'][:500])
-        elif 'prompt' in params:
-            print(params['prompt'][:500])
-        elif 'query' in params:
-            print(params['query'])
-        print("------------------------------------------")
+for k in sorted(nodes):
+    if k.startswith('PostRes_'):
+        print(f"=== {k} ({nodes[k].get('type')}) ===")
+        print(json.dumps(nodes[k].get('parameters', {}), indent=2, ensure_ascii=False))
+        print()

@@ -1,0 +1,1015 @@
+{
+  "id": "bf78RZqHZe5gjk9E",
+  "name": "BITRIX_TI_TICKET_TAKEOVER_HANDLER",
+  "description": null,
+  "active": true,
+  "activeVersionId": "1e2a1a75-1a7a-40b6-a551-74302fca86fe",
+  "createdAt": "2026-10-15T20:59:59.047Z",
+  "updatedAt": "2026-10-15T21:08:06.846Z",
+  "isArchived": false,
+  "versionId": "1e2a1a75-1a7a-40b6-a551-74302fca86fe",
+  "versionCounter": 6,
+  "sourceWorkflowId": null,
+  "triggerCount": 2,
+  "nodes": [
+    {
+      "id": "wh_takeover",
+      "name": "Webhook_Ticket_Action",
+      "webhookId": "4af6ec73-bb0b-4ff3-807e-d57e17160deb",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "ti-ticket-action",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "code_parse",
+      "name": "Parse_Action_Params",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        300
+      ],
+      "parameters": {
+        "jsCode": "\nconst query = $input.first().json.query || {};\nconst dealId = Number(query.deal_id);\nconst action = String(query.action || '').toLowerCase();\nconst userId = Number(query.user_id || query.user || 352678);\n\nif (!dealId) {\n  throw new Error(\"Parâmetro 'deal_id' é obrigatório.\");\n}\n\nconst isAccept = action === 'accept';\nconst targetStage = isAccept ? 'C160:PREPARATION' : 'C160:UC_JIOBG8';\nconst statusLabel = isAccept ? 'EM ATENDIMENTO' : 'NA FILA DA TI';\nconst actionEmoji = isAccept ? '👨‍💻' : '⏳';\n\nreturn [{\n  json: {\n    deal_id: dealId,\n    action: action,\n    is_accept: isAccept,\n    target_stage: targetStage,\n    status_label: statusLabel,\n    action_emoji: actionEmoji,\n    user_id: userId\n  }\n}];\n"
+      }
+    },
+    {
+      "id": "pg_tech_lookup",
+      "name": "Lookup_Technician_Name",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        180,
+        300
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COALESCE(NULLIF(TRIM(name || ' ' || last_name), ''), full_name, 'Técnico de TI') as tech_name, SPLIT_PART(TRIM(name), ' ', 1) as first_name FROM bitrix_users_cache WHERE user_id = {{ $json.user_id }};",
+        "additionalFields": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "J8q2YHlBbp4WxxV2",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "id": "code_merge_data",
+      "name": "Merge_Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        420,
+        300
+      ],
+      "parameters": {
+        "jsCode": "\nconst params = $('Parse_Action_Params').first().json;\nconst techRow = $input.first()?.json || {};\nconst techName = techRow.tech_name || (params.user_id === 32598 ? 'Eduardo Alaminos' : 'Igor Bonini');\nconst firstName = techRow.first_name || (params.user_id === 32598 ? 'Eduardo' : 'Igor');\n\nreturn [{\n  json: {\n    ...params,\n    tech_name: techName,\n    first_name: firstName\n  }\n}];\n"
+      }
+    },
+    {
+      "id": "http_update_deal",
+      "name": "Bitrix_Update_Deal_Takeover",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.update",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  id: $json.deal_id,\n  fields: $json.is_accept ? {\n    STAGE_ID: $json.target_stage,\n    ASSIGNED_BY_ID: $json.user_id,\n    UF_CRM_TI_RESPONSIBLE: $json.user_id\n  } : {\n    STAGE_ID: $json.target_stage\n  }\n}) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "pg_lock_session",
+      "name": "Update_Postgres_Session_Silence",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "onError": "continueRegularOutput",
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE ticket_bot_sessions SET status = CASE WHEN '{{ $('Merge_Context').first().json.action }}' = 'accept' THEN 'HUMAN_TAKEOVER' ELSE 'IN_QUEUE' END, ai_state = 'AI_PAUSED', last_interaction_at = NOW() WHERE deal_id = {{ $('Merge_Context').first().json.deal_id }};",
+        "additionalFields": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "J8q2YHlBbp4WxxV2",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "id": "http_get_chat",
+      "name": "Bitrix_Get_Deal_Chat",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1140,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.chat.get",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ENTITY_TYPE",
+              "value": "CRM"
+            },
+            {
+              "name": "ENTITY_ID",
+              "value": "={{ 'DEAL|' + $('Merge_Context').first().json.deal_id }}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "code_prepare_chat_msg",
+      "name": "Prepare_Chat_And_Timeline",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        300
+      ],
+      "parameters": {
+        "jsCode": "\nconst ctx = $('Merge_Context').first().json;\nconst chatData = $input.first().json.result || {};\nconst chatId = chatData.ID;\n\nconst chatMsg = ctx.is_accept \n  ? `👨‍💻 [b]Atendimento Assumido[/b]\\nO analista de TI [b]${ctx.tech_name}[/b] assumiu o atendimento do chamado #${ctx.deal_id}. A partir de agora, o suporte é realizado diretamente com o técnico humano.`\n  : `⏳ [b]Fila de Espera[/b]\\nO chamado #${ctx.deal_id} foi posicionado na fila de atendimento da equipe de TI e será atendido em breve.`;\n\nconst timelineComment = ctx.is_accept\n  ? `👨‍💻 **[TI - ATENDIMENTO ASSUMIDO]**\\n\\nO técnico **${ctx.tech_name}** (ID ${ctx.user_id}) aceitou o chamado #${ctx.deal_id} via botão interativo.\\n\\n• **Nova Etapa:** Em atendimento (C160:PREPARATION)\\n• **Técnico Responsável:** ${ctx.tech_name}\\n• **Sophia AI:** Silenciada com sucesso.`\n  : `⏳ **[TI - FILA DE ESPERA]**\\n\\nO chamado #${ctx.deal_id} foi mantido na fila de espera da TI (C160:UC_JIOBG8).`;\n\nreturn [{\n  json: {\n    ...ctx,\n    chat_id: chatId,\n    chat_message: chatMsg,\n    timeline_comment: timelineComment\n  }\n}];\n"
+      }
+    },
+    {
+      "id": "http_send_chat",
+      "name": "Bitrix_Send_Chat_Notice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1620,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: 'chat' + $json.chat_id,\n  MESSAGE: $json.chat_message\n}) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "http_timeline",
+      "name": "Bitrix_Add_Timeline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1620,
+        400
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.timeline.comment.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  fields: {\n    ENTITY_ID: $json.deal_id,\n    ENTITY_TYPE: 'deal',\n    COMMENT: $json.timeline_comment\n  }\n}) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "code_html",
+      "name": "Generate_HTML_Page",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1860,
+        300
+      ],
+      "parameters": {
+        "jsCode": "\nconst ctx = $('Merge_Context').first().json;\nconst isAccept = ctx.is_accept;\nconst title = isAccept ? 'Chamado Assumido com Sucesso!' : 'Chamado Colocado na Fila';\nconst badgeColor = isAccept ? '#10b981' : '#f59e0b';\nconst icon = isAccept ? '✅' : '⏳';\nconst desc = isAccept \n  ? `Você assumiu o chamado <strong>#${ctx.deal_id}</strong> com sucesso! O card foi movido para <strong>Em atendimento</strong> e a Sophia AI foi silenciada para você conversar diretamente com o solicitante.`\n  : `O chamado <strong>#${ctx.deal_id}</strong> foi mantido na <strong>Fila da TI</strong> aguardando disponibilidade técnica.`;\n\nconst dealUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${ctx.deal_id}/`;\n\nconst html = `<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>${title} - Central de TI Mundial</title>\n  <style>\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;\n      background: #0f172a;\n      color: #f8fafc;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      min-height: 100vh;\n      margin: 0;\n      padding: 16px;\n    }\n    .card {\n      background: #1e293b;\n      border: 1px solid #334155;\n      border-radius: 16px;\n      padding: 32px;\n      max-width: 480px;\n      width: 100%;\n      text-align: center;\n      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);\n    }\n    .icon {\n      font-size: 54px;\n      margin-bottom: 16px;\n    }\n    h1 {\n      font-size: 22px;\n      margin: 0 0 12px;\n      color: #f8fafc;\n    }\n    .badge {\n      display: inline-block;\n      padding: 4px 12px;\n      border-radius: 9999px;\n      font-size: 13px;\n      font-weight: 600;\n      background: ${badgeColor}22;\n      color: ${badgeColor};\n      border: 1px solid ${badgeColor}44;\n      margin-bottom: 16px;\n    }\n    p {\n      color: #94a3b8;\n      font-size: 15px;\n      line-height: 1.6;\n      margin: 0 0 24px;\n    }\n    .btn {\n      display: inline-block;\n      width: 100%;\n      box-sizing: border-box;\n      padding: 12px 24px;\n      background: #2563eb;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n      font-weight: 600;\n      transition: background 0.2s;\n    }\n    .btn:hover {\n      background: #1d4ed8;\n    }\n    .footer {\n      margin-top: 24px;\n      font-size: 12px;\n      color: #64748b;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <div class=\"icon\">${icon}</div>\n    <div class=\"badge\">${isAccept ? 'ATENDIMENTO INICIADO' : 'EM ESPERA'}</div>\n    <h1>${title}</h1>\n    <p>${desc}</p>\n    <a href=\"${dealUrl}\" class=\"btn\" target=\"_blank\">Abrir Chamado no Bitrix24</a>\n    <div class=\"footer\">Central de TI — Concessionárias Mundial Honda</div>\n  </div>\n</body>\n</html>`;\n\nreturn [{\n  json: {\n    html: html\n  }\n}];\n"
+      }
+    },
+    {
+      "id": "resp_webhook",
+      "name": "Respond_To_Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2100,
+        300
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "wh_csat_vote",
+      "name": "Webhook_CSAT_Vote",
+      "webhookId": "8ac0066b-13d6-4c6b-875c-8baac5ddb7ff",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "onError": "continueRegularOutput",
+      "position": [
+        -300,
+        650
+      ],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "ti-csat-vote",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "code_parse_csat",
+      "name": "Parse_CSAT_Params",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "onError": "continueRegularOutput",
+      "position": [
+        -60,
+        650
+      ],
+      "parameters": {
+        "jsCode": "\nconst query = $input.first().json.query || {};\nconst dealId = Number(query.deal_id);\nlet rating = parseInt(query.rating || query.stars || 5, 10);\nif (isNaN(rating) || rating < 1) rating = 1;\nif (rating > 5) rating = 5;\n\nif (!dealId) {\n  throw new Error(\"Parâmetro 'deal_id' é obrigatório.\");\n}\n\nconst starsStr = '⭐'.repeat(rating);\nconst labels = {\n  5: 'Excelente',\n  4: 'Muito Bom',\n  3: 'Regular',\n  2: 'Ruim',\n  1: 'Precisa Melhorar'\n};\n\nreturn [{\n  json: {\n    deal_id: dealId,\n    rating: rating,\n    stars_str: starsStr,\n    rating_label: labels[rating] || 'Avaliado'\n  }\n}];\n"
+      }
+    },
+    {
+      "id": "pg_insert_csat",
+      "name": "Insert_CSAT_Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "onError": "continueRegularOutput",
+      "position": [
+        180,
+        650
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO ticket_csat_ratings (deal_id, requester_user_id, rating, feedback_text, created_at) VALUES ({{ $json.deal_id }}, COALESCE((SELECT requester_user_id FROM ticket_bot_sessions WHERE deal_id = {{ $json.deal_id }}), 32598), {{ $json.rating }}, 'Avaliação 1-clique via chat', NOW()) RETURNING id;",
+        "additionalFields": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "J8q2YHlBbp4WxxV2",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "id": "http_csat_timeline",
+      "name": "Bitrix_CSAT_Timeline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "onError": "continueRegularOutput",
+      "position": [
+        420,
+        650
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.timeline.comment.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  fields: {\n    ENTITY_ID: $('Parse_CSAT_Params').first().json.deal_id,\n    ENTITY_TYPE: 'deal',\n    COMMENT: $('Parse_CSAT_Params').first().json.stars_str + ' **AVALIAÇÃO DE ATENDIMENTO (CSAT) REGISTRADA!**\\n\\n• **Nota:** ' + $('Parse_CSAT_Params').first().json.rating + '/5 (' + $('Parse_CSAT_Params').first().json.rating_label + ')\\n• **Origem:** Votação rápida de 1 clique no chat\\n\\n✅ *Registrado na base de qualidade de TI.*'\n  }\n}) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "code_csat_html",
+      "name": "Generate_CSAT_HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "onError": "continueRegularOutput",
+      "position": [
+        660,
+        650
+      ],
+      "parameters": {
+        "jsCode": "\nconst ctx = $('Parse_CSAT_Params').first().json;\nconst dealUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${ctx.deal_id}/`;\n\nconst html = `<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Obrigado pela sua Avaliação! - Central de TI Mundial</title>\n  <style>\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;\n      background: #0f172a;\n      color: #f8fafc;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      min-height: 100vh;\n      margin: 0;\n      padding: 16px;\n    }\n    .card {\n      background: #1e293b;\n      border: 1px solid #334155;\n      border-radius: 16px;\n      padding: 32px;\n      max-width: 480px;\n      width: 100%;\n      text-align: center;\n      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);\n    }\n    .stars {\n      font-size: 40px;\n      margin-bottom: 12px;\n      letter-spacing: 4px;\n    }\n    h1 {\n      font-size: 22px;\n      margin: 0 0 12px;\n      color: #f8fafc;\n    }\n    .badge {\n      display: inline-block;\n      padding: 4px 12px;\n      border-radius: 9999px;\n      font-size: 13px;\n      font-weight: 600;\n      background: #10b98122;\n      color: #10b981;\n      border: 1px solid #10b98144;\n      margin-bottom: 16px;\n    }\n    p {\n      color: #94a3b8;\n      font-size: 15px;\n      line-height: 1.6;\n      margin: 0 0 24px;\n    }\n    .footer {\n      margin-top: 24px;\n      font-size: 12px;\n      color: #64748b;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <div class=\"stars\">${ctx.stars_str}</div>\n    <div class=\"badge\">NOTA ${ctx.rating}/5 — ${ctx.rating_label.toUpperCase()}</div>\n    <h1>Avaliação Registrada!</h1>\n    <p>Muito obrigado pelo seu feedback sobre o atendimento do chamado <strong>#${ctx.deal_id}</strong>. Sua avaliação foi salva com sucesso e ajuda a equipe de TI a melhorar continuamente o suporte da Mundial!</p>\n    <div class=\"footer\">Central de TI — Concessionárias Mundial Honda</div>\n  </div>\n</body>\n</html>`;\n\nreturn [{\n  json: {\n    html: html\n  }\n}];\n"
+      }
+    },
+    {
+      "id": "resp_csat_webhook",
+      "name": "Respond_CSAT_Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "onError": "continueRegularOutput",
+      "position": [
+        900,
+        650
+      ],
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook_Ticket_Action": {
+      "main": [
+        [
+          {
+            "node": "Parse_Action_Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse_Action_Params": {
+      "main": [
+        [
+          {
+            "node": "Lookup_Technician_Name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup_Technician_Name": {
+      "main": [
+        [
+          {
+            "node": "Merge_Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge_Context": {
+      "main": [
+        [
+          {
+            "node": "Bitrix_Update_Deal_Takeover",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update_Postgres_Session_Silence",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bitrix_Get_Deal_Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bitrix_Get_Deal_Chat": {
+      "main": [
+        [
+          {
+            "node": "Prepare_Chat_And_Timeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare_Chat_And_Timeline": {
+      "main": [
+        [
+          {
+            "node": "Bitrix_Send_Chat_Notice",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bitrix_Add_Timeline",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate_HTML_Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate_HTML_Page": {
+      "main": [
+        [
+          {
+            "node": "Respond_To_Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook_CSAT_Vote": {
+      "main": [
+        [
+          {
+            "node": "Parse_CSAT_Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse_CSAT_Params": {
+      "main": [
+        [
+          {
+            "node": "Insert_CSAT_Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert_CSAT_Database": {
+      "main": [
+        [
+          {
+            "node": "Bitrix_CSAT_Timeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bitrix_CSAT_Timeline": {
+      "main": [
+        [
+          {
+            "node": "Generate_CSAT_HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate_CSAT_HTML": {
+      "main": [
+        [
+          {
+            "node": "Respond_CSAT_Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": null,
+  "meta": null,
+  "tags": [],
+  "activeVersion": {
+    "versionId": "1e2a1a75-1a7a-40b6-a551-74302fca86fe",
+    "workflowId": "bf78RZqHZe5gjk9E",
+    "nodes": [
+      {
+        "id": "wh_takeover",
+        "name": "Webhook_Ticket_Action",
+        "webhookId": "4af6ec73-bb0b-4ff3-807e-d57e17160deb",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -300,
+          300
+        ],
+        "parameters": {
+          "httpMethod": "GET",
+          "path": "ti-ticket-action",
+          "responseMode": "responseNode",
+          "options": {}
+        }
+      },
+      {
+        "id": "code_parse",
+        "name": "Parse_Action_Params",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -60,
+          300
+        ],
+        "parameters": {
+          "jsCode": "\nconst query = $input.first().json.query || {};\nconst dealId = Number(query.deal_id);\nconst action = String(query.action || '').toLowerCase();\nconst userId = Number(query.user_id || query.user || 352678);\n\nif (!dealId) {\n  throw new Error(\"Parâmetro 'deal_id' é obrigatório.\");\n}\n\nconst isAccept = action === 'accept';\nconst targetStage = isAccept ? 'C160:PREPARATION' : 'C160:UC_JIOBG8';\nconst statusLabel = isAccept ? 'EM ATENDIMENTO' : 'NA FILA DA TI';\nconst actionEmoji = isAccept ? '👨‍💻' : '⏳';\n\nreturn [{\n  json: {\n    deal_id: dealId,\n    action: action,\n    is_accept: isAccept,\n    target_stage: targetStage,\n    status_label: statusLabel,\n    action_emoji: actionEmoji,\n    user_id: userId\n  }\n}];\n"
+        }
+      },
+      {
+        "id": "pg_tech_lookup",
+        "name": "Lookup_Technician_Name",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 1,
+        "position": [
+          180,
+          300
+        ],
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT COALESCE(NULLIF(TRIM(name || ' ' || last_name), ''), full_name, 'Técnico de TI') as tech_name, SPLIT_PART(TRIM(name), ' ', 1) as first_name FROM bitrix_users_cache WHERE user_id = {{ $json.user_id }};",
+          "additionalFields": {}
+        },
+        "credentials": {
+          "postgres": {
+            "id": "J8q2YHlBbp4WxxV2",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "id": "code_merge_data",
+        "name": "Merge_Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          420,
+          300
+        ],
+        "parameters": {
+          "jsCode": "\nconst params = $('Parse_Action_Params').first().json;\nconst techRow = $input.first()?.json || {};\nconst techName = techRow.tech_name || (params.user_id === 32598 ? 'Eduardo Alaminos' : 'Igor Bonini');\nconst firstName = techRow.first_name || (params.user_id === 32598 ? 'Eduardo' : 'Igor');\n\nreturn [{\n  json: {\n    ...params,\n    tech_name: techName,\n    first_name: firstName\n  }\n}];\n"
+        }
+      },
+      {
+        "id": "http_update_deal",
+        "name": "Bitrix_Update_Deal_Takeover",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          660,
+          300
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.update",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify({\n  id: $json.deal_id,\n  fields: $json.is_accept ? {\n    STAGE_ID: $json.target_stage,\n    ASSIGNED_BY_ID: $json.user_id,\n    UF_CRM_TI_RESPONSIBLE: $json.user_id\n  } : {\n    STAGE_ID: $json.target_stage\n  }\n}) }}",
+          "options": {}
+        }
+      },
+      {
+        "id": "pg_lock_session",
+        "name": "Update_Postgres_Session_Silence",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 1,
+        "onError": "continueRegularOutput",
+        "position": [
+          900,
+          300
+        ],
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE ticket_bot_sessions SET status = CASE WHEN '{{ $('Merge_Context').first().json.action }}' = 'accept' THEN 'HUMAN_TAKEOVER' ELSE 'IN_QUEUE' END, ai_state = 'AI_PAUSED', last_interaction_at = NOW() WHERE deal_id = {{ $('Merge_Context').first().json.deal_id }};",
+          "additionalFields": {}
+        },
+        "credentials": {
+          "postgres": {
+            "id": "J8q2YHlBbp4WxxV2",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "id": "http_get_chat",
+        "name": "Bitrix_Get_Deal_Chat",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1140,
+          300
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.chat.get",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "ENTITY_TYPE",
+                "value": "CRM"
+              },
+              {
+                "name": "ENTITY_ID",
+                "value": "={{ 'DEAL|' + $('Merge_Context').first().json.deal_id }}"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "code_prepare_chat_msg",
+        "name": "Prepare_Chat_And_Timeline",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1380,
+          300
+        ],
+        "parameters": {
+          "jsCode": "\nconst ctx = $('Merge_Context').first().json;\nconst chatData = $input.first().json.result || {};\nconst chatId = chatData.ID;\n\nconst chatMsg = ctx.is_accept \n  ? `👨‍💻 [b]Atendimento Assumido[/b]\\nO analista de TI [b]${ctx.tech_name}[/b] assumiu o atendimento do chamado #${ctx.deal_id}. A partir de agora, o suporte é realizado diretamente com o técnico humano.`\n  : `⏳ [b]Fila de Espera[/b]\\nO chamado #${ctx.deal_id} foi posicionado na fila de atendimento da equipe de TI e será atendido em breve.`;\n\nconst timelineComment = ctx.is_accept\n  ? `👨‍💻 **[TI - ATENDIMENTO ASSUMIDO]**\\n\\nO técnico **${ctx.tech_name}** (ID ${ctx.user_id}) aceitou o chamado #${ctx.deal_id} via botão interativo.\\n\\n• **Nova Etapa:** Em atendimento (C160:PREPARATION)\\n• **Técnico Responsável:** ${ctx.tech_name}\\n• **Sophia AI:** Silenciada com sucesso.`\n  : `⏳ **[TI - FILA DE ESPERA]**\\n\\nO chamado #${ctx.deal_id} foi mantido na fila de espera da TI (C160:UC_JIOBG8).`;\n\nreturn [{\n  json: {\n    ...ctx,\n    chat_id: chatId,\n    chat_message: chatMsg,\n    timeline_comment: timelineComment\n  }\n}];\n"
+        }
+      },
+      {
+        "id": "http_send_chat",
+        "name": "Bitrix_Send_Chat_Notice",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1620,
+          200
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: 'chat' + $json.chat_id,\n  MESSAGE: $json.chat_message\n}) }}",
+          "options": {}
+        }
+      },
+      {
+        "id": "http_timeline",
+        "name": "Bitrix_Add_Timeline",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1620,
+          400
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.timeline.comment.add",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify({\n  fields: {\n    ENTITY_ID: $json.deal_id,\n    ENTITY_TYPE: 'deal',\n    COMMENT: $json.timeline_comment\n  }\n}) }}",
+          "options": {}
+        }
+      },
+      {
+        "id": "code_html",
+        "name": "Generate_HTML_Page",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1860,
+          300
+        ],
+        "parameters": {
+          "jsCode": "\nconst ctx = $('Merge_Context').first().json;\nconst isAccept = ctx.is_accept;\nconst title = isAccept ? 'Chamado Assumido com Sucesso!' : 'Chamado Colocado na Fila';\nconst badgeColor = isAccept ? '#10b981' : '#f59e0b';\nconst icon = isAccept ? '✅' : '⏳';\nconst desc = isAccept \n  ? `Você assumiu o chamado <strong>#${ctx.deal_id}</strong> com sucesso! O card foi movido para <strong>Em atendimento</strong> e a Sophia AI foi silenciada para você conversar diretamente com o solicitante.`\n  : `O chamado <strong>#${ctx.deal_id}</strong> foi mantido na <strong>Fila da TI</strong> aguardando disponibilidade técnica.`;\n\nconst dealUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${ctx.deal_id}/`;\n\nconst html = `<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>${title} - Central de TI Mundial</title>\n  <style>\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;\n      background: #0f172a;\n      color: #f8fafc;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      min-height: 100vh;\n      margin: 0;\n      padding: 16px;\n    }\n    .card {\n      background: #1e293b;\n      border: 1px solid #334155;\n      border-radius: 16px;\n      padding: 32px;\n      max-width: 480px;\n      width: 100%;\n      text-align: center;\n      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);\n    }\n    .icon {\n      font-size: 54px;\n      margin-bottom: 16px;\n    }\n    h1 {\n      font-size: 22px;\n      margin: 0 0 12px;\n      color: #f8fafc;\n    }\n    .badge {\n      display: inline-block;\n      padding: 4px 12px;\n      border-radius: 9999px;\n      font-size: 13px;\n      font-weight: 600;\n      background: ${badgeColor}22;\n      color: ${badgeColor};\n      border: 1px solid ${badgeColor}44;\n      margin-bottom: 16px;\n    }\n    p {\n      color: #94a3b8;\n      font-size: 15px;\n      line-height: 1.6;\n      margin: 0 0 24px;\n    }\n    .btn {\n      display: inline-block;\n      width: 100%;\n      box-sizing: border-box;\n      padding: 12px 24px;\n      background: #2563eb;\n      color: white;\n      text-decoration: none;\n      border-radius: 8px;\n      font-weight: 600;\n      transition: background 0.2s;\n    }\n    .btn:hover {\n      background: #1d4ed8;\n    }\n    .footer {\n      margin-top: 24px;\n      font-size: 12px;\n      color: #64748b;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <div class=\"icon\">${icon}</div>\n    <div class=\"badge\">${isAccept ? 'ATENDIMENTO INICIADO' : 'EM ESPERA'}</div>\n    <h1>${title}</h1>\n    <p>${desc}</p>\n    <a href=\"${dealUrl}\" class=\"btn\" target=\"_blank\">Abrir Chamado no Bitrix24</a>\n    <div class=\"footer\">Central de TI — Concessionárias Mundial Honda</div>\n  </div>\n</body>\n</html>`;\n\nreturn [{\n  json: {\n    html: html\n  }\n}];\n"
+        }
+      },
+      {
+        "id": "resp_webhook",
+        "name": "Respond_To_Webhook",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          2100,
+          300
+        ],
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "={{ $json.html }}",
+          "options": {
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "text/html; charset=utf-8"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": "wh_csat_vote",
+        "name": "Webhook_CSAT_Vote",
+        "webhookId": "8ac0066b-13d6-4c6b-875c-8baac5ddb7ff",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "onError": "continueRegularOutput",
+        "position": [
+          -300,
+          650
+        ],
+        "parameters": {
+          "httpMethod": "GET",
+          "path": "ti-csat-vote",
+          "responseMode": "responseNode",
+          "options": {}
+        }
+      },
+      {
+        "id": "code_parse_csat",
+        "name": "Parse_CSAT_Params",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "onError": "continueRegularOutput",
+        "position": [
+          -60,
+          650
+        ],
+        "parameters": {
+          "jsCode": "\nconst query = $input.first().json.query || {};\nconst dealId = Number(query.deal_id);\nlet rating = parseInt(query.rating || query.stars || 5, 10);\nif (isNaN(rating) || rating < 1) rating = 1;\nif (rating > 5) rating = 5;\n\nif (!dealId) {\n  throw new Error(\"Parâmetro 'deal_id' é obrigatório.\");\n}\n\nconst starsStr = '⭐'.repeat(rating);\nconst labels = {\n  5: 'Excelente',\n  4: 'Muito Bom',\n  3: 'Regular',\n  2: 'Ruim',\n  1: 'Precisa Melhorar'\n};\n\nreturn [{\n  json: {\n    deal_id: dealId,\n    rating: rating,\n    stars_str: starsStr,\n    rating_label: labels[rating] || 'Avaliado'\n  }\n}];\n"
+        }
+      },
+      {
+        "id": "pg_insert_csat",
+        "name": "Insert_CSAT_Database",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 1,
+        "onError": "continueRegularOutput",
+        "position": [
+          180,
+          650
+        ],
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "INSERT INTO ticket_csat_ratings (deal_id, requester_user_id, rating, feedback_text, created_at) VALUES ({{ $json.deal_id }}, COALESCE((SELECT requester_user_id FROM ticket_bot_sessions WHERE deal_id = {{ $json.deal_id }}), 32598), {{ $json.rating }}, 'Avaliação 1-clique via chat', NOW()) RETURNING id;",
+          "additionalFields": {}
+        },
+        "credentials": {
+          "postgres": {
+            "id": "J8q2YHlBbp4WxxV2",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "id": "http_csat_timeline",
+        "name": "Bitrix_CSAT_Timeline",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "onError": "continueRegularOutput",
+        "position": [
+          420,
+          650
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.timeline.comment.add",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify({\n  fields: {\n    ENTITY_ID: $('Parse_CSAT_Params').first().json.deal_id,\n    ENTITY_TYPE: 'deal',\n    COMMENT: $('Parse_CSAT_Params').first().json.stars_str + ' **AVALIAÇÃO DE ATENDIMENTO (CSAT) REGISTRADA!**\\n\\n• **Nota:** ' + $('Parse_CSAT_Params').first().json.rating + '/5 (' + $('Parse_CSAT_Params').first().json.rating_label + ')\\n• **Origem:** Votação rápida de 1 clique no chat\\n\\n✅ *Registrado na base de qualidade de TI.*'\n  }\n}) }}",
+          "options": {}
+        }
+      },
+      {
+        "id": "code_csat_html",
+        "name": "Generate_CSAT_HTML",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "onError": "continueRegularOutput",
+        "position": [
+          660,
+          650
+        ],
+        "parameters": {
+          "jsCode": "\nconst ctx = $('Parse_CSAT_Params').first().json;\nconst dealUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${ctx.deal_id}/`;\n\nconst html = `<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Obrigado pela sua Avaliação! - Central de TI Mundial</title>\n  <style>\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;\n      background: #0f172a;\n      color: #f8fafc;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      min-height: 100vh;\n      margin: 0;\n      padding: 16px;\n    }\n    .card {\n      background: #1e293b;\n      border: 1px solid #334155;\n      border-radius: 16px;\n      padding: 32px;\n      max-width: 480px;\n      width: 100%;\n      text-align: center;\n      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);\n    }\n    .stars {\n      font-size: 40px;\n      margin-bottom: 12px;\n      letter-spacing: 4px;\n    }\n    h1 {\n      font-size: 22px;\n      margin: 0 0 12px;\n      color: #f8fafc;\n    }\n    .badge {\n      display: inline-block;\n      padding: 4px 12px;\n      border-radius: 9999px;\n      font-size: 13px;\n      font-weight: 600;\n      background: #10b98122;\n      color: #10b981;\n      border: 1px solid #10b98144;\n      margin-bottom: 16px;\n    }\n    p {\n      color: #94a3b8;\n      font-size: 15px;\n      line-height: 1.6;\n      margin: 0 0 24px;\n    }\n    .footer {\n      margin-top: 24px;\n      font-size: 12px;\n      color: #64748b;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <div class=\"stars\">${ctx.stars_str}</div>\n    <div class=\"badge\">NOTA ${ctx.rating}/5 — ${ctx.rating_label.toUpperCase()}</div>\n    <h1>Avaliação Registrada!</h1>\n    <p>Muito obrigado pelo seu feedback sobre o atendimento do chamado <strong>#${ctx.deal_id}</strong>. Sua avaliação foi salva com sucesso e ajuda a equipe de TI a melhorar continuamente o suporte da Mundial!</p>\n    <div class=\"footer\">Central de TI — Concessionárias Mundial Honda</div>\n  </div>\n</body>\n</html>`;\n\nreturn [{\n  json: {\n    html: html\n  }\n}];\n"
+        }
+      },
+      {
+        "id": "resp_csat_webhook",
+        "name": "Respond_CSAT_Webhook",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "onError": "continueRegularOutput",
+        "position": [
+          900,
+          650
+        ],
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "={{ $json.html }}",
+          "options": {
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "text/html; charset=utf-8"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook_Ticket_Action": {
+        "main": [
+          [
+            {
+              "node": "Parse_Action_Params",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse_Action_Params": {
+        "main": [
+          [
+            {
+              "node": "Lookup_Technician_Name",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Lookup_Technician_Name": {
+        "main": [
+          [
+            {
+              "node": "Merge_Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge_Context": {
+        "main": [
+          [
+            {
+              "node": "Bitrix_Update_Deal_Takeover",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Update_Postgres_Session_Silence",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Bitrix_Get_Deal_Chat",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Bitrix_Get_Deal_Chat": {
+        "main": [
+          [
+            {
+              "node": "Prepare_Chat_And_Timeline",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prepare_Chat_And_Timeline": {
+        "main": [
+          [
+            {
+              "node": "Bitrix_Send_Chat_Notice",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Bitrix_Add_Timeline",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Generate_HTML_Page",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Generate_HTML_Page": {
+        "main": [
+          [
+            {
+              "node": "Respond_To_Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook_CSAT_Vote": {
+        "main": [
+          [
+            {
+              "node": "Parse_CSAT_Params",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse_CSAT_Params": {
+        "main": [
+          [
+            {
+              "node": "Insert_CSAT_Database",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Insert_CSAT_Database": {
+        "main": [
+          [
+            {
+              "node": "Bitrix_CSAT_Timeline",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Bitrix_CSAT_Timeline": {
+        "main": [
+          [
+            {
+              "node": "Generate_CSAT_HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Generate_CSAT_HTML": {
+        "main": [
+          [
+            {
+              "node": "Respond_CSAT_Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "Eduardo Alaminos",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "createdAt": "2026-10-15T21:08:06.849Z",
+    "updatedAt": "2026-10-15T21:08:06.849Z",
+    "workflowPublishHistory": [
+      {
+        "id": 617,
+        "workflowId": "bf78RZqHZe5gjk9E",
+        "versionId": "1e2a1a75-1a7a-40b6-a551-74302fca86fe",
+        "event": "activated",
+        "userId": "47bc24b3-99ec-468c-9224-e213aafc06ff",
+        "createdAt": "2026-10-15T21:08:06.886Z"
+      }
+    ]
+  }
+}

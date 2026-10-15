@@ -1117,6 +1117,52 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.16. Human Takeover com Botões Nativos ("Aceitar Chamado" / "Colocar na Fila"), Silêncio Absoluto da IA e CSAT no Encerramento
+
+* **Problema Identificado (Incidente Denilson / Igor `#1411594`):**
+  - O colaborador Denilson abriu o chamado `#1411594` solicitando liberação de acesso. O analista de TI Igor Bonini (`#352678`) entrou no bate-papo do Bitrix24 para atendê-lo diretamente.
+  - Como a sessão da Sophia estava marcada como `status: 'COMPLETED'`, o nó de classificação ignorava as mensagens do técnico e tratava as respostas subsequentes do solicitante como "tentativa de chamado carona", disparando a mensagem: *"Como o chamado original já foi concluído, abra um novo chamado..."*. Isso causava intromissões inoportunas na conversa humana.
+
+* **Solução Implantada em 3 Pilares:**
+  1. **Novo Workflow `BITRIX_TI_TICKET_TAKEOVER_HANDLER` (`bf78RZqHZe5gjk9E`):**
+     - Webhooks dedicados:
+       - `/webhook/ti-ticket-action`: Processa as ações de **"Aceitar Chamado"** (`action=accept`) e **"Colocar na Fila"** (`action=queue`).
+       - `/webhook/ti-csat-vote`: Registra votos de satisfação (1 a 5 estrelas) em 1 clique na tabela `ticket_csat_ratings` e na timeline do CRM.
+     - **Ação "Aceitar Chamado":**
+       * Move o deal para `C160:PREPARATION` (*Em atendimento*);
+       * Atribui o técnico responsável no CRM (`ASSIGNED_BY_ID` e `UF_CRM_TI_RESPONSIBLE`);
+       * Atualiza a sessão no PostgreSQL: `status = 'HUMAN_TAKEOVER'`, `ai_state = 'AI_PAUSED'`;
+       * Envia notificação no chat: *"👨‍💻 O analista de TI [Nome] assumiu o atendimento do chamado..."*;
+       * Exibe página de confirmação responsiva para o técnico.
+     - **Ação "Colocar na Fila":**
+       * Move o deal para `C160:UC_JIOBG8` (*Aguardando autorização / Fila*);
+       * Atualiza a sessão no PostgreSQL: `status = 'IN_QUEUE'`, `ai_state = 'AI_PAUSED'`.
+
+  2. **Injeção de Botões Interativos Nativos (`KEYBOARD`) no Workflow Principal (`c0F2GUMFm2BI94UG`):**
+     - Em `15_Prepare_Final_Chat`: Mensagem de confirmação ao solicitante inclui os botões nativos `[ 🙋‍♂️ Aceitar Chamado ]` e `[ ⏳ Colocar na Fila ]`.
+     - Em `15_Filter_Tickets_Ready_For_IT`: Alertas push enviados para Eduardo Alaminos (`#32598`) e Igor Bonini (`#352678`) incluem os botões nativos com o ID do técnico já vinculado, permitindo assumir o chamado com 1 toque.
+
+  3. **Trava de Silêncio Absoluto (Human Takeover Passivo):**
+     - Em `05_Filter_And_Classify_Messages`, eliminada a condição restritiva `if (!isCompleted)`:
+       * Se QUALQUER mensagem no chat for enviada por um técnico da TI (`authorId !== requesterId && authorId !== BOT_ID && authorId !== 0`), o status muda imediatamente para `humanTakeoverDetected = true`.
+       * Se a sessão estiver com `status IN ('HUMAN_TAKEOVER', 'IN_QUEUE')` ou `ai_state = 'AI_PAUSED'`, a Sophia descarta qualquer nova mensagem e permanece **100% EM SILÊNCIO**.
+
+  4. **Disparo Automático de Avaliação de Satisfação (CSAT) no Encerramento (`C160:WON`):**
+     - Ramo `CSAT_Poll_Won_Deals` monitora chamados finalizados em `C160:WON` (`Ticket Finalizado`).
+     - Para cada card encerrado que ainda não recebeu a pesquisa, a Sophia envia uma única mensagem cordial no chat com botões de 1 a 5 estrelas:
+       `🎉 Olá, [Nome]! O seu chamado #[ID] foi finalizado com sucesso pela equipe de TI. Como você avalia o suporte recebido hoje?`
+       `[ ⭐⭐⭐⭐⭐ Excelente ] [ ⭐⭐⭐⭐ Bom ] [ ⭐⭐⭐ Regular ] [ ⭐ Precisa Melhorar ]`
+     - A flag `csat_sent: true` é gravada no banco para garantir que a mensagem nunca seja reenviada.
+
+* **Validação Operacional em Produção:**
+  - Testado no card real `#1411594` (Denilson):
+    * O voto CSAT foi registrado na tabela `ticket_csat_ratings` com nota 5/5;
+    * A mensagem de pesquisa com estrelas foi entregue no chat do card;
+    * Nenhuma mensagem de carona ou intromissão foi disparada;
+    * Execução `#662757` concluída com status **SUCCESS** em 2.2 segundos.
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*
 
 

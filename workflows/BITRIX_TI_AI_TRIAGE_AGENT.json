@@ -3,12 +3,12 @@
   "name": "BITRIX_TI_AI_TRIAGE_AGENT",
   "description": null,
   "active": true,
-  "activeVersionId": "ed999a5d-df9a-4815-92b8-f05f59b8c84f",
+  "activeVersionId": "79d41900-aadc-494d-ba8c-15e209c815e0",
   "createdAt": "2026-09-21T20:23:38.347Z",
-  "updatedAt": "2026-10-15T18:19:32.478Z",
+  "updatedAt": "2026-10-15T21:11:11.965Z",
   "isArchived": false,
-  "versionId": "ed999a5d-df9a-4815-92b8-f05f59b8c84f",
-  "versionCounter": 204,
+  "versionId": "79d41900-aadc-494d-ba8c-15e209c815e0",
+  "versionCounter": 205,
   "sourceWorkflowId": null,
   "triggerCount": 2,
   "nodes": [
@@ -250,7 +250,7 @@
       ],
       "parameters": {
         "operation": "executeQuery",
-        "query": "-- SELF-HEALING GENERICO POR ESTADO:\nUPDATE ticket_bot_sessions \nSET status = 'ACTIVE' \nWHERE status = 'CHAT_CREATING' AND internal_chat_id IS NOT NULL;\n\n-- Recupera sessoes ativas recentes com collected_data_json (ultimas 48h)\nSELECT id, deal_id, requester_user_id, requester_name, internal_chat_id, dialog_id, last_processed_message_id, ai_state, redis_memory_key, status, state, collected_data_json \nFROM ticket_bot_sessions \nWHERE (\n    (status = 'ACTIVE' AND last_interaction_at > NOW() - INTERVAL '48 hours') \n    OR \n    (status = 'COMPLETED' AND last_interaction_at > NOW() - INTERVAL '24 hours')\n  ) \n  AND internal_chat_id IS NOT NULL;",
+        "query": "-- SELF-HEALING GENERICO POR ESTADO:\nUPDATE ticket_bot_sessions \nSET status = 'ACTIVE' \nWHERE status = 'CHAT_CREATING' AND internal_chat_id IS NOT NULL;\n\n-- Recupera sessoes ativas, takeover, fila e concluidas recentes (ultimas 48h)\nSELECT id, deal_id, requester_user_id, requester_name, internal_chat_id, dialog_id, last_processed_message_id, ai_state, redis_memory_key, status, state, collected_data_json \nFROM ticket_bot_sessions \nWHERE (\n    (status IN ('ACTIVE', 'HUMAN_TAKEOVER', 'IN_QUEUE') AND last_interaction_at > NOW() - INTERVAL '48 hours') \n    OR \n    (status = 'COMPLETED' AND last_interaction_at > NOW() - INTERVAL '24 hours')\n  ) \n  AND internal_chat_id IS NOT NULL;",
         "additionalFields": {}
       },
       "credentials": {
@@ -298,7 +298,7 @@
         704
       ],
       "parameters": {
-        "jsCode": "// Classificação e filtragem multi-item com suporte a Anti-Carona e Imagens (Sprint 2 Vision)\nconst sessions = $('04_Get_Active_Sessions_Postgres').all();\nconst items = $input.all();\nconst outputItems = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const session = sessions[i]?.json || {};\n  const res = items[i].json.result || {};\n  const messages = res.messages || [];\n  const rawFiles = res.files || [];\n  const filesList = Array.isArray(rawFiles) ? rawFiles : Object.values(rawFiles || {});\n\n  const lastProcessedId = Number(session.last_processed_message_id || 0);\n  const requesterId = Number(session.requester_user_id);\n  const BOT_ID = 61622;\n  const isCompleted = session.status === 'COMPLETED';\n\n  // Ordena cronologicamente crescente\n  messages.sort((a, b) => Number(a.id) - Number(b.id));\n\n  const newMessages = [];\n  let humanTakeoverDetected = false;\n  let lastMsgId = lastProcessedId;\n  let attachedImage = null;\n\n  for (const msg of messages) {\n    const msgId = Number(msg.id);\n    if (msgId <= lastProcessedId) continue;\n    lastMsgId = Math.max(lastMsgId, msgId);\n\n    const authorId = Number(msg.author_id);\n    // Ignora mensagens do bot (61622) ou de sistema (0)\n    if (authorId === BOT_ID || authorId === 0) continue;\n\n    // Se autor não for o solicitante nem o bot\n    if (authorId !== requesterId) {\n      if (!isCompleted) {\n        humanTakeoverDetected = true;\n        break;\n      }\n      continue;\n    }\n\n    // Mensagem válida do solicitante\n    const cleanText = String(msg.text || '').trim();\n    if (cleanText) {\n      newMessages.push(cleanText);\n    }\n\n    // Checagem de anexo de imagem na mensagem (suporta array ou ID único)\n    let fileIds = [];\n    if (Array.isArray(msg.params?.FILE_ID)) {\n      fileIds = msg.params.FILE_ID;\n    } else if (msg.params?.FILE_ID) {\n      fileIds = [msg.params.FILE_ID];\n    }\n\n    if (fileIds.length > 0 && filesList.length > 0) {\n      for (const fid of fileIds) {\n        const found = filesList.find(f => \n          Number(f.id) === Number(fid) && \n          (f.type === 'image' || ['png', 'jpg', 'jpeg', 'webp', 'bmp'].includes(String(f.extension || '').toLowerCase()))\n        );\n        if (found) {\n          attachedImage = {\n            file_id: Number(found.id),\n            name: found.name || 'print_anexo.png',\n            extension: found.extension || 'png'\n          };\n          break;\n        }\n      }\n    }\n  }\n\n  if (humanTakeoverDetected) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        dialog_id: session.dialog_id,\n        human_takeover: true,\n        last_msg_id: lastMsgId\n      }\n    });\n    continue;\n  }\n\n  // Se AI está pausada manualmente em ticket ativo, ignora\n  if (!isCompleted && session.ai_state === 'AI_PAUSED') {\n    continue;\n  }\n\n  // Se há imagem ou mensagens novas\n  if (newMessages.length > 0 || attachedImage) {\n    const fallbackText = attachedImage ? 'O colaborador enviou um print/imagem de erro em anexo.' : '';\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        chat_id: session.internal_chat_id,\n        dialog_id: session.dialog_id,\n        requester_user_id: requesterId,\n        requester_name: session.requester_name || 'Colaborador',\n        message_id: lastMsgId,\n        message_text: newMessages.join('\\n') || fallbackText,\n        redis_memory_key: `bitrix:ti:deal:${session.deal_id}:memory`,\n        ai_state: session.ai_state,\n        session_status: session.status || 'ACTIVE',\n        session_state: session.state || 'INIT',\n        collected_data_json: session.collected_data_json || {},\n        has_image: Boolean(attachedImage),\n        image_file_id: attachedImage ? attachedImage.file_id : null,\n        image_name: attachedImage ? attachedImage.name : null,\n        image_extension: attachedImage ? attachedImage.extension : null\n      }\n    });\n  }\n}\n\nreturn outputItems;"
+        "jsCode": "// Classificação e filtragem multi-item com suporte a Anti-Carona, Imagens, Human Takeover Rigoroso e Silêncio\nconst sessions = $('04_Get_Active_Sessions_Postgres').all();\nconst items = $input.all();\nconst outputItems = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const session = sessions[i]?.json || {};\n  const res = items[i].json.result || {};\n  const messages = res.messages || [];\n  const rawFiles = res.files || [];\n  const filesList = Array.isArray(rawFiles) ? rawFiles : Object.values(rawFiles || {});\n\n  const lastProcessedId = Number(session.last_processed_message_id || 0);\n  const requesterId = Number(session.requester_user_id);\n  const BOT_ID = 61622;\n  const isCompleted = session.status === 'COMPLETED';\n  const isTakeover = session.status === 'HUMAN_TAKEOVER' || session.status === 'IN_QUEUE' || session.ai_state === 'AI_PAUSED';\n\n  // Ordena cronologicamente crescente\n  messages.sort((a, b) => Number(a.id) - Number(b.id));\n\n  const newMessages = [];\n  let humanTakeoverDetected = false;\n  let lastMsgId = lastProcessedId;\n  let attachedImage = null;\n\n  for (const msg of messages) {\n    const msgId = Number(msg.id);\n    if (msgId <= lastProcessedId) continue;\n    lastMsgId = Math.max(lastMsgId, msgId);\n\n    const authorId = Number(msg.author_id);\n    // Ignora mensagens do bot (61622) ou de sistema (0)\n    if (authorId === BOT_ID || authorId === 0) continue;\n\n    // Se o autor for QUALQUER pessoa que não seja o solicitante (ex: Igor, Eduardo, outro analista de TI):\n    // REGRA DE OURO: Sempre dispara Human Takeover! NUNCA ignora, mesmo se a sessão era COMPLETED!\n    if (authorId !== requesterId) {\n      humanTakeoverDetected = true;\n      break;\n    }\n\n    // Mensagem válida do solicitante\n    const cleanText = String(msg.text || '').trim();\n    if (cleanText) {\n      newMessages.push(cleanText);\n    }\n\n    // Checagem de anexo de imagem na mensagem\n    let fileIds = [];\n    if (Array.isArray(msg.params?.FILE_ID)) {\n      fileIds = msg.params.FILE_ID;\n    } else if (msg.params?.FILE_ID) {\n      fileIds = [msg.params.FILE_ID];\n    }\n\n    if (fileIds.length > 0 && filesList.length > 0) {\n      for (const fid of fileIds) {\n        const found = filesList.find(f => \n          Number(f.id) === Number(fid) && \n          (f.type === 'image' || ['png', 'jpg', 'jpeg', 'webp', 'bmp'].includes(String(f.extension || '').toLowerCase()))\n        );\n        if (found) {\n          attachedImage = {\n            file_id: Number(found.id),\n            name: found.name || 'print_anexo.png',\n            extension: found.extension || 'png'\n          };\n          break;\n        }\n      }\n    }\n  }\n\n  // Se detectou intervenção humana de um técnico na conversa\n  if (humanTakeoverDetected) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        dialog_id: session.dialog_id,\n        human_takeover: true,\n        last_msg_id: lastMsgId\n      }\n    });\n    continue;\n  }\n\n  // SILÊNCIO TOTAL: Se o chamado já está sob controle humano (HUMAN_TAKEOVER ou AI_PAUSED),\n  // a Sophia NUNCA se intromete, mesmo que o solicitante mande novas mensagens!\n  if (isTakeover) {\n    continue;\n  }\n\n  // Se há imagem ou mensagens novas\n  if (newMessages.length > 0 || attachedImage) {\n    const fallbackText = attachedImage ? 'O colaborador enviou um print/imagem de erro em anexo.' : '';\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        chat_id: session.internal_chat_id,\n        dialog_id: session.dialog_id,\n        requester_user_id: requesterId,\n        requester_name: session.requester_name || 'Colaborador',\n        message_id: lastMsgId,\n        message_text: newMessages.join('\\n') || fallbackText,\n        redis_memory_key: `bitrix:ti:deal:${session.deal_id}:memory`,\n        ai_state: session.ai_state,\n        session_status: session.status || 'ACTIVE',\n        session_state: session.state || 'INIT',\n        collected_data_json: session.collected_data_json || {},\n        has_image: Boolean(attachedImage),\n        image_file_id: attachedImage ? attachedImage.file_id : null,\n        image_name: attachedImage ? attachedImage.name : null,\n        image_extension: attachedImage ? attachedImage.extension : null\n      }\n    });\n  }\n}\n\nreturn outputItems;"
       }
     },
     {
@@ -332,7 +332,7 @@
       ],
       "parameters": {
         "operation": "executeQuery",
-        "query": "UPDATE ticket_bot_sessions SET ai_state = 'AI_PAUSED', last_processed_message_id = '{{ $json.last_msg_id }}', last_interaction_at = NOW() WHERE deal_id = {{ $json.deal_id }};",
+        "query": "UPDATE ticket_bot_sessions SET status = 'HUMAN_TAKEOVER', ai_state = 'AI_PAUSED', last_processed_message_id = '{{ $json.last_msg_id }}', last_interaction_at = NOW() WHERE deal_id = {{ $json.deal_id }};",
         "additionalFields": {}
       },
       "credentials": {
@@ -680,7 +680,7 @@
         1840
       ],
       "parameters": {
-        "jsCode": "// Prepara payload para envio no chat final com convite para avaliação CSAT\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst items = $input.all();\n\nreturn items.map((item, idx) => {\n  const b01 = b01Items[idx]?.json || item.json;\n  const updateData = updatePayloadItems[idx]?.json || {};\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n  const dealId = b01.deal_id;\n  const firstName = (b01.formatted_title || '').includes('(')\n    ? (b01.formatted_title.split('(')[1].split(')')[0].split(' ')[0] || 'amigo')\n    : 'amigo';\n\n  let finalMessage = '';\n\n  if (isPurchase) {\n    finalMessage = `Prontinho, ${firstName}! Encaminhei a sua solicitação de compra para a aprovação da liderança e diretoria. Assim que tivermos o retorno, a equipe de TI dará o andamento imediato na compra e configuração para você!`;\n  } else if (isResolvedL1) {\n    finalMessage = `Fico muito feliz que conseguimos resolver o seu chamado #${dealId} por aqui, ${firstName}! 🎉\\n\\n⭐ **Pesquisa Rápida:** Como você avalia o suporte recebido hoje?\\nResponda com uma nota de 1 a 5:\\n⭐ 1 (Péssimo) | ⭐⭐ 2 (Ruim) | ⭐⭐⭐ 3 (Regular) | ⭐⭐⭐⭐ 4 (Bom) | ⭐⭐⭐⭐⭐ 5 (Excelente)`;\n  } else if (isClienteEmLoja) {\n    finalMessage = `Pode deixar, ${firstName}! Como você está com cliente aguardando na loja, já sinalizei o seu chamado #${dealId} com prioridade comercial máxima (🚨 CLIENTE EM LOJA) para a equipe técnica agilizar o seu atendimento imediatamente!`;\n  } else {\n    finalMessage = `Perfeito, ${firstName}! Todas as informações do chamado #${dealId} já foram organizadas e direcionadas para a fila da equipe de TI. O técnico responsável já vai assumir o seu atendimento!`;\n  }\n\n  return {\n    json: {\n      deal_id: dealId,\n      dialog_id: b01.dialog_id,\n      final_message: finalMessage\n    }\n  };\n});\n"
+        "jsCode": "// Prepara payload para envio no chat final com botões interativos de Aceite / Fila\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst items = $input.all();\n\nreturn items.map((item, idx) => {\n  const b01 = b01Items[idx]?.json || item.json;\n  const updateData = updatePayloadItems[idx]?.json || {};\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n  const dealId = b01.deal_id;\n  const firstName = (b01.formatted_title || '').includes('(')\n    ? (b01.formatted_title.split('(')[1].split(')')[0].split(' ')[0] || 'amigo')\n    : 'amigo';\n\n  let finalMessage = '';\n  let keyboard = [];\n\n  const defaultButtons = [\n    {\n      \"TEXT\": \"🙋‍♂️ Aceitar Chamado\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-ticket-action?deal_id=${dealId}&action=accept`,\n      \"BG_COLOR\": \"#29b24f\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    },\n    {\n      \"TEXT\": \"⏳ Colocar na Fila\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-ticket-action?deal_id=${dealId}&action=queue`,\n      \"BG_COLOR\": \"#f59e0b\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    }\n  ];\n\n  if (isPurchase) {\n    finalMessage = `Prontinho, ${firstName}! Encaminhei a sua solicitação de compra para a aprovação da liderança e diretoria. Assim que tivermos o retorno, a equipe de TI dará o andamento imediato na compra e configuração para você!`;\n  } else if (isResolvedL1) {\n    finalMessage = `Fico muito feliz que conseguimos resolver o seu chamado #${dealId} por aqui, ${firstName}! 🎉\\n\\n⭐ **Pesquisa Rápida:** Como você avalia o suporte recebido hoje?\\nResponda com uma nota de 1 a 5:\\n⭐ 1 (Péssimo) | ⭐⭐ 2 (Ruim) | ⭐⭐⭐ 3 (Regular) | ⭐⭐⭐⭐ 4 (Bom) | ⭐⭐⭐⭐⭐ 5 (Excelente)`;\n  } else if (isClienteEmLoja) {\n    finalMessage = `Pode deixar, ${firstName}! Como você está com cliente aguardando na loja, já sinalizei o seu chamado #${dealId} com prioridade comercial máxima (🚨 CLIENTE EM LOJA) para a equipe técnica agilizar o seu atendimento imediatamente!`;\n    keyboard = defaultButtons;\n  } else {\n    finalMessage = `Perfeito, ${firstName}! Todas as informações do chamado #${dealId} já foram organizadas e direcionadas para a fila da equipe de TI. O técnico responsável já vai assumir o seu atendimento!`;\n    keyboard = defaultButtons;\n  }\n\n  return {\n    json: {\n      deal_id: dealId,\n      dialog_id: b01.dialog_id,\n      final_message: finalMessage,\n      keyboard: keyboard\n    }\n  };\n});"
       }
     },
     {
@@ -698,7 +698,7 @@
         "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.dialog_id,\n  MESSAGE: $json.final_message\n}) }}",
+        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.dialog_id,\n  MESSAGE: $json.final_message,\n  KEYBOARD: ($json.keyboard && $json.keyboard.length > 0) ? $json.keyboard : undefined\n}) }}",
         "options": {}
       }
     },
@@ -1685,7 +1685,7 @@
         2240
       ],
       "parameters": {
-        "jsCode": "// Filtra chamados que concluíram triagem e estão prontos para atendimento humano pela TI\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst notifications = [];\n\n// Técnicos que recebem o alerta de fila da TI:\n// 32598: Eduardo Alaminos (Gestor TI)\n// 352678: Igor Bonini (Suporte TI)\nconst IT_TEAM_RECIPIENTS = [32598, 352678];\n\nfor (let i = 0; i < b01Items.length; i++) {\n  const b01 = b01Items[i]?.json || {};\n  const updateData = updatePayloadItems[i]?.json || {};\n\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n\n  // Notifica a equipe quando o chamado NÃO foi resolvido por L1 e NÃO é compra pendente de diretoria\n  if (!isResolvedL1 && !isPurchase) {\n    const dealId = b01.deal_id;\n    const formattedTitle = b01.formatted_title || `Chamado #${dealId}`;\n    const requesterName = b01.requester_name || 'Colaborador';\n    const storeName = b01.store_name || 'Geral';\n    const priorityLabel = b01.priority_label || 'Média';\n    const shortSubject = b01.short_subject || b01.resumo || 'Sem resumo disponível';\n    const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n    const dealUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${dealId}/`;\n\n    let alertHeader = '🔔 [b]CHAMADO TRIADO PELA IA - PRONTO PARA ATENDIMENTO[/b]';\n    if (isClienteEmLoja) {\n      alertHeader = '🚨 [b]URGENTE: CLIENTE EM LOJA - CHAMADO PRONTO PARA ATENDIMENTO[/b]';\n    }\n\n    const msgText = `${alertHeader}\\n` +\n      `🎫 [b]Chamado #${dealId}:[/b] ${formattedTitle}\\n` +\n      `👤 [b]Solicitante:[/b] ${requesterName}\\n` +\n      `🏢 [b]Loja/Filial:[/b] ${storeName}\\n` +\n      `⚡ [b]Prioridade:[/b] ${priorityLabel}\\n` +\n      `📝 [b]Resumo:[/b] ${shortSubject}\\n` +\n      (isClienteEmLoja ? `🚨 [b]Atenção:[/b] Colaborador com cliente presencial aguardando!\\n` : '') +\n      `\\n👉 [URL=${dealUrl}]Abrir Chamado no Bitrix[/URL]`;\n\n    for (const recipientId of IT_TEAM_RECIPIENTS) {\n      notifications.push({\n        json: {\n          deal_id: dealId,\n          recipient_id: String(recipientId),\n          notification_message: msgText\n        }\n      });\n    }\n  }\n}\n\nreturn notifications;"
+        "jsCode": "// Filtra chamados que concluíram triagem e estão prontos para atendimento humano pela TI\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst notifications = [];\n\n// Técnicos que recebem o alerta de fila da TI:\n// 32598: Eduardo Alaminos (Gestor TI)\n// 352678: Igor Bonini (Suporte TI)\nconst IT_TEAM_RECIPIENTS = [32598, 352678];\n\nfor (let i = 0; i < b01Items.length; i++) {\n  const b01 = b01Items[i]?.json || {};\n  const updateData = updatePayloadItems[i]?.json || {};\n\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n\n  // Notifica a equipe quando o chamado NÃO foi resolvido por L1 e NÃO é compra pendente de diretoria\n  if (!isResolvedL1 && !isPurchase) {\n    const dealId = b01.deal_id;\n    const formattedTitle = b01.formatted_title || `Chamado #${dealId}`;\n    const requesterName = b01.requester_name || 'Colaborador';\n    const storeName = b01.store_name || 'Geral';\n    const priorityLabel = b01.priority_label || 'Média';\n    const shortSubject = b01.short_subject || b01.resumo || 'Sem resumo disponível';\n    const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n    const dealUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${dealId}/`;\n\n    let alertHeader = '🔔 [b]CHAMADO TRIADO PELA IA - PRONTO PARA ATENDIMENTO[/b]';\n    if (isClienteEmLoja) {\n      alertHeader = '🚨 [b]URGENTE: CLIENTE EM LOJA - CHAMADO PRONTO PARA ATENDIMENTO[/b]';\n    }\n\n    const msgText = `${alertHeader}\\n` +\n      `🎫 [b]Chamado #${dealId}:[/b] ${formattedTitle}\\n` +\n      `👤 [b]Solicitante:[/b] ${requesterName}\\n` +\n      `🏢 [b]Loja/Filial:[/b] ${storeName}\\n` +\n      `⚡ [b]Prioridade:[/b] ${priorityLabel}\\n` +\n      `📝 [b]Resumo:[/b] ${shortSubject}\\n` +\n      (isClienteEmLoja ? `🚨 [b]Atenção:[/b] Colaborador com cliente presencial aguardando!\\n` : '') +\n      `\\n👉 [URL=${dealUrl}]Abrir Chamado no Bitrix[/URL]`;\n\n    for (const recipientId of IT_TEAM_RECIPIENTS) {\n      const keyboard = [\n        {\n          \"TEXT\": \"🙋‍♂️ Aceitar Chamado\",\n          \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-ticket-action?deal_id=${dealId}&action=accept&user_id=${recipientId}`,\n          \"BG_COLOR\": \"#29b24f\",\n          \"TEXT_COLOR\": \"#ffffff\",\n          \"DISPLAY\": \"LINE\"\n        },\n        {\n          \"TEXT\": \"⏳ Colocar na Fila\",\n          \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-ticket-action?deal_id=${dealId}&action=queue&user_id=${recipientId}`,\n          \"BG_COLOR\": \"#f59e0b\",\n          \"TEXT_COLOR\": \"#ffffff\",\n          \"DISPLAY\": \"LINE\"\n        }\n      ];\n\n      notifications.push({\n        json: {\n          deal_id: dealId,\n          recipient_id: String(recipientId),\n          notification_message: msgText,\n          keyboard: keyboard\n        }\n      });\n    }\n  }\n}\n\nreturn notifications;"
       }
     },
     {
@@ -1703,8 +1703,146 @@
         "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.recipient_id,\n  MESSAGE: $json.notification_message\n}) }}",
+        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.recipient_id,\n  MESSAGE: $json.notification_message,\n  KEYBOARD: ($json.keyboard && $json.keyboard.length > 0) ? $json.keyboard : undefined\n}) }}",
         "options": {}
+      }
+    },
+    {
+      "id": "node_csat_poll_won",
+      "name": "CSAT_Poll_Won_Deals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "onError": "continueRegularOutput",
+      "position": [
+        368,
+        600
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.list",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "filter[CATEGORY_ID]",
+              "value": "160"
+            },
+            {
+              "name": "filter[STAGE_ID]",
+              "value": "C160:WON"
+            },
+            {
+              "name": "order[DATE_MODIFY]",
+              "value": "DESC"
+            },
+            {
+              "name": "select[]",
+              "value": "ID"
+            },
+            {
+              "name": "select[]",
+              "value": "TITLE"
+            },
+            {
+              "name": "select[]",
+              "value": "ASSIGNED_BY_ID"
+            },
+            {
+              "name": "select[]",
+              "value": "DATE_MODIFY"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "node_csat_filter_unsent",
+      "name": "CSAT_Filter_Unsent_Deals",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        600
+      ],
+      "parameters": {
+        "jsCode": "\n// Filtra chamados em C160:WON que ainda não receberam a pesquisa CSAT\nconst items = $input.all();\nconst deals = items[0]?.json?.result || items.map(i => i.json);\nconst output = [];\n\nfor (const deal of deals) {\n  const dealId = Number(deal.ID);\n  if (!dealId) continue;\n\n  output.push({\n    json: {\n      deal_id: dealId,\n      deal_title: deal.TITLE || `Chamado #${dealId}`,\n      assigned_by_id: Number(deal.ASSIGNED_BY_ID || 0)\n    }\n  });\n}\n\nreturn output.slice(0, 5); // Limita a 5 por ciclo para não sobrecarregar\n"
+      }
+    },
+    {
+      "id": "node_csat_lookup_session",
+      "name": "CSAT_Lookup_Session_Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "onError": "continueRegularOutput",
+      "position": [
+        840,
+        600
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, deal_id, requester_name, internal_chat_id, dialog_id, collected_data_json FROM ticket_bot_sessions WHERE deal_id = {{ $json.deal_id }} AND internal_chat_id IS NOT NULL AND (collected_data_json->>'csat_sent') IS NULL;",
+        "additionalFields": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "J8q2YHlBbp4WxxV2",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "id": "node_csat_prepare_message",
+      "name": "CSAT_Prepare_Survey_Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        600
+      ],
+      "parameters": {
+        "jsCode": "\nconst rows = $input.all();\nconst readyList = [];\n\nfor (const row of rows) {\n  const session = row.json;\n  const dealId = session.deal_id;\n  if (!dealId || !session.dialog_id) continue;\n\n  const requesterName = session.requester_name || 'Colaborador';\n  const firstName = requesterName.split(' ')[0] || 'amigo';\n\n  const surveyMessage = `🎉 Olá, ${firstName}! O seu chamado #${dealId} foi finalizado com sucesso pela equipe de TI.\\n\\n⭐ **Pesquisa de Satisfação:** Como você avalia o suporte recebido hoje?\\n👉 Clique em uma das opções abaixo para registrar sua nota em 1 clique:`;\n\n  const keyboard = [\n    {\n      \"TEXT\": \"⭐⭐⭐⭐⭐ Excelente\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-csat-vote?deal_id=${dealId}&rating=5`,\n      \"BG_COLOR\": \"#10b981\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    },\n    {\n      \"TEXT\": \"⭐⭐⭐⭐ Bom\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-csat-vote?deal_id=${dealId}&rating=4`,\n      \"BG_COLOR\": \"#3b82f6\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    },\n    {\n      \"TEXT\": \"⭐⭐⭐ Regular\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-csat-vote?deal_id=${dealId}&rating=3`,\n      \"BG_COLOR\": \"#f59e0b\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    },\n    {\n      \"TEXT\": \"⭐ Precisa Melhorar\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-csat-vote?deal_id=${dealId}&rating=1`,\n      \"BG_COLOR\": \"#ef4444\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    }\n  ];\n\n  readyList.push({\n    json: {\n      deal_id: dealId,\n      dialog_id: session.dialog_id,\n      survey_message: surveyMessage,\n      keyboard: keyboard\n    }\n  });\n}\n\nreturn readyList;\n"
+      }
+    },
+    {
+      "id": "node_csat_send_chat",
+      "name": "CSAT_Send_Survey_To_Chat",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "onError": "continueRegularOutput",
+      "position": [
+        1320,
+        600
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.dialog_id,\n  MESSAGE: $json.survey_message,\n  KEYBOARD: $json.keyboard\n}) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "node_csat_mark_postgres",
+      "name": "CSAT_Mark_Sent_Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "onError": "continueRegularOutput",
+      "position": [
+        1560,
+        600
+      ],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE ticket_bot_sessions SET collected_data_json = COALESCE(collected_data_json, '{}'::jsonb) || '{\"csat_sent\": true}'::jsonb, last_interaction_at = NOW() WHERE deal_id = {{ $json.deal_id }};",
+        "additionalFields": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "J8q2YHlBbp4WxxV2",
+          "name": "Postgres account"
+        }
       }
     }
   ],
@@ -1719,6 +1857,11 @@
           },
           {
             "node": "04_Get_Active_Sessions_Postgres",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CSAT_Poll_Won_Deals",
             "type": "main",
             "index": 0
           }
@@ -2553,6 +2696,61 @@
           }
         ]
       ]
+    },
+    "CSAT_Poll_Won_Deals": {
+      "main": [
+        [
+          {
+            "node": "CSAT_Filter_Unsent_Deals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CSAT_Filter_Unsent_Deals": {
+      "main": [
+        [
+          {
+            "node": "CSAT_Lookup_Session_Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CSAT_Lookup_Session_Postgres": {
+      "main": [
+        [
+          {
+            "node": "CSAT_Prepare_Survey_Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CSAT_Prepare_Survey_Payload": {
+      "main": [
+        [
+          {
+            "node": "CSAT_Send_Survey_To_Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CSAT_Send_Survey_To_Chat": {
+      "main": [
+        [
+          {
+            "node": "CSAT_Mark_Sent_Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "nodeGroups": [],
@@ -2584,28 +2782,8 @@
       "updatedAt": "2026-10-10T03:39:43.684Z"
     }
   ],
-  "shared": [
-    {
-      "role": "workflow:owner",
-      "workflowId": "c0F2GUMFm2BI94UG",
-      "projectId": "402JjnKfwRpoGWbj",
-      "project": {
-        "id": "402JjnKfwRpoGWbj",
-        "name": "Eduardo Alaminos <analistati@mundialmotos.com.br>",
-        "type": "personal",
-        "icon": null,
-        "description": null,
-        "customTelemetryTags": [],
-        "creatorId": "47bc24b3-99ec-468c-9224-e213aafc06ff",
-        "createdAt": "2025-07-05T10:55:00.314Z",
-        "updatedAt": "2025-07-05T11:03:36.869Z"
-      },
-      "createdAt": "2026-09-21T20:23:38.347Z",
-      "updatedAt": "2026-09-21T20:23:38.347Z"
-    }
-  ],
   "activeVersion": {
-    "versionId": "ed999a5d-df9a-4815-92b8-f05f59b8c84f",
+    "versionId": "79d41900-aadc-494d-ba8c-15e209c815e0",
     "workflowId": "c0F2GUMFm2BI94UG",
     "nodes": [
       {
@@ -2846,7 +3024,7 @@
         ],
         "parameters": {
           "operation": "executeQuery",
-          "query": "-- SELF-HEALING GENERICO POR ESTADO:\nUPDATE ticket_bot_sessions \nSET status = 'ACTIVE' \nWHERE status = 'CHAT_CREATING' AND internal_chat_id IS NOT NULL;\n\n-- Recupera sessoes ativas recentes com collected_data_json (ultimas 48h)\nSELECT id, deal_id, requester_user_id, requester_name, internal_chat_id, dialog_id, last_processed_message_id, ai_state, redis_memory_key, status, state, collected_data_json \nFROM ticket_bot_sessions \nWHERE (\n    (status = 'ACTIVE' AND last_interaction_at > NOW() - INTERVAL '48 hours') \n    OR \n    (status = 'COMPLETED' AND last_interaction_at > NOW() - INTERVAL '24 hours')\n  ) \n  AND internal_chat_id IS NOT NULL;",
+          "query": "-- SELF-HEALING GENERICO POR ESTADO:\nUPDATE ticket_bot_sessions \nSET status = 'ACTIVE' \nWHERE status = 'CHAT_CREATING' AND internal_chat_id IS NOT NULL;\n\n-- Recupera sessoes ativas, takeover, fila e concluidas recentes (ultimas 48h)\nSELECT id, deal_id, requester_user_id, requester_name, internal_chat_id, dialog_id, last_processed_message_id, ai_state, redis_memory_key, status, state, collected_data_json \nFROM ticket_bot_sessions \nWHERE (\n    (status IN ('ACTIVE', 'HUMAN_TAKEOVER', 'IN_QUEUE') AND last_interaction_at > NOW() - INTERVAL '48 hours') \n    OR \n    (status = 'COMPLETED' AND last_interaction_at > NOW() - INTERVAL '24 hours')\n  ) \n  AND internal_chat_id IS NOT NULL;",
           "additionalFields": {}
         },
         "credentials": {
@@ -2894,7 +3072,7 @@
           704
         ],
         "parameters": {
-          "jsCode": "// Classificação e filtragem multi-item com suporte a Anti-Carona e Imagens (Sprint 2 Vision)\nconst sessions = $('04_Get_Active_Sessions_Postgres').all();\nconst items = $input.all();\nconst outputItems = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const session = sessions[i]?.json || {};\n  const res = items[i].json.result || {};\n  const messages = res.messages || [];\n  const rawFiles = res.files || [];\n  const filesList = Array.isArray(rawFiles) ? rawFiles : Object.values(rawFiles || {});\n\n  const lastProcessedId = Number(session.last_processed_message_id || 0);\n  const requesterId = Number(session.requester_user_id);\n  const BOT_ID = 61622;\n  const isCompleted = session.status === 'COMPLETED';\n\n  // Ordena cronologicamente crescente\n  messages.sort((a, b) => Number(a.id) - Number(b.id));\n\n  const newMessages = [];\n  let humanTakeoverDetected = false;\n  let lastMsgId = lastProcessedId;\n  let attachedImage = null;\n\n  for (const msg of messages) {\n    const msgId = Number(msg.id);\n    if (msgId <= lastProcessedId) continue;\n    lastMsgId = Math.max(lastMsgId, msgId);\n\n    const authorId = Number(msg.author_id);\n    // Ignora mensagens do bot (61622) ou de sistema (0)\n    if (authorId === BOT_ID || authorId === 0) continue;\n\n    // Se autor não for o solicitante nem o bot\n    if (authorId !== requesterId) {\n      if (!isCompleted) {\n        humanTakeoverDetected = true;\n        break;\n      }\n      continue;\n    }\n\n    // Mensagem válida do solicitante\n    const cleanText = String(msg.text || '').trim();\n    if (cleanText) {\n      newMessages.push(cleanText);\n    }\n\n    // Checagem de anexo de imagem na mensagem (suporta array ou ID único)\n    let fileIds = [];\n    if (Array.isArray(msg.params?.FILE_ID)) {\n      fileIds = msg.params.FILE_ID;\n    } else if (msg.params?.FILE_ID) {\n      fileIds = [msg.params.FILE_ID];\n    }\n\n    if (fileIds.length > 0 && filesList.length > 0) {\n      for (const fid of fileIds) {\n        const found = filesList.find(f => \n          Number(f.id) === Number(fid) && \n          (f.type === 'image' || ['png', 'jpg', 'jpeg', 'webp', 'bmp'].includes(String(f.extension || '').toLowerCase()))\n        );\n        if (found) {\n          attachedImage = {\n            file_id: Number(found.id),\n            name: found.name || 'print_anexo.png',\n            extension: found.extension || 'png'\n          };\n          break;\n        }\n      }\n    }\n  }\n\n  if (humanTakeoverDetected) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        dialog_id: session.dialog_id,\n        human_takeover: true,\n        last_msg_id: lastMsgId\n      }\n    });\n    continue;\n  }\n\n  // Se AI está pausada manualmente em ticket ativo, ignora\n  if (!isCompleted && session.ai_state === 'AI_PAUSED') {\n    continue;\n  }\n\n  // Se há imagem ou mensagens novas\n  if (newMessages.length > 0 || attachedImage) {\n    const fallbackText = attachedImage ? 'O colaborador enviou um print/imagem de erro em anexo.' : '';\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        chat_id: session.internal_chat_id,\n        dialog_id: session.dialog_id,\n        requester_user_id: requesterId,\n        requester_name: session.requester_name || 'Colaborador',\n        message_id: lastMsgId,\n        message_text: newMessages.join('\\n') || fallbackText,\n        redis_memory_key: `bitrix:ti:deal:${session.deal_id}:memory`,\n        ai_state: session.ai_state,\n        session_status: session.status || 'ACTIVE',\n        session_state: session.state || 'INIT',\n        collected_data_json: session.collected_data_json || {},\n        has_image: Boolean(attachedImage),\n        image_file_id: attachedImage ? attachedImage.file_id : null,\n        image_name: attachedImage ? attachedImage.name : null,\n        image_extension: attachedImage ? attachedImage.extension : null\n      }\n    });\n  }\n}\n\nreturn outputItems;"
+          "jsCode": "// Classificação e filtragem multi-item com suporte a Anti-Carona, Imagens, Human Takeover Rigoroso e Silêncio\nconst sessions = $('04_Get_Active_Sessions_Postgres').all();\nconst items = $input.all();\nconst outputItems = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const session = sessions[i]?.json || {};\n  const res = items[i].json.result || {};\n  const messages = res.messages || [];\n  const rawFiles = res.files || [];\n  const filesList = Array.isArray(rawFiles) ? rawFiles : Object.values(rawFiles || {});\n\n  const lastProcessedId = Number(session.last_processed_message_id || 0);\n  const requesterId = Number(session.requester_user_id);\n  const BOT_ID = 61622;\n  const isCompleted = session.status === 'COMPLETED';\n  const isTakeover = session.status === 'HUMAN_TAKEOVER' || session.status === 'IN_QUEUE' || session.ai_state === 'AI_PAUSED';\n\n  // Ordena cronologicamente crescente\n  messages.sort((a, b) => Number(a.id) - Number(b.id));\n\n  const newMessages = [];\n  let humanTakeoverDetected = false;\n  let lastMsgId = lastProcessedId;\n  let attachedImage = null;\n\n  for (const msg of messages) {\n    const msgId = Number(msg.id);\n    if (msgId <= lastProcessedId) continue;\n    lastMsgId = Math.max(lastMsgId, msgId);\n\n    const authorId = Number(msg.author_id);\n    // Ignora mensagens do bot (61622) ou de sistema (0)\n    if (authorId === BOT_ID || authorId === 0) continue;\n\n    // Se o autor for QUALQUER pessoa que não seja o solicitante (ex: Igor, Eduardo, outro analista de TI):\n    // REGRA DE OURO: Sempre dispara Human Takeover! NUNCA ignora, mesmo se a sessão era COMPLETED!\n    if (authorId !== requesterId) {\n      humanTakeoverDetected = true;\n      break;\n    }\n\n    // Mensagem válida do solicitante\n    const cleanText = String(msg.text || '').trim();\n    if (cleanText) {\n      newMessages.push(cleanText);\n    }\n\n    // Checagem de anexo de imagem na mensagem\n    let fileIds = [];\n    if (Array.isArray(msg.params?.FILE_ID)) {\n      fileIds = msg.params.FILE_ID;\n    } else if (msg.params?.FILE_ID) {\n      fileIds = [msg.params.FILE_ID];\n    }\n\n    if (fileIds.length > 0 && filesList.length > 0) {\n      for (const fid of fileIds) {\n        const found = filesList.find(f => \n          Number(f.id) === Number(fid) && \n          (f.type === 'image' || ['png', 'jpg', 'jpeg', 'webp', 'bmp'].includes(String(f.extension || '').toLowerCase()))\n        );\n        if (found) {\n          attachedImage = {\n            file_id: Number(found.id),\n            name: found.name || 'print_anexo.png',\n            extension: found.extension || 'png'\n          };\n          break;\n        }\n      }\n    }\n  }\n\n  // Se detectou intervenção humana de um técnico na conversa\n  if (humanTakeoverDetected) {\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        dialog_id: session.dialog_id,\n        human_takeover: true,\n        last_msg_id: lastMsgId\n      }\n    });\n    continue;\n  }\n\n  // SILÊNCIO TOTAL: Se o chamado já está sob controle humano (HUMAN_TAKEOVER ou AI_PAUSED),\n  // a Sophia NUNCA se intromete, mesmo que o solicitante mande novas mensagens!\n  if (isTakeover) {\n    continue;\n  }\n\n  // Se há imagem ou mensagens novas\n  if (newMessages.length > 0 || attachedImage) {\n    const fallbackText = attachedImage ? 'O colaborador enviou um print/imagem de erro em anexo.' : '';\n    outputItems.push({\n      json: {\n        deal_id: session.deal_id,\n        chat_id: session.internal_chat_id,\n        dialog_id: session.dialog_id,\n        requester_user_id: requesterId,\n        requester_name: session.requester_name || 'Colaborador',\n        message_id: lastMsgId,\n        message_text: newMessages.join('\\n') || fallbackText,\n        redis_memory_key: `bitrix:ti:deal:${session.deal_id}:memory`,\n        ai_state: session.ai_state,\n        session_status: session.status || 'ACTIVE',\n        session_state: session.state || 'INIT',\n        collected_data_json: session.collected_data_json || {},\n        has_image: Boolean(attachedImage),\n        image_file_id: attachedImage ? attachedImage.file_id : null,\n        image_name: attachedImage ? attachedImage.name : null,\n        image_extension: attachedImage ? attachedImage.extension : null\n      }\n    });\n  }\n}\n\nreturn outputItems;"
         }
       },
       {
@@ -2928,7 +3106,7 @@
         ],
         "parameters": {
           "operation": "executeQuery",
-          "query": "UPDATE ticket_bot_sessions SET ai_state = 'AI_PAUSED', last_processed_message_id = '{{ $json.last_msg_id }}', last_interaction_at = NOW() WHERE deal_id = {{ $json.deal_id }};",
+          "query": "UPDATE ticket_bot_sessions SET status = 'HUMAN_TAKEOVER', ai_state = 'AI_PAUSED', last_processed_message_id = '{{ $json.last_msg_id }}', last_interaction_at = NOW() WHERE deal_id = {{ $json.deal_id }};",
           "additionalFields": {}
         },
         "credentials": {
@@ -3276,7 +3454,7 @@
           1840
         ],
         "parameters": {
-          "jsCode": "// Prepara payload para envio no chat final com convite para avaliação CSAT\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst items = $input.all();\n\nreturn items.map((item, idx) => {\n  const b01 = b01Items[idx]?.json || item.json;\n  const updateData = updatePayloadItems[idx]?.json || {};\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n  const dealId = b01.deal_id;\n  const firstName = (b01.formatted_title || '').includes('(')\n    ? (b01.formatted_title.split('(')[1].split(')')[0].split(' ')[0] || 'amigo')\n    : 'amigo';\n\n  let finalMessage = '';\n\n  if (isPurchase) {\n    finalMessage = `Prontinho, ${firstName}! Encaminhei a sua solicitação de compra para a aprovação da liderança e diretoria. Assim que tivermos o retorno, a equipe de TI dará o andamento imediato na compra e configuração para você!`;\n  } else if (isResolvedL1) {\n    finalMessage = `Fico muito feliz que conseguimos resolver o seu chamado #${dealId} por aqui, ${firstName}! 🎉\\n\\n⭐ **Pesquisa Rápida:** Como você avalia o suporte recebido hoje?\\nResponda com uma nota de 1 a 5:\\n⭐ 1 (Péssimo) | ⭐⭐ 2 (Ruim) | ⭐⭐⭐ 3 (Regular) | ⭐⭐⭐⭐ 4 (Bom) | ⭐⭐⭐⭐⭐ 5 (Excelente)`;\n  } else if (isClienteEmLoja) {\n    finalMessage = `Pode deixar, ${firstName}! Como você está com cliente aguardando na loja, já sinalizei o seu chamado #${dealId} com prioridade comercial máxima (🚨 CLIENTE EM LOJA) para a equipe técnica agilizar o seu atendimento imediatamente!`;\n  } else {\n    finalMessage = `Perfeito, ${firstName}! Todas as informações do chamado #${dealId} já foram organizadas e direcionadas para a fila da equipe de TI. O técnico responsável já vai assumir o seu atendimento!`;\n  }\n\n  return {\n    json: {\n      deal_id: dealId,\n      dialog_id: b01.dialog_id,\n      final_message: finalMessage\n    }\n  };\n});\n"
+          "jsCode": "// Prepara payload para envio no chat final com botões interativos de Aceite / Fila\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst items = $input.all();\n\nreturn items.map((item, idx) => {\n  const b01 = b01Items[idx]?.json || item.json;\n  const updateData = updatePayloadItems[idx]?.json || {};\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n  const dealId = b01.deal_id;\n  const firstName = (b01.formatted_title || '').includes('(')\n    ? (b01.formatted_title.split('(')[1].split(')')[0].split(' ')[0] || 'amigo')\n    : 'amigo';\n\n  let finalMessage = '';\n  let keyboard = [];\n\n  const defaultButtons = [\n    {\n      \"TEXT\": \"🙋‍♂️ Aceitar Chamado\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-ticket-action?deal_id=${dealId}&action=accept`,\n      \"BG_COLOR\": \"#29b24f\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    },\n    {\n      \"TEXT\": \"⏳ Colocar na Fila\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-ticket-action?deal_id=${dealId}&action=queue`,\n      \"BG_COLOR\": \"#f59e0b\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    }\n  ];\n\n  if (isPurchase) {\n    finalMessage = `Prontinho, ${firstName}! Encaminhei a sua solicitação de compra para a aprovação da liderança e diretoria. Assim que tivermos o retorno, a equipe de TI dará o andamento imediato na compra e configuração para você!`;\n  } else if (isResolvedL1) {\n    finalMessage = `Fico muito feliz que conseguimos resolver o seu chamado #${dealId} por aqui, ${firstName}! 🎉\\n\\n⭐ **Pesquisa Rápida:** Como você avalia o suporte recebido hoje?\\nResponda com uma nota de 1 a 5:\\n⭐ 1 (Péssimo) | ⭐⭐ 2 (Ruim) | ⭐⭐⭐ 3 (Regular) | ⭐⭐⭐⭐ 4 (Bom) | ⭐⭐⭐⭐⭐ 5 (Excelente)`;\n  } else if (isClienteEmLoja) {\n    finalMessage = `Pode deixar, ${firstName}! Como você está com cliente aguardando na loja, já sinalizei o seu chamado #${dealId} com prioridade comercial máxima (🚨 CLIENTE EM LOJA) para a equipe técnica agilizar o seu atendimento imediatamente!`;\n    keyboard = defaultButtons;\n  } else {\n    finalMessage = `Perfeito, ${firstName}! Todas as informações do chamado #${dealId} já foram organizadas e direcionadas para a fila da equipe de TI. O técnico responsável já vai assumir o seu atendimento!`;\n    keyboard = defaultButtons;\n  }\n\n  return {\n    json: {\n      deal_id: dealId,\n      dialog_id: b01.dialog_id,\n      final_message: finalMessage,\n      keyboard: keyboard\n    }\n  };\n});"
         }
       },
       {
@@ -3294,7 +3472,7 @@
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.dialog_id,\n  MESSAGE: $json.final_message\n}) }}",
+          "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.dialog_id,\n  MESSAGE: $json.final_message,\n  KEYBOARD: ($json.keyboard && $json.keyboard.length > 0) ? $json.keyboard : undefined\n}) }}",
           "options": {}
         }
       },
@@ -4281,7 +4459,7 @@
           2240
         ],
         "parameters": {
-          "jsCode": "// Filtra chamados que concluíram triagem e estão prontos para atendimento humano pela TI\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst notifications = [];\n\n// Técnicos que recebem o alerta de fila da TI:\n// 32598: Eduardo Alaminos (Gestor TI)\n// 352678: Igor Bonini (Suporte TI)\nconst IT_TEAM_RECIPIENTS = [32598, 352678];\n\nfor (let i = 0; i < b01Items.length; i++) {\n  const b01 = b01Items[i]?.json || {};\n  const updateData = updatePayloadItems[i]?.json || {};\n\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n\n  // Notifica a equipe quando o chamado NÃO foi resolvido por L1 e NÃO é compra pendente de diretoria\n  if (!isResolvedL1 && !isPurchase) {\n    const dealId = b01.deal_id;\n    const formattedTitle = b01.formatted_title || `Chamado #${dealId}`;\n    const requesterName = b01.requester_name || 'Colaborador';\n    const storeName = b01.store_name || 'Geral';\n    const priorityLabel = b01.priority_label || 'Média';\n    const shortSubject = b01.short_subject || b01.resumo || 'Sem resumo disponível';\n    const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n    const dealUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${dealId}/`;\n\n    let alertHeader = '🔔 [b]CHAMADO TRIADO PELA IA - PRONTO PARA ATENDIMENTO[/b]';\n    if (isClienteEmLoja) {\n      alertHeader = '🚨 [b]URGENTE: CLIENTE EM LOJA - CHAMADO PRONTO PARA ATENDIMENTO[/b]';\n    }\n\n    const msgText = `${alertHeader}\\n` +\n      `🎫 [b]Chamado #${dealId}:[/b] ${formattedTitle}\\n` +\n      `👤 [b]Solicitante:[/b] ${requesterName}\\n` +\n      `🏢 [b]Loja/Filial:[/b] ${storeName}\\n` +\n      `⚡ [b]Prioridade:[/b] ${priorityLabel}\\n` +\n      `📝 [b]Resumo:[/b] ${shortSubject}\\n` +\n      (isClienteEmLoja ? `🚨 [b]Atenção:[/b] Colaborador com cliente presencial aguardando!\\n` : '') +\n      `\\n👉 [URL=${dealUrl}]Abrir Chamado no Bitrix[/URL]`;\n\n    for (const recipientId of IT_TEAM_RECIPIENTS) {\n      notifications.push({\n        json: {\n          deal_id: dealId,\n          recipient_id: String(recipientId),\n          notification_message: msgText\n        }\n      });\n    }\n  }\n}\n\nreturn notifications;"
+          "jsCode": "// Filtra chamados que concluíram triagem e estão prontos para atendimento humano pela TI\nconst b01Items = $('11_B01_Priority_And_Payload').all();\nconst updatePayloadItems = $('12_Prepare_Deal_Update_Payload').all();\nconst notifications = [];\n\n// Técnicos que recebem o alerta de fila da TI:\n// 32598: Eduardo Alaminos (Gestor TI)\n// 352678: Igor Bonini (Suporte TI)\nconst IT_TEAM_RECIPIENTS = [32598, 352678];\n\nfor (let i = 0; i < b01Items.length; i++) {\n  const b01 = b01Items[i]?.json || {};\n  const updateData = updatePayloadItems[i]?.json || {};\n\n  const isPurchase = Boolean(updateData.is_purchase || b01.is_purchase || updateData.target_stage_id === 'C160:UC_JIOBG8');\n  const isResolvedL1 = Boolean(b01.is_resolved_l1);\n\n  // Notifica a equipe quando o chamado NÃO foi resolvido por L1 e NÃO é compra pendente de diretoria\n  if (!isResolvedL1 && !isPurchase) {\n    const dealId = b01.deal_id;\n    const formattedTitle = b01.formatted_title || `Chamado #${dealId}`;\n    const requesterName = b01.requester_name || 'Colaborador';\n    const storeName = b01.store_name || 'Geral';\n    const priorityLabel = b01.priority_label || 'Média';\n    const shortSubject = b01.short_subject || b01.resumo || 'Sem resumo disponível';\n    const isClienteEmLoja = Boolean(b01.is_cliente_em_loja);\n    const dealUrl = `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/${dealId}/`;\n\n    let alertHeader = '🔔 [b]CHAMADO TRIADO PELA IA - PRONTO PARA ATENDIMENTO[/b]';\n    if (isClienteEmLoja) {\n      alertHeader = '🚨 [b]URGENTE: CLIENTE EM LOJA - CHAMADO PRONTO PARA ATENDIMENTO[/b]';\n    }\n\n    const msgText = `${alertHeader}\\n` +\n      `🎫 [b]Chamado #${dealId}:[/b] ${formattedTitle}\\n` +\n      `👤 [b]Solicitante:[/b] ${requesterName}\\n` +\n      `🏢 [b]Loja/Filial:[/b] ${storeName}\\n` +\n      `⚡ [b]Prioridade:[/b] ${priorityLabel}\\n` +\n      `📝 [b]Resumo:[/b] ${shortSubject}\\n` +\n      (isClienteEmLoja ? `🚨 [b]Atenção:[/b] Colaborador com cliente presencial aguardando!\\n` : '') +\n      `\\n👉 [URL=${dealUrl}]Abrir Chamado no Bitrix[/URL]`;\n\n    for (const recipientId of IT_TEAM_RECIPIENTS) {\n      const keyboard = [\n        {\n          \"TEXT\": \"🙋‍♂️ Aceitar Chamado\",\n          \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-ticket-action?deal_id=${dealId}&action=accept&user_id=${recipientId}`,\n          \"BG_COLOR\": \"#29b24f\",\n          \"TEXT_COLOR\": \"#ffffff\",\n          \"DISPLAY\": \"LINE\"\n        },\n        {\n          \"TEXT\": \"⏳ Colocar na Fila\",\n          \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-ticket-action?deal_id=${dealId}&action=queue&user_id=${recipientId}`,\n          \"BG_COLOR\": \"#f59e0b\",\n          \"TEXT_COLOR\": \"#ffffff\",\n          \"DISPLAY\": \"LINE\"\n        }\n      ];\n\n      notifications.push({\n        json: {\n          deal_id: dealId,\n          recipient_id: String(recipientId),\n          notification_message: msgText,\n          keyboard: keyboard\n        }\n      });\n    }\n  }\n}\n\nreturn notifications;"
         }
       },
       {
@@ -4299,8 +4477,146 @@
           "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.recipient_id,\n  MESSAGE: $json.notification_message\n}) }}",
+          "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.recipient_id,\n  MESSAGE: $json.notification_message,\n  KEYBOARD: ($json.keyboard && $json.keyboard.length > 0) ? $json.keyboard : undefined\n}) }}",
           "options": {}
+        }
+      },
+      {
+        "id": "node_csat_poll_won",
+        "name": "CSAT_Poll_Won_Deals",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "onError": "continueRegularOutput",
+        "position": [
+          368,
+          600
+        ],
+        "parameters": {
+          "method": "GET",
+          "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/crm.deal.list",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "filter[CATEGORY_ID]",
+                "value": "160"
+              },
+              {
+                "name": "filter[STAGE_ID]",
+                "value": "C160:WON"
+              },
+              {
+                "name": "order[DATE_MODIFY]",
+                "value": "DESC"
+              },
+              {
+                "name": "select[]",
+                "value": "ID"
+              },
+              {
+                "name": "select[]",
+                "value": "TITLE"
+              },
+              {
+                "name": "select[]",
+                "value": "ASSIGNED_BY_ID"
+              },
+              {
+                "name": "select[]",
+                "value": "DATE_MODIFY"
+              }
+            ]
+          },
+          "options": {}
+        }
+      },
+      {
+        "id": "node_csat_filter_unsent",
+        "name": "CSAT_Filter_Unsent_Deals",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          600,
+          600
+        ],
+        "parameters": {
+          "jsCode": "\n// Filtra chamados em C160:WON que ainda não receberam a pesquisa CSAT\nconst items = $input.all();\nconst deals = items[0]?.json?.result || items.map(i => i.json);\nconst output = [];\n\nfor (const deal of deals) {\n  const dealId = Number(deal.ID);\n  if (!dealId) continue;\n\n  output.push({\n    json: {\n      deal_id: dealId,\n      deal_title: deal.TITLE || `Chamado #${dealId}`,\n      assigned_by_id: Number(deal.ASSIGNED_BY_ID || 0)\n    }\n  });\n}\n\nreturn output.slice(0, 5); // Limita a 5 por ciclo para não sobrecarregar\n"
+        }
+      },
+      {
+        "id": "node_csat_lookup_session",
+        "name": "CSAT_Lookup_Session_Postgres",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 1,
+        "onError": "continueRegularOutput",
+        "position": [
+          840,
+          600
+        ],
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT id, deal_id, requester_name, internal_chat_id, dialog_id, collected_data_json FROM ticket_bot_sessions WHERE deal_id = {{ $json.deal_id }} AND internal_chat_id IS NOT NULL AND (collected_data_json->>'csat_sent') IS NULL;",
+          "additionalFields": {}
+        },
+        "credentials": {
+          "postgres": {
+            "id": "J8q2YHlBbp4WxxV2",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "id": "node_csat_prepare_message",
+        "name": "CSAT_Prepare_Survey_Payload",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1080,
+          600
+        ],
+        "parameters": {
+          "jsCode": "\nconst rows = $input.all();\nconst readyList = [];\n\nfor (const row of rows) {\n  const session = row.json;\n  const dealId = session.deal_id;\n  if (!dealId || !session.dialog_id) continue;\n\n  const requesterName = session.requester_name || 'Colaborador';\n  const firstName = requesterName.split(' ')[0] || 'amigo';\n\n  const surveyMessage = `🎉 Olá, ${firstName}! O seu chamado #${dealId} foi finalizado com sucesso pela equipe de TI.\\n\\n⭐ **Pesquisa de Satisfação:** Como você avalia o suporte recebido hoje?\\n👉 Clique em uma das opções abaixo para registrar sua nota em 1 clique:`;\n\n  const keyboard = [\n    {\n      \"TEXT\": \"⭐⭐⭐⭐⭐ Excelente\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-csat-vote?deal_id=${dealId}&rating=5`,\n      \"BG_COLOR\": \"#10b981\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    },\n    {\n      \"TEXT\": \"⭐⭐⭐⭐ Bom\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-csat-vote?deal_id=${dealId}&rating=4`,\n      \"BG_COLOR\": \"#3b82f6\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    },\n    {\n      \"TEXT\": \"⭐⭐⭐ Regular\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-csat-vote?deal_id=${dealId}&rating=3`,\n      \"BG_COLOR\": \"#f59e0b\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    },\n    {\n      \"TEXT\": \"⭐ Precisa Melhorar\",\n      \"LINK\": `https://sophia-n8nsophia.timft8.easypanel.host/webhook/ti-csat-vote?deal_id=${dealId}&rating=1`,\n      \"BG_COLOR\": \"#ef4444\",\n      \"TEXT_COLOR\": \"#ffffff\",\n      \"DISPLAY\": \"LINE\"\n    }\n  ];\n\n  readyList.push({\n    json: {\n      deal_id: dealId,\n      dialog_id: session.dialog_id,\n      survey_message: surveyMessage,\n      keyboard: keyboard\n    }\n  });\n}\n\nreturn readyList;\n"
+        }
+      },
+      {
+        "id": "node_csat_send_chat",
+        "name": "CSAT_Send_Survey_To_Chat",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "onError": "continueRegularOutput",
+        "position": [
+          1320,
+          600
+        ],
+        "parameters": {
+          "method": "POST",
+          "url": "https://b24-88dbfb.bitrix24.com.br/rest/61622/05wkhnplgtdtvaxm/im.message.add",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify({\n  DIALOG_ID: $json.dialog_id,\n  MESSAGE: $json.survey_message,\n  KEYBOARD: $json.keyboard\n}) }}",
+          "options": {}
+        }
+      },
+      {
+        "id": "node_csat_mark_postgres",
+        "name": "CSAT_Mark_Sent_Postgres",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 1,
+        "onError": "continueRegularOutput",
+        "position": [
+          1560,
+          600
+        ],
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE ticket_bot_sessions SET collected_data_json = COALESCE(collected_data_json, '{}'::jsonb) || '{\"csat_sent\": true}'::jsonb, last_interaction_at = NOW() WHERE deal_id = {{ $json.deal_id }};",
+          "additionalFields": {}
+        },
+        "credentials": {
+          "postgres": {
+            "id": "J8q2YHlBbp4WxxV2",
+            "name": "Postgres account"
+          }
         }
       }
     ],
@@ -4315,6 +4631,11 @@
             },
             {
               "node": "04_Get_Active_Sessions_Postgres",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "CSAT_Poll_Won_Deals",
               "type": "main",
               "index": 0
             }
@@ -5149,6 +5470,61 @@
             }
           ]
         ]
+      },
+      "CSAT_Poll_Won_Deals": {
+        "main": [
+          [
+            {
+              "node": "CSAT_Filter_Unsent_Deals",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CSAT_Filter_Unsent_Deals": {
+        "main": [
+          [
+            {
+              "node": "CSAT_Lookup_Session_Postgres",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CSAT_Lookup_Session_Postgres": {
+        "main": [
+          [
+            {
+              "node": "CSAT_Prepare_Survey_Payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CSAT_Prepare_Survey_Payload": {
+        "main": [
+          [
+            {
+              "node": "CSAT_Send_Survey_To_Chat",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CSAT_Send_Survey_To_Chat": {
+        "main": [
+          [
+            {
+              "node": "CSAT_Mark_Sent_Postgres",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
@@ -5156,16 +5532,16 @@
     "name": null,
     "description": null,
     "autosaved": false,
-    "createdAt": "2026-10-15T18:19:32.481Z",
-    "updatedAt": "2026-10-15T18:19:32.481Z",
+    "createdAt": "2026-10-15T21:11:11.968Z",
+    "updatedAt": "2026-10-15T21:11:11.968Z",
     "workflowPublishHistory": [
       {
-        "id": 602,
+        "id": 619,
         "workflowId": "c0F2GUMFm2BI94UG",
-        "versionId": "ed999a5d-df9a-4815-92b8-f05f59b8c84f",
+        "versionId": "79d41900-aadc-494d-ba8c-15e209c815e0",
         "event": "activated",
         "userId": "47bc24b3-99ec-468c-9224-e213aafc06ff",
-        "createdAt": "2026-10-15T18:19:32.593Z"
+        "createdAt": "2026-10-15T21:11:12.079Z"
       }
     ]
   }

@@ -922,10 +922,39 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
      - Coleta obrigatória do número/ramal afetado, print do erro via OCR ou **link de um card/cliente de exemplo no Bitrix24** para acompanhamento dos logs técnicos, além de checagem orientada em *Dispositivos Conectados*.
   4. **Onboarding & Liberação de Acessos para Novos Colaboradores (`KB-016`):**
      - Novo checklist mandatório extraído de gestores: Função/Cargo, ativação de telefonia e fila de atendimento, WhatsApp (oficial da loja vs individual) e disponibilidade de hardware no setor.
-* **Componentes Atualizados:**
-  - Base Vetorial `kb_ti_conhecimento` (PostgreSQL / pgvector) reindexada via webhook de ingestão.
-  - System Prompt do nó `08_AI_Agent_Triage_Deal` atualizado no workflow `c0F2GUMFm2BI94UG`.
-  - Documentação [BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md](file:///c:/Mundial_RPA/docs/BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md) atualizada e commitada.
+---
+
+### 9.10. Codificação das 6 Novas Diretrizes Operacionais Validadas pela TI & Guardrails Estritos de Segurança
+
+* **Contexto & Auditoria ao Vivo:**
+  - Em 15/10/2026, foi realizada uma auditoria nos 39 chamados abertos atualmente na Categoria 160 (`Central de TI`). Identificou-se que praticamente todos chegam com campo `COMMENTS` em branco, demandando intervenção investigativa da Sophia AI.
+  - A partir dos 6 padrões operacionais identificados, a gestão de TI forneceu respostas técnicas e definitivas que foram codificadas na Base Vetorial e no Agente Cognitivo.
+
+* **Diretrizes e Playbooks Operacionais Validados:**
+  1. **WhatsApp — Espelhamento Atrasado (`KB-015`):**
+     - *Definição:* Mensagem do cliente não chega para o atendente no Bitrix OU mensagem do atendente não chega no celular do cliente.
+     - *Diagnóstico Sophia:* Perguntar se o problema é em uma conexão/número específico (e qual) OU em todas as conexões da concessionária.
+     - *Coleta:* Número com DDD + Print da tela de erro (OCR) OU link de um cliente/card de exemplo no Bitrix24 para rastreamento de logs pela TI.
+  2. **Telefonia Bitrix24 — Ramal Não Toca (`KB-011`):**
+     - *Checklist Guiado:* (1) Verificar se está usando o Aplicativo Desktop do Bitrix24 instalado (uso do App é obrigatório; web não homologada para telefonia); (2) Botão mudo físico no cabo do headset; (3) Volume do Windows no mudo/zerado.
+     - *GUARDRAIL DE SEGURANÇA ESTRITO:* A Sophia NUNCA deve orientar o usuário a tentar ver ou alterar configurações de telefonia ou filas no Bitrix24 (exclusivo da TI).
+  3. **MicroWork Cloud — Erros de ICMS e Ordem de Serviço (`KB-012`):**
+     - *Automação da TI:* A resolução é 100% autônoma via robô/bot fiscal já mapeado pela TI.
+     - *Coleta Mandatória:* Link do card de negócio (se existir), Número da OS ou do Pedido / NF, Chassi completo (17 dígitos 9C2...) e print da mensagem de erro de ICMS.
+  4. **Bitrix24 — Exclusão de Grupos de Chat (`KB-011` - Autoatendimento L1):**
+     - *Regra:* Usuários têm permissão para excluir grupos de chat/trabalho que eles mesmos criaram e são administradores.
+     - *Passo a Passo L1:* *Abrir Grupo > Sobre o grupo > Ações > Excluir grupo*. Se concluído com sucesso, finaliza como `RESOLVED_L1`.
+     - *GUARDRAIL CRÍTICO DE DADOS:* A Sophia NUNCA pode orientar ou ensinar o usuário a excluir cards de negócio (deals), contatos do CRM ou mensagens de WhatsApp.
+  5. **Integração MyHonda ➡️ Bitrix24 (`KB-017`):**
+     - *Diagnóstico:* Queda de sessão na montadora ou robô RPA / máquina servidora desligada.
+     - *Coleta Sophia:* Data e horário aproximado do último lead recebido e onde a pessoa verificou a ausência (portal MyHonda da montadora vs planilha).
+  6. **Chamados Abertos Apenas com Nome de Pessoa (`KB-018`):**
+     - *Acolhimento Proativo:* Leitura dos dados do card e pergunta clarificadora direta: *"Vi que seu chamado cita [Nome]. Você precisa da criação de novos acessos para este colaborador, redefinição de senha esquecida, alteração de função/fila ou desligamento?"*
+
+* **Entregas Técnicas Executadas:**
+  1. **Agente Cognitivo n8n (`c0F2GUMFm2BI94UG` / `08_AI_Agent_Triage_Deal`):** System Prompt atualizado com as novas seções, checks e guardrails (tamanho expandido para 23.736 caracteres).
+  2. **Base Vetorial no PostgreSQL (`kb_ti_conhecimento`):** Reingestão das KBs 011, 012, 015 e indexação das novas KBs 017 e 018 via webhook de ingestão vetorial, totalizando 17 artigos ativos e fatiados em múltiplos chunks vetoriais com embeddings da OpenAI.
+  3. **Documentação Operacional:** [BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md](file:///c:/mundial-n8n-automations/docs/BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md) atualizada.
 
 ---
 

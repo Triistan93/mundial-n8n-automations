@@ -982,4 +982,46 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.12. Incidente no Chamado #1411066 (Hadner - Gerente Mogi Mirim): Resolução da Identidade do Solicitante e Destravamento da Esteira SQL
+
+* **Incidente Relatado:**
+  1. No Chamado [#1411066](https://b24-88dbfb.bitrix24.com.br/crm/deal/details/1411066/) (*"liberar CRM - Mecânico Ailton"*), a Sophia AI dirigiu-se ao solicitante como *"Ailton"*, confundindo o responsável do card (o gerente Hadner Sulato, ID 2606) com o colaborador beneficiário citado no título (*Mecânico Ailton*).
+  2. A Sophia orientou testes de acesso (celular vs computador), Hadner respondeu às 16:30 UTC (*"testamos pelo computador e não aparece a opção de CRM tbm"*), e a assistente congelou/parou de responder no chat.
+
+* **Diagnóstico & Causa Raiz Técnica Identificada:**
+  1. **Falha de Mapeamento de Nome:** No nó `01_Strict_Gate_Cat160_Pilot`, o dicionário `USER_NAMES` continha erroneamente `2606: 'Ailton'`. O usuário `2606` no Bitrix24 é **Hadner Sulato (Gerente de Loja - Mogi Mirim)**.
+  2. **Colapso Global da Esteira por Erro de Sintaxe SQL (`column "Flavio" does not exist`):**
+     - No nó `02_Reserve_Deal_Session_Atomic`, a query SQL continha `'deal_title', {{ JSON.stringify($json.title) }}`.
+     - Quando o chamado #1411194 (*Título: "Flavio"*) entrou na esteira, `JSON.stringify` gerou aspas duplas `"Flavio"`. No PostgreSQL, aspas duplas representam identificadores/colunas e não literais de texto.
+     - O PostgreSQL abortou com `error: column "Flavio" does not exist`.
+     - Como o trigger agendado executa em paralelo o polling de novos cards e o polling de sessões ativas (`04_Get_Active_Sessions_Postgres`), a falha em um nó derrubou a execução completa a cada minuto, impedindo que a resposta do Hadner fosse processada.
+  3. **Vulnerabilidade Residual em `01_Check_Store_Outage_Cluster`:**
+     - A query de contagem de eventos inseria `'{{ $json.description }}'` e `'{{ $json.title }}'` diretamente no SQL, falhando com `syntax error at or near ":"` quando descrições continham aspas simples (ex: `Status: 'UnprocessableEntity'`).
+  4. **Sub-nó Problemático `Tool_Diagnostico_TI`:**
+     - Uma ferramenta experimental do tipo `toolHttpRequest` com `jsonBody: "={ ... }"` gerava `NodeOperationError: No execution data available` no Agent V3 do LangChain, travando a inicialização do nó do agente.
+
+* **Correções Aplicadas & Validadas:**
+  1. **Mapeamento de Usuário & Contexto Gestor vs Colaborador:**
+     - Atualizado `USER_NAMES[2606] = 'Hadner'`.
+     - No nó `07_Prepare_AI_Deal_Input`, injetado cabeçalho explícito: `[SOLICITANTE DO CARD / USUÁRIO NO CHAT]: ${requesterName} (Dirija-se sempre a ele(a) por este nome)`.
+     - No nó `08_AI_Agent_Triage_Deal` (System Prompt), criada a Seção 14 (*"Liberação de Permissão / Módulo no Bitrix24"*): quando o gestor solicita CRM/módulos para colaboradores e confirma que não aparece em nenhum dispositivo, a Sophia conclui imediatamente como solicitação de permissão de perfil sem perguntas irrelevantes de compras ou telefonia.
+  2. **Blindagem SQL Absoluta (Postgres):**
+     - Em `02_Reserve_Deal_Session_Atomic`, substituído `JSON.stringify` por escaping seguro de aspas simples: `'deal_title', '{{ ($json.title || "").replace(/'/g, "''") }}'`.
+     - Em `01_Check_Store_Outage_Cluster`, removida a interpolação desnecessária de `title` e `description` na query SQL. O nó subsequente `01_Evaluate_Store_Outage` agora recupera os campos originais de forma determinística via `$('01_If_Is_Duplicate').all(1)`.
+  3. **Desconexão do Sub-nó Inválido:**
+     - `Tool_Diagnostico_TI` removido do nó `08_AI_Agent_Triage_Deal`, restabelecendo o trio homologado de ferramentas (`OpenAI_Chat_Model_Deal`, `Redis_Deal_Chat_Memory`, `KB_TI_PGVector_Tool`).
+  4. **Propagação de Solicitante e Loja nas Notificações da TI:**
+     - `09_Format_AI_Response` e `11_B01_Priority_And_Payload` atualizados para propagar `requester_name` e `store_name`, garantindo que os alertas push enviados a Eduardo (`32598`) e Igor (`352678`) exibam o nome real e a filial do solicitante.
+
+* **Validação Operacional & Resultado no Card #1411066:**
+  - A esteira executou com status **SUCCESS** (Execuções #653628 e #653795).
+  - A Sophia retomou o chamado do Hadner e enviou a mensagem conclusiva no chat: *"Perfeito, Hadner! Todas as informações do chamado #1411066 já foram organizadas e direcionadas para a fila da equipe de TI. O técnico responsável já vai assumir o seu atendimento!"*.
+  - O card foi atualizado com o título: `[TI-BITRIX24] - Liberação de permissão para CRM no Bitrix24 para mecânico Ailton (Hadner)`.
+  - A timeline do Bitrix recebeu o resumo de triagem estruturado (Prioridade B01 P4 - Baixo).
+  - Eduardo e Igor receberam a notificação push no Bitrix24.
+  - A sessão foi finalizada no Postgres (`status: 'COMPLETED'`).
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*
+

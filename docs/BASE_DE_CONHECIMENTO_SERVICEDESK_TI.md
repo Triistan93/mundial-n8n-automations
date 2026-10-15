@@ -187,3 +187,14 @@ Para que a **Sophia AI** execute a triagem e o autoatendimento com máxima preci
   1. **Link do Card:** Solicitar o link do card no Bitrix24 onde o robô está travado (ex: `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/XXXXX/`);
   2. **Conferência de Dados:** Perguntar se o colaborador já conferiu se todos os dados do card estão corretos (número da nota, chassi, fornecedor, valores);
   3. **Escalonamento Imediato para a TI (L2):** Imediatamente após a resposta da pessoa (ou se ela já forneceu o link e confirmou os dados), concluir a triagem (`action: COMPLETE`) com alta urgência e direcionar para a TI intervir no robô no servidor.
+
+---
+
+### Arquétipo 11: Liberação de Permissão / Módulo no Bitrix24 (CRM, Tarefas, Folgas e Tickets)
+* **Público Solicitante:** Gerentes de Loja (ex: Hadner `#2606`, Celeste `#4880`, Silvana `#2644`) e Supervisores solicitando acesso para membros de equipe (mecânicos, caixas, consultores).
+* **Sintomas:** "liberar CRM para mecânico", "não aparece a opção de CRM no Bitrix", "liberar acesso para cards de folga e tickets".
+* **DIRETIVA ESTRITA DA GESTÃO DE TI:**
+  1. **Separação de Papéis:** O usuário falando no chat é o **gestor responsável** (ex: Hadner). A Sophia deve sempre se dirigir ao gestor pelo nome dele e registrar que o acesso solicitado é para o **colaborador indicado** (ex: Mecânico Ailton).
+  2. **Validação Rápida:** Se o usuário confirmar que testou no celular e no computador e o menu não aparece, trata-se de **permissão de perfil/módulo no Bitrix24**.
+  3. **Escopo Limpo de Perguntas:** A Sophia **NUNCA** deve fazer perguntas irrelevantes de telefonia, chip de WhatsApp ou compras de hardware para pedidos pontuais de permissão de sistema para colaboradores já contratados.
+  4. **Conclusão e Encaminhamento:** Concluir a triagem imediatamente (`action: COMPLETE`) com prioridade B01 P4 (Baixo) e registrar os dados estruturados: Gestor Solicitante, Colaborador Beneficiário, Sistema/Módulo (Bitrix24 CRM / Folgas / Tickets), Loja e resultado dos testes.

@@ -1079,6 +1079,44 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.15. Implementação das Fases 3 e 4: Regex Contextual (\b) e Guardrail Cognitivo Anti-Redundância (UX)
+
+* **Fase 3: Refinamento de Regex de Temas e Blindagem Estrita de Outage:**
+  1. **Regex com Borda de Palavra (`\b`) em `01_Strict_Gate_Cat160_Pilot`:**
+     - Substituição do método permissivo `.includes()` por expressões regulares com limites de palavra (`\b`) para evitar falsos positivos semânticos.
+     - Temas mapeados com alta fidelidade:
+       - `ROBO_RPA`: `\b(rob[ôo]|card\s+rob[ôo]|entrada\s+honda|entrada\s+grupo|vigia|dms_vigia|faturamento\s+direto|solicita[çc][ãa]o\s+de\s+entrada|loop)\b`
+       - `DETRAN_RENAVE`: `\b(atpv|atpv-?e|renave|detran|inten[çc][ãa]o\s+de\s+venda|9c2[a-hj-npr-z0-9]{14})\b`
+       - `CONNECTIVITY_NETWORK`: `\b(internet|rede\s+caiu|queda\s+de\s+link|roteador|vpn|fora\s+do\s+ar|offline|sem\s+sistema|tudo\s+vermelho|lentid[ãa]o\s+geral|sem\s+net|wi-?fi|link\s+caiu)\b`
+       - `TELEFONIA`: `\b(telefone|ramal|liga[çc][ãa]o|liga[çc][õo]es|headset|fone|fale\s+f[áa]cil|n[ãa]o\s+toca|sem\s+tom)\b`
+       - `WHATSAPP_FALEFACIL`: `\b(whats?app|wpp|zap|conex[ãa]o\s+zap|n[úu]mero\s+corporativo|espelhamento)\b`
+       - `ACCESS_PERMISSIONS`: `\b(libera[çc][ãa]o\s+de\s+acesso|liberar\s+acesso|acesso\s+crm|liberar\s+crm|permiss[ãa]o|permissoes|criar\s+usu[áa]rio|novo\s+colaborador|novo\s+consultor|onboarding|admiss[ãa]o|reset\s+de\s+senha|esqueci\s+a\s+senha|trocar\s+senha)\b`
+       - `MICROWORK_DMS`: `\b(microwork|dms|banco\s+travou|nuvem\s+microwork|icms|ordem\s+de\s+servi[çc]o|o\.?s\.?\s*\d+|rotina\s*\d+)\b`
+  2. **Blindagem de Incidentes P1:**
+     - Casos de rede e conectividade classificados com precisão, evitando falsos alarmes de parada geral.
+
+* **Fase 4: Guardrail Cognitivo Anti-Redundância & Pré-Extração Determinística:**
+  1. **Pré-Extração Determinística em `07_Prepare_AI_Deal_Input`:**
+     - Antes de enviar a mensagem ao LLM, o nó analisa título e mensagens em busca de entidades já fornecidas pelo usuário:
+       - **Chassi de 17 dígitos:** `\b(9C2[A-HJ-NPR-Z0-9]{14})\b`
+       - **Link de Card Bitrix24:** `https://b24-[a-z0-9]+\.bitrix24\.com\.br\/crm\/deal\/details\/\d+\/`
+       - **Número de Nota Fiscal:** `\b(?:nf|nota|nfe)\s*[:#ºn]?\s*(\d{4,9})\b`
+       - **Número de Ordem de Serviço:** `\b(?:os|o\.s\.)\s*[:#ºn]?\s*(\d{4,8})\b`
+     - Quando identificados, o nó injeta a diretiva:
+       `[DADOS JÁ CONFIRMADOS E COMPROVADOS NO CARD (NÃO PERGUNTE NOVAMENTE AO USUÁRIO)]` com a lista dos dados e a regra expressa de não solicitá-los novamente.
+  2. **Guardrail Anti-Repetição no System Prompt de `08_AI_Agent_Triage_Deal`:**
+     - Adicionada a regra de ouro:
+       * NUNCA perguntar ao usuário dados já presentes no título, descrição ou bloco de fatos confirmados.
+       * Se os dados estiverem completos, diagnosticar ou concluir imediatamente.
+       * Se faltarem dados essenciais, formular uma ÚNICA pergunta harmoniosa e gentil (sem rajadas ou perguntas repetidas em turnos seguintes).
+
+* **Validação Operacional em Produção:**
+  - Deploy efetuado com sucesso no workflow `c0F2GUMFm2BI94UG`.
+  - Execução agendada `#655456` concluída com status **SUCCESS** (17:54:47Z).
+  - Integridade dos nós de trigger, roteamento, IA e conclusão 100% preservada.
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*
 
 

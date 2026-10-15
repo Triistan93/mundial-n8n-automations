@@ -176,7 +176,7 @@ return items.map(item => {
 
   // 2. Detecção de solicitação em nome de terceiro (Gestor abrindo para colaborador)
   let thirdPartyNote = '';
-  const thirdPartyMatch = title.match(/(?:para|do|da|mecanico|mecânico|vendedor|estoquista|novo colaborador|novo consultor)\s+([A-ZÀ-ÿ][a-zà-ÿ]+(?:\s+[A-ZÀ-ÿ][a-zà-ÿ]+)?)/i);
+  const thirdPartyMatch = title.match(/\b(?:para|do|da|mecanico|mecânico|vendedor|estoquista|novo colaborador|novo consultor)\b\s+([A-ZÀ-ÿ][a-zà-ÿ]+(?:\s+[A-ZÀ-ÿ][a-zà-ÿ]+)?)/i);
   
   if (thirdPartyMatch && thirdPartyMatch[1] && !thirdPartyMatch[1].toLowerCase().includes(requesterName.toLowerCase())) {
     const beneficiary = thirdPartyMatch[1].trim();

@@ -1023,5 +1023,27 @@ Foi realizada uma auditoria estrutural e de dependências completa de todos os 9
 
 ---
 
+### 9.13. Aprendizado e Enriquecimento da Base de Conhecimento com Casos Reais Fechados pela TI
+
+* **Chamados Auditados:**
+  1. **Nataelen Balduino (#1410592 - ATPV-e / RENAVE):**
+     - *Diagnóstico do Fechamento (`UF_CRM_1689597532`):* *"No DMS Cloud a saída para comprador final estava com erro 'Serviço de nota fiscal indisponível'. Basta reprocessar o movimento de saída final e em seguida gerar o atpv"*.
+     - *Aprendizado Integrado (`KB-001`):* Quando o RENAVE acusar que não existe intenção de venda para o chassi, a falha está frequentemente no movimento de saída do veículo no DMS Cloud. A ação técnica é reprocessar a saída de cliente final no ERP antes de retransmitir ao RENAVE.
+  2. **Danielly (#1410810 - Card Robô / Entrada Honda):**
+     - *Diagnóstico do Fechamento (Comentário Técnico por Eduardo Alaminos `#32598`):*
+       - *Causa Raiz:* Acúmulo de cookies corrompidos de autenticação OpenID gerando *Erro 500 (Interno do Servidor)* no MicroWork Cloud ao acessar a Rotina 1719.
+       - *Causa do Loop:* O Bitrix devolvia o card para a etapa inicial a cada 15 min em processamento; como a blacklist do robô expirava em 15 min, o robô reexecutava e caía no Erro 500 repetidamente.
+       - *Correção no Script RPA (`Lancamento_Entrada_Honda.py`):* Função de detecção ativa de Erro 500 com auto-recuperação (purga de cookies e re-login), mecanismo anti-loop em 2 níveis e reciclagem do WebDriver.
+     - *Aprendizado Integrado (`KB-019`):* Protocolo para robôs travados em processamento e atuação técnica no Mission Control.
+  3. **Hadner Sulato (#1411066 - Permissão de CRM no Bitrix24):**
+     - *Aprendizado Integrado (`KB-020`):* Separação gestor vs colaborador, diagnóstico de ausência de permissão no menu CRM e escalonamento limpo para atribuição de perfil no Bitrix.
+
+* **Ações Executadas:**
+  - [BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md](file:///c:/mundial-n8n-automations/docs/BASE_DE_CONHECIMENTO_SERVICEDESK_TI.md) atualizado com as resoluções reais de cada arquétipo.
+  - Base vetorial `kb_ti_conhecimento` reindexada via webhook de ingestão vetorial (`KB-001`: 3 chunks, `KB-019`: 5 chunks, `KB-020`: 2 chunks).
+
+---
+
 *Diário consolidado e atualizado em Outubro de 2026 — Central Mundial Honda (RPA, IA & TI).*
+
 

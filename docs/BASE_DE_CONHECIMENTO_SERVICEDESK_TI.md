@@ -63,12 +63,16 @@ Para que a **Sophia AI** execute a triagem e o autoatendimento com máxima preci
   * **Print do Erro em Tela:** Captura da tela do MicroWork com a mensagem/código de erro (analisada via OCR Vision GPT-4o).
 * **Procedimento Técnico da Equipe de TI no MicroWork Cloud:**
   * **Rotina Oficial:** [Renave - MicroWork CLOUD DMS](https://microworkcloud.com.br/cloud/#/veiculo/estoque/renave)
-  * **Passo a Passo:**
+  * **Passo a Passo Padrão:**
     1. Filtrar pelo Chassi informado;
     2. Em Período, selecionar a opção **`PERÍODO`**;
     3. Desmarcar o filtro **`NOVO`**;
     4. Selecionar a **Filial** correspondente;
     5. Clicar em **Busca** e transmitir a intenção de venda.
+  * **Causa Raiz & Resolução para "Não existe intenção de venda disponível" (Incidente Real #1410592):**
+    * *Causa Raiz:* No MicroWork Cloud (DMS Cloud), a saída de venda para o comprador final travou com o erro *"Serviço de nota fiscal indisponível"*, impedindo que a intenção de venda ficasse disponível para transmissão.
+    * *Resolução Técnica da TI:* Reprocessar o movimento de saída para o comprador final no DMS Cloud para normalizar a comunicação com a SEFAZ/Renave e, em seguida, gerar e transmitir o ATPV-e normalmente.
+
 
 ---
 
@@ -187,6 +191,11 @@ Para que a **Sophia AI** execute a triagem e o autoatendimento com máxima preci
   1. **Link do Card:** Solicitar o link do card no Bitrix24 onde o robô está travado (ex: `https://b24-88dbfb.bitrix24.com.br/crm/deal/details/XXXXX/`);
   2. **Conferência de Dados:** Perguntar se o colaborador já conferiu se todos os dados do card estão corretos (número da nota, chassi, fornecedor, valores);
   3. **Escalonamento Imediato para a TI (L2):** Imediatamente após a resposta da pessoa (ou se ela já forneceu o link e confirmou os dados), concluir a triagem (`action: COMPLETE`) com alta urgência e direcionar para a TI intervir no robô no servidor.
+* **Causa Raiz & Resolução para Loops de Robô Entrada Honda (Incidente Real #1410810 / Card #1410462):**
+  * *Causa Raiz Técnica:* Sessão acumulando cookies corrompidos de autenticação OpenID gerando tela de *Erro 500 (Interno do Servidor)* no MicroWork Cloud ao abrir a Rotina 1719. Como o Bitrix possui regra de devolução para a fila inicial a cada 15 min em "Em processamento", e a blacklist do robô expirava em 15 min, o card entrava em loop cíclico de reexecução.
+  * *Correção Aplicada na Automação:* Adicionada detecção ativa de erro 500 no robô (`is_erro_500_page`) com purga automática de cookies e reautenticação limpa, além de mecanismo anti-loop de 2 níveis (devolução para fila com alerta na 1ª tentativa e bloqueio em erro desconhecido na 2ª) e reciclagem de WebDriver.
+  * *Atuação Operacional da TI:* Reiniciar o serviço do robô via Mission Control e liberar os cards represados para processamento em fila limpa.
+
 
 ---
 
